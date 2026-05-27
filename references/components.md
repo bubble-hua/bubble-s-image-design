@@ -3363,3 +3363,689 @@ CSS Grid两栏布局、2px粗边框系统、酒店名跨列、日期蓝色大字
 - 用 `>` 前缀模拟引用/输入，用 `##` 模拟标题层级
 - 闪烁光标用CSS animation实现，增加“正在输入”的动态感
 - 适合技术教程、开发者向内容、CLI风格展示、极客叙事
+
+---
+
+## 26. 横向滑动卡片（Horizontal Scroll Cards）
+
+适用场景：多个并列内容项（步骤、手法、功能点）需要逐一展示，不同时占版面。移动端友好。
+
+```html
+<div class="hscroll-container">
+  <h2 class="hscroll-title">标题</h2>
+  <div class="hscroll-track">
+    <div class="hscroll-card">
+      <span class="hscroll-num">01</span>
+      <h3>卡片标题</h3>
+      <p>内容描述文字，一张卡片讲一个点。</p>
+    </div>
+    <div class="hscroll-card">
+      <span class="hscroll-num">02</span>
+      <h3>卡片标题</h3>
+      <p>内容描述文字。</p>
+    </div>
+    <!-- 更多卡片 -->
+  </div>
+  <p class="hscroll-hint">← 左右滑动查看全部 →</p>
+</div>
+```
+
+```css
+.hscroll-track {
+  display: flex; gap: 24px; overflow-x: auto; scroll-snap-type: x mandatory;
+  padding: 20px 0; -webkit-overflow-scrolling: touch;
+}
+.hscroll-track::-webkit-scrollbar { height: 4px; }
+.hscroll-track::-webkit-scrollbar-thumb { background: var(--accent-light, #d4a06a); border-radius: 2px; }
+.hscroll-card {
+  min-width: 340px; max-width: 380px; flex-shrink: 0; scroll-snap-align: center;
+  background: #fff; border-radius: 16px; padding: 32px 28px;
+  box-shadow: 0 4px 20px rgba(0,0,0,0.06); position: relative;
+}
+.hscroll-card .hscroll-num {
+  position: absolute; top: 16px; right: 20px; font-family: 'Caveat', cursive;
+  font-size: 2rem; color: var(--accent-light, #d4a06a); opacity: 0.4;
+}
+.hscroll-card h3 { font-size: 1.1rem; font-weight: 700; margin-bottom: 12px; }
+.hscroll-card p { font-size: 0.82rem; color: var(--ink-light, #5a4f3f); line-height: 1.9; }
+.hscroll-hint { font-size: 0.75rem; color: var(--ink-faint, #8a7e6d); margin-top: 1rem; font-family: 'Caveat', cursive; }
+```
+
+**使用原则**：
+- 卡片宽度固定 340-380px，确保移动端一次看一张
+- 编号用轻量手写字体做右上角装饰，不抢主内容
+- scroll-snap 保证滑动停在卡片中心
+- 适合 3-6 张卡片的并列展示
+
+---
+
+## 27. Tab 切换面板（Tab Switcher）
+
+适用场景：同一版面多个分类内容需要切换展示。适合手法对比、分类讲解、功能列表。
+
+```html
+<div class="tab-container">
+  <div class="tab-bar">
+    <div class="tab-item active" onclick="switchTab(this, 0)">标签一</div>
+    <div class="tab-item" onclick="switchTab(this, 1)">标签二</div>
+    <div class="tab-item" onclick="switchTab(this, 2)">标签三</div>
+  </div>
+  <div class="tab-panels">
+    <div class="tab-panel active">
+      <h3>面板标题</h3>
+      <p>面板内容。</p>
+      <div class="tab-example">引用/示例文字</div>
+    </div>
+    <div class="tab-panel">
+      <h3>面板标题</h3>
+      <p>面板内容。</p>
+      <div class="tab-example">引用/示例文字</div>
+    </div>
+    <div class="tab-panel">
+      <h3>面板标题</h3>
+      <p>面板内容。</p>
+      <div class="tab-example">引用/示例文字</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(el, idx) {
+  const tabs = el.parentElement.querySelectorAll('.tab-item');
+  const panels = el.closest('.tab-container').querySelectorAll('.tab-panel');
+  tabs.forEach(t => t.classList.remove('active'));
+  panels.forEach(p => p.classList.remove('active'));
+  el.classList.add('active');
+  panels[idx].classList.add('active');
+}
+</script>
+```
+
+```css
+.tab-bar { display: flex; gap: 0; margin-bottom: 2rem; border-bottom: 2px solid var(--accent-light, #d4a06a); }
+.tab-item {
+  padding: 10px 20px; font-size: 0.82rem; font-weight: 500; cursor: pointer;
+  border-bottom: 3px solid transparent; margin-bottom: -2px; transition: all 0.2s;
+  color: var(--ink-faint, #8a7e6d);
+}
+.tab-item.active { border-bottom-color: var(--accent, #8b4513); color: var(--ink, #2c2416); font-weight: 700; }
+.tab-item:hover { color: var(--ink-light, #5a4f3f); }
+.tab-panels { position: relative; }
+.tab-panel { display: none; animation: tabFadeIn 0.3s; }
+.tab-panel.active { display: block; }
+.tab-panel h3 { font-size: 1.3rem; font-weight: 700; margin-bottom: 12px; }
+.tab-panel p { font-size: 0.88rem; color: var(--ink-light, #5a4f3f); line-height: 2; max-width: 550px; }
+.tab-example { margin-top: 1rem; background: #fff; border-radius: 10px; padding: 16px 20px; font-size: 0.9rem; color: var(--accent, #8b4513); border-left: 3px solid var(--accent-light, #d4a06a); }
+@keyframes tabFadeIn { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: translateY(0); } }
+```
+
+**使用原则**：
+- Tab 数量控制在 2-5 个，超过5个用横向滚动卡片代替
+- Tab 文字简短（2-4个字），用下划线指示当前选中
+- 面板内容高度尽量一致，避免切换时版面跳动
+- 适合分类讲解、对比展示、FAQ
+
+---
+
+## 28. 手风琴展开（Accordion）
+
+适用场景：有序列内容需要逐项展开查看。适合步骤、问答、目录结构。
+
+```html
+<div class="accordion-list">
+  <div class="accordion-item open">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <span class="accordion-step">1</span>
+      <h4>条目标题</h4>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>展开后的详细内容。</p>
+    </div>
+  </div>
+  <div class="accordion-item">
+    <div class="accordion-header" onclick="toggleAccordion(this)">
+      <span class="accordion-step">2</span>
+      <h4>条目标题</h4>
+      <span class="accordion-arrow">▼</span>
+    </div>
+    <div class="accordion-body">
+      <p>展开后的详细内容。</p>
+    </div>
+  </div>
+</div>
+
+<script>
+function toggleAccordion(header) {
+  const item = header.parentElement;
+  const wasOpen = item.classList.contains('open');
+  item.parentElement.querySelectorAll('.accordion-item').forEach(i => i.classList.remove('open'));
+  if (!wasOpen) item.classList.add('open');
+}
+</script>
+```
+
+```css
+.accordion-list { max-width: 600px; }
+.accordion-item { border-bottom: 1px solid rgba(139,69,19,0.15); }
+.accordion-header {
+  display: flex; align-items: center; gap: 16px; padding: 18px 0; cursor: pointer; transition: all 0.2s;
+}
+.accordion-header:hover { padding-left: 8px; }
+.accordion-step {
+  width: 32px; height: 32px; border-radius: 50%; background: var(--accent, #8b4513);
+  color: #fff; font-size: 0.8rem; font-weight: 700; display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+}
+.accordion-header h4 { font-size: 0.95rem; font-weight: 700; }
+.accordion-arrow { margin-left: auto; font-size: 0.8rem; color: var(--ink-faint, #8a7e6d); transition: transform 0.2s; }
+.accordion-item.open .accordion-arrow { transform: rotate(180deg); }
+.accordion-body { padding: 0 0 18px 48px; display: none; }
+.accordion-item.open .accordion-body { display: block; animation: tabFadeIn 0.3s; }
+.accordion-body p { font-size: 0.82rem; color: var(--ink-light, #5a4f3f); line-height: 1.9; }
+```
+
+**使用原则**：
+- 默认展开第一项（.open class），让用户知道可以点击
+- 编号圆圈提供视觉锚点和顺序感
+- hover 微移增加交互感
+- 适合 FAQ、步骤说明、有层级的内容目录
+
+---
+
+## 29. 箭头轮播（Arrow Carousel）
+
+适用场景：内容在固定区域内轮播，用箭头+圆点控制。适合居中展示、焦点突出的场景。
+
+```html
+<div class="carousel-container">
+  <div class="carousel-slides" id="carouselSlides">
+    <div class="carousel-slide">
+      <div class="carousel-icon">🎯</div>
+      <h3>幻灯片标题</h3>
+      <p>内容描述。</p>
+    </div>
+    <div class="carousel-slide">
+      <div class="carousel-icon">⚡</div>
+      <h3>幻灯片标题</h3>
+      <p>内容描述。</p>
+    </div>
+  </div>
+  <div class="carousel-arrows">
+    <button class="carousel-arrow" onclick="moveSlide(-1)">←</button>
+    <button class="carousel-arrow" onclick="moveSlide(1)">→</button>
+  </div>
+  <div class="carousel-dots">
+    <span class="carousel-dot active"></span>
+    <span class="carousel-dot"></span>
+  </div>
+</div>
+
+<script>
+let carouselIdx = 0;
+const totalSlides = document.querySelectorAll('.carousel-slide').length;
+function moveSlide(dir) {
+  const slides = document.getElementById('carouselSlides');
+  const dots = document.querySelectorAll('.carousel-dot');
+  carouselIdx = (carouselIdx + dir + totalSlides) % totalSlides;
+  slides.style.transform = `translateX(-${carouselIdx * 100}%)`;
+  dots.forEach((d, i) => d.classList.toggle('active', i === carouselIdx));
+}
+</script>
+```
+
+```css
+.carousel-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; overflow: hidden; }
+.carousel-slides { display: flex; transition: transform 0.4s ease; }
+.carousel-slide { min-width: 100%; padding: 40px; text-align: center; }
+.carousel-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+.carousel-slide h3 { font-size: 1.4rem; font-weight: 700; margin-bottom: 16px; }
+.carousel-slide p { font-size: 0.85rem; color: var(--ink-light, #5a4f3f); line-height: 2; max-width: 450px; margin: 0 auto; }
+.carousel-arrows { display: flex; justify-content: center; gap: 16px; margin-top: 2rem; }
+.carousel-arrow {
+  width: 40px; height: 40px; border-radius: 50%; border: 1.5px solid var(--accent-light, #d4a06a);
+  background: transparent; cursor: pointer; font-size: 1rem; color: var(--accent, #8b4513); transition: all 0.2s;
+}
+.carousel-arrow:hover { background: var(--accent, #8b4513); color: #fff; }
+.carousel-dots { display: flex; justify-content: center; gap: 8px; margin-top: 1rem; }
+.carousel-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--accent-light, #d4a06a); opacity: 0.4; transition: all 0.2s; }
+.carousel-dot.active { opacity: 1; transform: scale(1.3); background: var(--accent, #8b4513); }
+```
+
+**使用原则**：
+- 内容居中展示，单屏一张，焦点突出
+- 箭头圆形按钮 hover 变实心增强反馈
+- 圆点指示当前位置
+- 适合 3-6 项的重点内容轮播展示
+
+---
+
+## 30. 堆叠卡片（Stacked Cards）
+
+适用场景：内容像一沓卡片堆叠，点击顶部飞走露出下一张。视觉趣味性强，适合教学、游戏化展示。
+
+```html
+<div class="stack-container" id="cardStack">
+  <div class="stack-card" onclick="flipStack()">
+    <span class="stack-tag">标签一</span>
+    <h3>卡片标题</h3>
+    <p>卡片内容。</p>
+  </div>
+  <div class="stack-card" onclick="flipStack()">
+    <span class="stack-tag">标签二</span>
+    <h3>卡片标题</h3>
+    <p>卡片内容。</p>
+  </div>
+  <div class="stack-card" onclick="flipStack()">
+    <span class="stack-tag">标签三</span>
+    <h3>卡片标题</h3>
+    <p>卡片内容。</p>
+  </div>
+</div>
+<p class="stack-hint">点击卡片翻到下一张</p>
+
+<script>
+function flipStack() {
+  const stack = document.getElementById('cardStack');
+  const cards = [...stack.children];
+  const first = cards[0];
+  first.style.transform = 'translateX(-120%) rotate(-5deg)';
+  first.style.opacity = '0';
+  setTimeout(() => {
+    stack.appendChild(first);
+    first.style.transform = '';
+    first.style.opacity = '';
+    [...stack.children].forEach((card, i) => {
+      card.style.zIndex = 4 - i;
+      if (i === 0) { card.style.transform = 'translateY(0) scale(1)'; card.style.opacity = '1'; }
+      else if (i === 1) { card.style.transform = 'translateY(12px) scale(0.96)'; card.style.opacity = '0.8'; }
+      else if (i === 2) { card.style.transform = 'translateY(24px) scale(0.92)'; card.style.opacity = '0.6'; }
+      else { card.style.transform = 'translateY(36px) scale(0.88)'; card.style.opacity = '0.4'; }
+    });
+  }, 300);
+}
+</script>
+```
+
+```css
+.stack-container { position: relative; width: 380px; height: 280px; perspective: 1000px; margin: 1.5rem auto; }
+.stack-card {
+  position: absolute; inset: 0; background: #fff; border-radius: 16px;
+  padding: 32px; box-shadow: 0 6px 24px rgba(0,0,0,0.08);
+  transition: all 0.4s ease; cursor: pointer;
+}
+.stack-card:nth-child(1) { z-index: 4; transform: translateY(0) scale(1); }
+.stack-card:nth-child(2) { z-index: 3; transform: translateY(12px) scale(0.96); opacity: 0.8; }
+.stack-card:nth-child(3) { z-index: 2; transform: translateY(24px) scale(0.92); opacity: 0.6; }
+.stack-card:nth-child(4) { z-index: 1; transform: translateY(36px) scale(0.88); opacity: 0.4; }
+.stack-card h3 { font-size: 1.2rem; font-weight: 700; margin-bottom: 12px; }
+.stack-card p { font-size: 0.82rem; color: var(--ink-light, #5a4f3f); line-height: 1.9; }
+.stack-tag { display: inline-block; background: var(--accent, #8b4513); color: #fff; font-size: 0.7rem; padding: 2px 8px; border-radius: 3px; margin-bottom: 10px; }
+.stack-hint { font-size: 0.75rem; color: var(--ink-faint, #8a7e6d); text-align: center; margin-top: 3.5rem; font-family: 'Caveat', cursive; }
+```
+
+**使用原则**：
+- 卡片数量 3-5 张效果最佳
+- 堆叠偏移 12px + 缩小 4% 制造纵深
+- 飞出动画 300ms + 左移旋转增加趣味
+- 适合游戏化教学、知识卡片、功能点展示
+
+---
+
+## 31. 翻转卡片（3D Flip Card）
+
+适用场景：正反两面信息展示——正面是核心句/名言/问题，背面是翻译/答案/解释。适合教学、名句展示、闪卡。
+
+```html
+<div class="flip-scene">
+  <div class="flip-card" onclick="this.classList.toggle('flipped')">
+    <div class="flip-front">
+      <h2>正面大字内容</h2>
+      <p class="flip-hint">↺ 点击翻转</p>
+    </div>
+    <div class="flip-back">
+      <h3>背面标题</h3>
+      <p>背面详细内容/翻译/答案</p>
+    </div>
+  </div>
+</div>
+```
+
+```css
+.flip-scene { perspective: 1000px; width: 500px; max-width: 90vw; height: 320px; }
+.flip-card {
+  width: 100%; height: 100%; position: relative;
+  transform-style: preserve-3d; transition: transform 0.6s ease; cursor: pointer;
+}
+.flip-card.flipped { transform: rotateY(180deg); }
+.flip-front, .flip-back {
+  position: absolute; inset: 0; backface-visibility: hidden;
+  border-radius: 20px; display: flex; flex-direction: column;
+  justify-content: center; align-items: center; padding: 40px;
+}
+.flip-front { background: #fff; box-shadow: 0 8px 32px rgba(0,0,0,0.08); }
+.flip-front h2 { font-size: clamp(2.2rem, 5vw, 3.2rem); line-height: 1.6; text-align: center; }
+.flip-front .flip-hint { font-size: 0.75rem; color: var(--ink-faint, #8a7e6d); margin-top: 2rem; }
+.flip-back {
+  background: var(--accent, #8b4513); color: #fff;
+  transform: rotateY(180deg); text-align: center;
+}
+.flip-back h3 { font-size: 1rem; font-weight: 400; opacity: 0.8; margin-bottom: 1rem; }
+.flip-back p { font-size: 0.92rem; line-height: 2; max-width: 380px; }
+```
+
+**使用原则**：
+- 正面只放核心内容（大字、名句、问题），不放解释
+- 背面放翻译/答案/解释，形成对照
+- 翻转动画 0.6s，preserve-3d 保证视觉正确
+- 适合古文名句、单词卡、问答、知识闪卡
+
+---
+
+## 32. 悬停揭示卡片（Hover Reveal Card）
+
+适用场景：核心内容常驻展示，翻译/注释/补充信息在悬停时覆盖显示。比翻转卡片更轻量，适合不需要完整翻面的场景。
+
+```html
+<div class="reveal-card">
+  <h2 class="reveal-text">正面主内容</h2>
+  <p class="reveal-sub">副信息（拼音/出处等）</p>
+  <div class="reveal-overlay">
+    <p>悬停后显示的翻译/解释内容</p>
+    <p class="reveal-note">补充注释</p>
+  </div>
+</div>
+<p class="reveal-hint">悬停查看翻译 →</p>
+```
+
+```css
+.reveal-card {
+  position: relative; width: 550px; max-width: 90vw;
+  text-align: center; padding: 48px 40px; background: #fff;
+  border-radius: 20px; box-shadow: 0 4px 20px rgba(0,0,0,0.05); overflow: hidden;
+}
+.reveal-text {
+  font-size: clamp(2.5rem, 6vw, 3.5rem); line-height: 1.5;
+  color: var(--ink, #2c2416); position: relative; z-index: 2;
+}
+.reveal-sub { font-size: 0.8rem; color: var(--ink-faint, #8a7e6d); margin-top: 0.5rem; letter-spacing: 0.1em; position: relative; z-index: 2; }
+.reveal-overlay {
+  position: absolute; inset: 0; background: var(--accent, #8b4513); color: #fff;
+  display: flex; flex-direction: column; justify-content: center; align-items: center;
+  padding: 40px; opacity: 0; transition: opacity 0.4s ease; z-index: 3; border-radius: 20px;
+}
+.reveal-card:hover .reveal-overlay { opacity: 1; }
+.reveal-overlay p { font-size: 0.9rem; line-height: 2; text-align: center; max-width: 380px; }
+.reveal-note { margin-top: 1rem; font-size: 0.82rem; opacity: 0.7; }
+.reveal-hint { font-size: 0.75rem; color: var(--ink-faint, #8a7e6d); margin-top: 1rem; text-align: center; }
+```
+
+**使用原则**：
+- 正面信息要足够"重"——大字、醒目，让人想探索
+- 遮罩用品牌色/强调色，与正面形成反差
+- transition 0.4s 平滑过渡
+- 适合名句展示、术语解释、产品功能揭示
+
+---
+
+## 33. 暗底大字+按钮揭示（Dark Hero Reveal）
+
+适用场景：深色背景突出核心名句/标语，超大装饰字做氛围，翻译/释义通过按钮主动触发显示。适合需要仪式感的展示。
+
+```html
+<div class="dark-reveal-wrap">
+  <div class="dark-reveal-bgchar">字</div>
+  <div class="dark-reveal-content">
+    <h2>核心名句大字</h2>
+    <div class="dark-reveal-divider"></div>
+    <div class="dark-reveal-trans" id="darkTrans">
+      隐藏的翻译/解释文字
+    </div>
+    <button class="dark-reveal-btn" onclick="document.getElementById('darkTrans').classList.toggle('show'); this.textContent = this.textContent === '显示翻译' ? '隐藏翻译' : '显示翻译';">显示翻译</button>
+  </div>
+</div>
+```
+
+```css
+/* 需要深色背景容器 background: #1a1510; color: #f0e9dc; */
+.dark-reveal-bgchar {
+  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
+  font-size: clamp(20rem, 40vw, 35rem); color: rgba(255,255,255,0.03);
+  pointer-events: none; line-height: 1;
+}
+.dark-reveal-content { position: relative; z-index: 1; text-align: center; max-width: 550px; }
+.dark-reveal-content h2 {
+  font-size: clamp(2.5rem, 7vw, 4rem); line-height: 1.6; color: #fff; margin-bottom: 2rem;
+}
+.dark-reveal-divider { width: 40px; height: 2px; background: var(--accent-light, #d4a06a); margin: 0 auto 2rem; }
+.dark-reveal-trans {
+  font-size: 0.88rem; color: rgba(255,255,255,0.6); line-height: 2;
+  opacity: 0; transition: opacity 0.5s;
+}
+.dark-reveal-trans.show { opacity: 1; }
+.dark-reveal-btn {
+  margin-top: 2rem; padding: 8px 20px; border: 1px solid var(--accent-light, #d4a06a);
+  background: transparent; color: var(--accent-light, #d4a06a); border-radius: 20px;
+  font-size: 0.78rem; cursor: pointer; transition: all 0.2s;
+}
+.dark-reveal-btn:hover { background: var(--accent-light, #d4a06a); color: #1a1510; }
+```
+
+**使用原则**：
+- 背景用深色（#1a1510 或 #0d1117），文字白/米色
+- 超大装饰字用极低透明度（0.03），做氛围不干扰
+- 按钮触发比悬停更有仪式感，适合正式教学场景
+- 适合名言金句、品牌slogan、演讲稿重点句展示
+
+---
+
+## 34. 左右分栏问答（Split Q&A）
+
+适用场景：左侧放问题/任务列表，右侧放辅助信息（结构图、流程、提示）。适合课后练习、FAQ+Tips、任务+参考。
+
+```html
+<div class="split-qa">
+  <div class="split-qa-left">
+    <h2>标题</h2>
+    <div class="split-qa-item">
+      <span class="split-qa-num">1</span>
+      <p>问题内容</p>
+    </div>
+    <div class="split-qa-item">
+      <span class="split-qa-num">2</span>
+      <p>问题内容</p>
+    </div>
+  </div>
+  <div class="split-qa-right">
+    <h3>辅助标题</h3>
+    <div class="split-qa-flow">
+      <span class="split-qa-step">步骤一</span>
+      <span class="split-qa-arrow">→</span>
+      <span class="split-qa-step">步骤二</span>
+      <span class="split-qa-arrow">→</span>
+      <span class="split-qa-step">步骤三</span>
+    </div>
+  </div>
+</div>
+```
+
+```css
+.split-qa { display: grid; grid-template-columns: 1.2fr 1fr; gap: clamp(32px, 5vw, 60px); align-items: start; }
+.split-qa-left h2 { font-family: 'Noto Serif SC', serif; font-weight: 900; font-size: clamp(1.8rem, 4vw, 2.5rem); margin-bottom: 1.5rem; }
+.split-qa-item { display: flex; gap: 14px; margin-bottom: 1.5rem; align-items: flex-start; }
+.split-qa-num {
+  width: 28px; height: 28px; border-radius: 50%; background: var(--accent, #8b4513);
+  color: #fff; font-size: 0.75rem; font-weight: 700; flex-shrink: 0;
+  display: flex; align-items: center; justify-content: center;
+}
+.split-qa-item p { font-size: 0.85rem; color: var(--ink-light, #5a4f3f); line-height: 1.8; }
+.split-qa-right {
+  background: #fff; border-radius: 16px; padding: 28px 24px;
+  border: 1px solid rgba(139,69,19,0.1);
+}
+.split-qa-right h3 { font-size: 0.85rem; font-weight: 700; color: var(--accent, #8b4513); margin-bottom: 12px; }
+.split-qa-flow { display: flex; align-items: center; flex-wrap: wrap; gap: 8px; }
+.split-qa-step { background: var(--cream-dark, #f0e9dc); padding: 6px 14px; border-radius: 20px; font-size: 0.78rem; color: var(--ink-light, #5a4f3f); }
+.split-qa-arrow { font-size: 0.7rem; color: var(--accent-light, #d4a06a); }
+@media (max-width: 768px) { .split-qa { grid-template-columns: 1fr; } }
+```
+
+**使用原则**：
+- 左栏信息优先级高（问题/任务），右栏为辅助（参考/结构/提示）
+- 编号圆圈与 Accordion 风格统一
+- 右栏药丸标签+箭头适合展示流程/结构
+- 适合课后练习、Q&A+参考、任务分配+资源
+
+---
+
+## 35. 编号卡片网格（Numbered Card Grid）
+
+适用场景：多个并列任务/要点用卡片形式展示，编号作背景装饰。可设置单张横跨整行。
+
+```html
+<div class="numgrid">
+  <div class="numgrid-card" data-num="01">
+    <h4>卡片标题</h4>
+    <p>卡片内容。</p>
+  </div>
+  <div class="numgrid-card" data-num="02">
+    <h4>卡片标题</h4>
+    <p>卡片内容。</p>
+  </div>
+  <div class="numgrid-card full" data-num="03">
+    <h4>横跨卡片标题</h4>
+    <p>横跨内容。</p>
+  </div>
+</div>
+```
+
+```css
+.numgrid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 16px; max-width: 600px; }
+.numgrid-card {
+  background: #fff; border-radius: 14px; padding: 24px 20px;
+  position: relative; overflow: hidden; transition: transform 0.2s;
+}
+.numgrid-card:hover { transform: translateY(-3px); }
+.numgrid-card::before {
+  content: attr(data-num); position: absolute; top: -8px; right: 12px;
+  font-family: 'Caveat', cursive; font-size: 3rem; color: var(--accent-light, #d4a06a); opacity: 0.2;
+}
+.numgrid-card h4 { font-size: 0.82rem; font-weight: 700; margin-bottom: 6px; color: var(--accent, #8b4513); }
+.numgrid-card p { font-size: 0.78rem; color: var(--ink-light, #5a4f3f); line-height: 1.8; }
+.numgrid-card.full { grid-column: 1 / -1; }
+@media (max-width: 768px) { .numgrid { grid-template-columns: 1fr; } }
+```
+
+**使用原则**：
+- 2列网格，hover微浮增加交互感
+- data-num 通过 CSS attr() 做背景大字装饰
+- `.full` class 横跨整行，用于总结性卡片
+- 适合并列要点、任务列表、功能展示
+
+---
+
+## 36. 交互清单（Interactive Checklist）
+
+适用场景：有序任务列表，可点击打勾。适合教学任务、待办清单、学习进度跟踪。
+
+```html
+<div class="checklist">
+  <div class="checklist-item">
+    <div class="checklist-check" onclick="this.classList.toggle('checked')"></div>
+    <div class="checklist-content">
+      <h4>任务标题</h4>
+      <p>任务描述。</p>
+      <span class="checklist-tag">标签</span>
+    </div>
+  </div>
+  <div class="checklist-item">
+    <div class="checklist-check" onclick="this.classList.toggle('checked')"></div>
+    <div class="checklist-content">
+      <h4>任务标题</h4>
+      <p>任务描述。</p>
+      <span class="checklist-tag">标签</span>
+    </div>
+  </div>
+</div>
+```
+
+```css
+.checklist { max-width: 550px; }
+.checklist-item {
+  display: flex; align-items: flex-start; gap: 14px; padding: 14px 0;
+  border-bottom: 1px solid rgba(139,69,19,0.1);
+}
+.checklist-check {
+  width: 22px; height: 22px; border-radius: 6px; border: 2px solid var(--accent-light, #d4a06a);
+  flex-shrink: 0; margin-top: 2px; cursor: pointer; transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center;
+}
+.checklist-check.checked { background: var(--accent, #8b4513); border-color: var(--accent, #8b4513); }
+.checklist-check.checked::after { content: '✓'; color: #fff; font-size: 0.7rem; }
+.checklist-content h4 { font-size: 0.85rem; font-weight: 600; margin-bottom: 2px; }
+.checklist-content p { font-size: 0.78rem; color: var(--ink-light, #5a4f3f); line-height: 1.7; }
+.checklist-tag { display: inline-block; font-size: 0.65rem; background: var(--cream-dark, #f0e9dc); color: var(--ink-faint, #8a7e6d); padding: 2px 8px; border-radius: 3px; margin-top: 4px; }
+```
+
+**使用原则**：
+- 点击方块切换打勾状态，增加参与感
+- 标签用于分类（思考/归纳/拓展/背诵等）
+- border-bottom 分隔各项，视觉清晰
+- 适合课后任务、学习清单、进度追踪
+
+---
+
+## 37. 手写明信片（Handwritten Postcard）
+
+适用场景：结尾页、寄语、课后总结。模拟手写卡片的温暖感，微歪旋转+虚线分隔+邮票装饰。
+
+```html
+<div class="postcard">
+  <h2 class="postcard-title">标题（手写体）</h2>
+  <div class="postcard-body">
+    <span class="postcard-num">①</span> 第一行内容<br>
+    <span class="postcard-num">②</span> 第二行内容<br>
+    <span class="postcard-num">③</span> 第三行内容
+  </div>
+  <hr class="postcard-divider">
+  <div class="postcard-footer">
+    补充信息或寄语
+  </div>
+  <span class="postcard-stamp">— 署名 ✦</span>
+</div>
+```
+
+```css
+.postcard {
+  background: #fff; border-radius: 4px; padding: 48px 44px;
+  max-width: 520px; box-shadow: 0 4px 24px rgba(0,0,0,0.06);
+  border: 1px solid rgba(139,69,19,0.08); position: relative;
+  transform: rotate(-0.5deg);
+}
+.postcard::before {
+  content: ''; position: absolute; top: 20px; right: 20px;
+  width: 50px; height: 50px; border: 2px solid var(--accent-light, #d4a06a); opacity: 0.3;
+}
+.postcard-title {
+  font-family: 'Ma Shan Zheng', cursive; font-size: 1.8rem;
+  margin-bottom: 1.5rem; transform: rotate(0.5deg);
+}
+.postcard-body {
+  font-family: 'Caveat', cursive; font-size: 1.05rem; line-height: 2.8;
+  color: var(--ink-light, #5a4f3f);
+}
+.postcard-num { color: var(--accent, #8b4513); font-weight: 700; }
+.postcard-divider { border: none; border-top: 1px dashed var(--accent-light, #d4a06a); margin: 1.5rem 0; }
+.postcard-footer { font-size: 0.8rem; color: var(--ink-faint, #8a7e6d); line-height: 2; }
+.postcard-footer strong { color: var(--accent, #8b4513); }
+.postcard-stamp {
+  position: absolute; bottom: -12px; right: 24px; font-family: 'Caveat', cursive;
+  font-size: 0.75rem; color: var(--ink-faint, #8a7e6d); transform: rotate(2deg);
+}
+```
+
+**使用原则**：
+- transform: rotate(-0.5deg) 制造随意放置感
+- 右上角方框模拟邮票位
+- Caveat字体 + 编号圆圈营造手写质感
+- 虚线分隔主内容和附加信息
+- 适合结尾寄语、课后思考、感谢页、个人备忘
