@@ -595,3 +595,143 @@
 ```
 
 ⚠️ 注意：需要配合JS实现拖拽/缩放。仅用于App型页面。
+
+---
+
+## 16. Sticky编号侧栏 + 大图杂志卡片
+
+**适用**: 步骤教程、流程拆解、图文并茂的长教程（步骤5~10个）
+
+```html
+<div class="layout-sticky-mag">
+  <div class="sidebar">
+    <ul class="nav">
+      <li>步骤名1</li>
+      <li>步骤名2</li>
+      <li>步骤名3</li>
+    </ul>
+  </div>
+  <div class="steps-content">
+    <div class="step-item step-observe" data-index="0">
+      <img src="step-image.png" alt="">
+      <div class="step-text">
+        <span class="step-num">01</span>
+        <div class="step-info">
+          <h4>步骤标题</h4>
+          <p>步骤描述</p>
+        </div>
+      </div>
+    </div>
+    <!-- 更多步骤 -->
+  </div>
+</div>
+```
+
+```css
+.layout-sticky-mag {
+  display: grid;
+  grid-template-columns: 200px 1fr;
+  gap: 48px;
+}
+.layout-sticky-mag .sidebar {
+  position: sticky;
+  top: 40px;
+  align-self: start;
+}
+.layout-sticky-mag .nav {
+  list-style: none;
+  counter-reset: step;
+}
+.layout-sticky-mag .nav li {
+  counter-increment: step;
+  padding: 10px 0;
+  font-size: 0.85rem;
+  color: var(--ink-faint);
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  transition: all 0.3s ease;
+}
+.layout-sticky-mag .nav li::before {
+  content: counter(step, decimal-leading-zero);
+  font-family: 'Fraunces', serif;
+  font-size: 1.5rem;
+  font-weight: 900;
+  color: rgba(43,127,216,0.12);
+  min-width: 36px;
+  transition: all 0.3s ease;
+}
+.layout-sticky-mag .nav li.active {
+  color: var(--ink);
+  font-weight: 700;
+}
+.layout-sticky-mag .nav li.active::before {
+  color: var(--blue);
+  font-size: 1.8rem;
+}
+.steps-content {
+  display: flex;
+  flex-direction: column;
+  gap: 48px;
+}
+.step-item {
+  border-radius: 14px;
+  overflow: hidden;
+  box-shadow: 0 3px 16px rgba(0,0,0,0.05);
+  background: white;
+}
+.step-item img {
+  width: 100%;
+  display: block;
+}
+.step-item .step-text {
+  padding: 32px 36px;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  gap: 20px;
+  align-items: start;
+}
+.step-item .step-num {
+  font-family: 'Fraunces', serif;
+  font-size: 3rem;
+  font-weight: 900;
+  line-height: 1;
+  color: rgba(43,127,216,0.15);
+}
+.step-item:nth-child(3n+2) .step-num { color: rgba(244,215,88,0.35); }
+.step-item:nth-child(3n) .step-num { color: rgba(232,74,95,0.2); }
+.step-item .step-info h4 {
+  font-family: 'Noto Serif SC', serif;
+  font-size: 1.3rem;
+  font-weight: 900;
+  margin-bottom: 8px;
+  line-height: 1.4;
+}
+.step-item .step-info p {
+  font-size: 1rem;
+  color: var(--ink-light);
+  line-height: 1.9;
+}
+@media (max-width: 900px) {
+  .layout-sticky-mag { grid-template-columns: 1fr; }
+  .layout-sticky-mag .sidebar { display: none; }
+  .step-item .step-text { grid-template-columns: 1fr; }
+  .step-item .step-num { font-size: 2rem; }
+}
+```
+
+**JS配套**（侧栏滚动联动高亮）:
+```javascript
+const navItems = document.querySelectorAll('.nav li');
+const stepObserver = new IntersectionObserver((entries) => {
+  entries.forEach(entry => {
+    if (entry.isIntersecting) {
+      const idx = parseInt(entry.target.dataset.index);
+      navItems.forEach((li, i) => li.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.35, rootMargin: '-15% 0px -50% 0px' });
+document.querySelectorAll('.step-observe').forEach(el => stepObserver.observe(el));
+```
+
+⚠️ 注意：步骤5~10个最合适。超过10个太长，少于5个用横向Step连接线（#7）更紧凑。大图是关键——每一步都必须有一张占满宽度的配图。编号三色轮换（蓝/黄/红）保持节奏。移动端侧栏隐藏，变成纯纵向滚动。
