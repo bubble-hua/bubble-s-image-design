@@ -63,7 +63,7 @@
 - 大标题（84px）用汇文明朝体（Huiwen Mincho），关键词用蓝色高亮块（`background: #2B7FD8; color: #fff; padding: 4px 16px; border-radius: 6px`）
 - 副标题（44px）一行显示，紧跟标题下方，`white-space: nowrap`
 - 圆形头像（`avatar.jpg`，120px，`border: 4px solid #F4D758`）
-- 署名「Esther不二」44px + 介绍34px
+- 署名（作者名）44px + 介绍34px
 - 整体边框：`border: 28px solid #F4D758`
 - 背景加浅色网格质感（`background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px`）
 - 中间留白区域给用户放效果图/截图
@@ -75,9 +75,9 @@
 
 ### 最后一页 尾页
 - 金句（oversized引号装饰 `"` ，Fraunces 200px，opacity 0.15）
-- 圆形头像 + 署名「Esther不二」
-- CTA：「关注 Esther不二」（英文卡片用 `Slowly building, openly sharing.`）
-- 一行小字：`在AI时代认真生活的女生｜INTJ / 跟Agent搭档的第1年`（英文卡片用 `Living intentionally in the AI era | INTJ / Teaming up with an AI agent — year one`）
+- 圆形头像 + 署名（作者名）
+- CTA：「关注 + 作者名」（英文卡片可用你的固定英文 CTA 短语）
+- 一行小字：你的签名档（见 `components.md` #43，中英文按卡片语言选择）
 - 底部品牌三色装饰条
 
 ---
@@ -103,9 +103,20 @@
 
 - 所有颜色、字体、禁忌遵守 `brand-dna.md`
 - 头像源文件：`assets/avatar.jpg`（HTML内用相对路径 `avatar.jpg` 引用，交付时复制到输出HTML同目录）
-- 署名固定为你在 `template-cards.html` 中配置的作者名（默认「Esther不二」）
+- 署名固定为你在 `template-cards.html` 中配置的作者名（模板内为占位符，使用前替换）
 - 品牌三色比例：主色6 : 强调3 : 点缀1
 - 背景主色：奶白 `#fefcf6` / 深奶 `#faf6eb`，深色面板用 `#1A1A2E`
+
+---
+
+## 🌍 英文卡片补充规范
+
+用于 Twitter/Instagram 等出海平台的英文卡片，在上述规范基础上调整：
+
+- 标题/金句用 **Fraunces italic**（替代中文的 Noto Serif SC），手写标注用 **Caveat**
+- 文案风格：除专有名词/缩写外全小写，句首字母大写
+- 英文单词较长，标题字号可比中文规范上浮（封面可到 110-130px），注意单词换行不截断
+- 尾页 CTA 用你的固定英文短语替代「关注 + 作者名」，签名档用英文版（见 `components.md` #43）
 
 ---
 
@@ -116,7 +127,7 @@
 - [ ] 每页是否撑满画面（内容占满1080×1440，有呼吸感但不留大片空白）
 - [ ] 页面之间排版是否有变化（不能连续3页同一layout）
 - [ ] 品牌三色比例 6:3:1
-- [ ] 头像和署名是否正确（圆形头像+「Esther不二」）
+- [ ] 头像和署名是否正确（圆形头像+作者名）
 - [ ] 导出按钮是否工作（html2canvas本地文件 + JSZip CDN、exportAll打包zip一次性下载）
 - [ ] 卡片是否居中显示（transform-origin: top center）
 - [ ] 用localhost打开测试导出（file://协议下js加载受限）

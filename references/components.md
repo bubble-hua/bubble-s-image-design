@@ -4015,23 +4015,21 @@ function flipStack() {
 
 适用场景：`页尾` `个人签名` `品牌标识`
 
-固定签名档（用于footer、文章结尾、个人介绍）。以下为仓库作者 Esther不二 的默认签名，fork后请替换成你自己的：
+固定签名档（用于footer、文章结尾、个人介绍）。以下为占位示例，使用前替换成你自己的：
 
 ```
-▪️在AI时代认真生活的女生｜INTJ
-▪️跟Agent搭档的第1年
+▪️你的一句话介绍｜你的MBTI
+▪️你的第二行签名
 ```
 
-英文版（用于英文卡片/出海内容，除 INTJ 外小写，句首字母大写）：
+英文版建议除专有名词/缩写外全小写，句首字母大写：
 
 ```
-Living intentionally in the AI era | INTJ
-Teaming up with an AI agent — year one
+Your one-line intro | MBTI
+Your second line — keep it short
 ```
 
-英文内容固定 CTA：`Slowly building, openly sharing.`
-
-不要再用旧版「AI时代的个人品牌实验 · 用AI让生活变好」。
+英文内容可另配一句固定 CTA 短语，替代「关注 + 作者名」。
 
 ---
 
