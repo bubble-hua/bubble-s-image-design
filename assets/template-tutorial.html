@@ -3,229 +3,1083 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><!-- 页面标题 --></title>
+  <title>花心小泡泡 · 设计系统教程</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Caveat:wght@400;700&family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fira+Code:wght@400&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Fira+Code:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* === CSS变量 === */
     :root {
-      --blue: #2B7FD8;
-      --blue-deep: #1E5BA8;
-      --yellow: #F4D758;
-      --yellow-soft: #FFF3CD;
-      --red: #E84A5F;
-      --cream: #fefcf6;
-      --cream-dark: #faf6eb;
-      --ink: #1A1A2E;
-      --ink-light: #4A4A5A;
-      --ink-faint: #8A8A9A;
-      --dark-panel: #151821;
+      --brown: #A67B5B;
+      --brown-deep: #8B6343;
+      --yellow: #F0C674;
+      --yellow-soft: #FDF0D0;
+      --blue: #5B8BA0;
+      --blue-deep: #4A7A8E;
+      --cream: #FDF8F0;
+      --cream-dark: #F5EDE0;
+      --ink: #2D2420;
+      --ink-light: #5C4D44;
+      --ink-faint: #8A7D74;
+      --dark-panel: #1E1A16;
+      --terminal-green: #6B9E5A;
+      --font-display: 'Fraunces', 'Noto Serif SC', serif;
+      --font-body: 'Noto Sans SC', sans-serif;
+      --font-hand: 'Caveat', cursive;
+      --font-mono: 'Fira Code', monospace;
+      --font-serif: 'Noto Serif SC', serif;
+      --content-width: clamp(320px, 90vw, 1100px);
+      --nav-height: 64px;
     }
 
-    /* === Reset === */
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: clamp(15px, 1.2vw, 18px);
+    }
 
     body {
-      font-family: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
+      font-family: var(--font-body);
       color: var(--ink);
       background: var(--cream);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
     }
 
-    ::selection {
-      background: var(--yellow);
+    /* ============ NAV ============ */
+    .nav {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: var(--nav-height);
+      z-index: 1000;
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      background: rgba(253, 248, 240, 0.82);
+      border-bottom: 1px solid rgba(166, 123, 91, 0.12);
+      display: flex;
+      align-items: center;
+      padding: 0 clamp(16px, 4vw, 48px);
+      transition: background 0.3s;
+    }
+
+    .nav.scrolled {
+      background: rgba(253, 248, 240, 0.95);
+      box-shadow: 0 1px 20px rgba(45, 36, 32, 0.06);
+    }
+
+    .nav-logo {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      text-decoration: none;
       color: var(--ink);
     }
 
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 0 2rem;
+    .nav-avatar {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--yellow);
     }
 
-    /* === Hero Section === */
-    /* 替换为适合的Hero布局（参见layouts.md） */
-    .hero {
-      min-height: 100vh;
-      display: grid;
-      grid-template-columns: 1fr 0.6fr;
+    .nav-name {
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1.1rem;
+      letter-spacing: -0.01em;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: clamp(12px, 2vw, 28px);
+      margin-left: auto;
+      list-style: none;
       align-items: center;
-      gap: 48px;
-      padding: 6rem 2rem 4rem;
-      max-width: 1300px;
-      margin: 0 auto;
     }
 
-    .hero h1 {
-      font-family: 'Noto Serif SC', serif;
-      font-weight: 900;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      line-height: 1.15;
-    }
-
-    .hero p {
-      font-size: 1.05rem;
+    .nav-links a {
+      text-decoration: none;
       color: var(--ink-light);
-      margin-top: 1.5rem;
+      font-size: 0.9rem;
+      font-weight: 400;
+      transition: color 0.25s;
+      position: relative;
+    }
+
+    .nav-links a:hover {
+      color: var(--brown);
+    }
+
+    .nav-links a::after {
+      content: '';
+      position: absolute;
+      bottom: -4px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--brown);
+      transition: width 0.3s;
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    .nav-cta {
+      background: var(--brown);
+      color: #fff !important;
+      padding: 8px 20px;
+      border-radius: 24px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      transition: background 0.3s, transform 0.2s;
+    }
+
+    .nav-cta:hover {
+      background: var(--brown-deep);
+      transform: translateY(-1px);
+    }
+
+    .nav-cta::after {
+      display: none !important;
+    }
+
+    .nav-toggle {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      margin-left: auto;
+    }
+
+    .nav-toggle span {
+      width: 24px;
+      height: 2px;
+      background: var(--ink);
+      border-radius: 2px;
+      transition: transform 0.3s, opacity 0.3s;
+    }
+
+    /* ============ HERO ============ */
+    .hero {
+      padding: calc(var(--nav-height) + clamp(40px, 8vh, 100px)) clamp(16px, 4vw, 48px) clamp(40px, 8vh, 80px);
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(24px, 4vw, 60px);
+      align-items: center;
+      max-width: var(--content-width);
+      margin: 0 auto;
+      min-height: 80vh;
+    }
+
+    .hero-content {
       max-width: 540px;
     }
 
-    .label-caps {
+    .hero-badge {
+      display: inline-block;
+      background: var(--yellow-soft);
+      color: var(--brown-deep);
+      padding: 4px 14px;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      margin-bottom: clamp(12px, 2vh, 24px);
+      letter-spacing: 0.04em;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 5vw, 3.6rem);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.02em;
+      margin-bottom: clamp(12px, 2vh, 20px);
+      color: var(--ink);
+    }
+
+    .hero-title em {
+      font-style: italic;
+      color: var(--brown);
+    }
+
+    .hero-desc {
+      font-size: clamp(0.95rem, 1.3vw, 1.15rem);
+      color: var(--ink-light);
+      margin-bottom: clamp(20px, 3vh, 32px);
+      max-width: 460px;
+    }
+
+    .hero-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.85rem;
+      color: var(--ink-faint);
+    }
+
+    .hero-meta img {
+      width: 28px;
+      height: 28px;
+      border-radius: 50%;
+    }
+
+    .hero-visual {
+      position: relative;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 1;
+      max-width: 400px;
+      margin: 0 auto;
+      width: 100%;
+    }
+
+    .hero-mascot {
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, var(--yellow-soft) 0%, var(--cream-dark) 50%, var(--yellow-soft) 100%);
+      border-radius: 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      position: relative;
+      overflow: hidden;
+      border: 2px dashed var(--brown);
+    }
+
+    .hero-mascot::before {
+      content: '';
+      position: absolute;
+      width: 60%;
+      height: 60%;
+      background: radial-gradient(circle, rgba(166, 123, 91, 0.1) 0%, transparent 70%);
+      border-radius: 50%;
+    }
+
+    .hero-mascot-text {
+      font-family: var(--font-hand);
+      font-size: clamp(2rem, 4vw, 3.5rem);
+      color: var(--brown);
+      text-align: center;
+      line-height: 1.2;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-dots {
+      position: absolute;
+      bottom: 20px;
+      right: 20px;
+      display: grid;
+      grid-template-columns: repeat(3, 8px);
+      gap: 6px;
+    }
+
+    .hero-dots span {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--brown);
+      opacity: 0.3;
+    }
+
+    .hero-dots span:nth-child(odd) {
+      opacity: 0.6;
+    }
+
+    /* ============ SECTION COMMON ============ */
+    .section {
+      padding: clamp(40px, 6vh, 80px) clamp(16px, 4vw, 48px);
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
       font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      font-weight: 500;
-      color: var(--ink-faint);
-      display: block;
-      margin-bottom: 0.75rem;
-    }
-
-    /* === Content Sections === */
-    /* 每个section使用不同布局（参见layouts.md） */
-    .section {
-      padding: clamp(80px, 12vh, 160px) 0;
-    }
-
-    .section--alt {
-      background: var(--cream-dark);
-    }
-
-    .section-header {
-      margin-bottom: clamp(40px, 6vw, 80px);
-    }
-
-    .section-number {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      color: var(--blue);
-      opacity: 0.3;
-      display: block;
-      margin-bottom: 0.25rem;
+      letter-spacing: 0.1em;
+      color: var(--brown);
+      margin-bottom: 8px;
     }
 
     .section-title {
-      font-family: 'Noto Serif SC', serif;
-      font-weight: 900;
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: clamp(16px, 2vh, 24px);
     }
 
-    /* === 卡片 === */
-    .feature-card {
-      background: var(--cream-dark);
+    .section-desc {
+      color: var(--ink-light);
+      max-width: 600px;
+      font-size: 0.95rem;
+    }
+
+    /* ============ STICKY SIDEBAR LAYOUT ============ */
+    .sticky-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: clamp(24px, 4vw, 48px);
+      max-width: var(--content-width);
+      margin: 0 auto;
+      align-items: start;
+    }
+
+    .sticky-sidebar {
+      position: sticky;
+      top: calc(var(--nav-height) + 24px);
+      background: #fff;
       border-radius: 16px;
-      padding: clamp(24px, 3vw, 36px);
-      border-left: 4px solid var(--yellow);
-      transition: transform 0.3s ease;
+      padding: clamp(20px, 3vw, 28px);
+      box-shadow: 0 2px 20px rgba(45, 36, 32, 0.05);
+      border: 1px solid rgba(166, 123, 91, 0.1);
     }
-    .feature-card:hover { transform: translateY(-4px); }
 
-    /* === Scroll Reveal === */
+    .sticky-sidebar h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 16px;
+    }
+
+    .sticky-sidebar ul {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .sticky-sidebar li a {
+      display: block;
+      padding: 8px 12px;
+      text-decoration: none;
+      color: var(--ink-light);
+      font-size: 0.9rem;
+      border-radius: 8px;
+      transition: background 0.2s, color 0.2s;
+    }
+
+    .sticky-sidebar li a:hover,
+    .sticky-sidebar li a.active {
+      background: var(--yellow-soft);
+      color: var(--brown-deep);
+    }
+
+    .sticky-content h3 {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2vw, 1.5rem);
+      margin-bottom: 12px;
+      margin-top: 32px;
+    }
+
+    .sticky-content h3:first-child {
+      margin-top: 0;
+    }
+
+    .sticky-content p {
+      color: var(--ink-light);
+      margin-bottom: 16px;
+      font-size: 0.9rem;
+    }
+
+    /* ============ CARD GRID ============ */
+    .card-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(16px, 2vw, 24px);
+      max-width: var(--content-width);
+      margin: 0 auto;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 16px;
+      padding: clamp(20px, 3vw, 32px);
+      box-shadow: 0 2px 16px rgba(45, 36, 32, 0.04);
+      border: 1px solid rgba(166, 123, 91, 0.08);
+      transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 30px rgba(45, 36, 32, 0.08);
+    }
+
+    .card-icon {
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      background: var(--yellow-soft);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.4rem;
+      margin-bottom: 16px;
+    }
+
+    .card h4 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      margin-bottom: 8px;
+    }
+
+    .card p {
+      color: var(--ink-light);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    /* ============ FULL-WIDTH BROWN PANEL ============ */
+    .brand-panel {
+      background: var(--brown);
+      color: #fff;
+      padding: clamp(48px, 8vh, 80px) clamp(16px, 4vw, 48px);
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .brand-panel::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(ellipse at 30% 50%, rgba(240, 198, 116, 0.12) 0%, transparent 60%),
+                  radial-gradient(ellipse at 70% 50%, rgba(91, 139, 160, 0.08) 0%, transparent 60%);
+    }
+
+    .brand-panel-inner {
+      position: relative;
+      z-index: 1;
+      max-width: 640px;
+      margin: 0 auto;
+    }
+
+    .brand-panel .section-label {
+      color: rgba(255,255,255,0.7);
+    }
+
+    .brand-panel h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+
+    .brand-panel p {
+      opacity: 0.85;
+      font-size: 1rem;
+      line-height: 1.7;
+    }
+
+    .brand-panel .brand-stat-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 40px;
+    }
+
+    .brand-stat {
+      text-align: center;
+    }
+
+    .brand-stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 3vw, 2.8rem);
+      font-weight: 700;
+    }
+
+    .brand-stat-label {
+      font-size: 0.8rem;
+      opacity: 0.7;
+      margin-top: 4px;
+    }
+
+    /* ============ STEP TIMELINE ============ */
+    .step-list {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      flex-direction: column;
+      gap: clamp(24px, 4vh, 40px);
+      position: relative;
+    }
+
+    .step-list::before {
+      content: '';
+      position: absolute;
+      left: 23px;
+      top: 12px;
+      bottom: 12px;
+      width: 2px;
+      background: linear-gradient(to bottom, var(--brown), var(--yellow), var(--blue));
+      border-radius: 1px;
+    }
+
+    .step-item {
+      display: flex;
+      gap: clamp(16px, 2vw, 28px);
+      align-items: flex-start;
+    }
+
+    .step-number {
+      flex-shrink: 0;
+      width: 48px;
+      height: 48px;
+      border-radius: 50%;
+      background: #fff;
+      border: 2px solid var(--brown);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: var(--brown);
+      position: relative;
+      z-index: 1;
+    }
+
+    .step-body h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .step-body p {
+      color: var(--ink-light);
+      font-size: 0.85rem;
+    }
+
+    /* ============ DARK QUOTE PANEL ============ */
+    .quote-panel {
+      background: var(--dark-panel);
+      color: #fff;
+      padding: clamp(48px, 8vh, 80px) clamp(16px, 4vw, 48px);
+      text-align: center;
+    }
+
+    .quote-panel blockquote {
+      max-width: 680px;
+      margin: 0 auto;
+      font-family: var(--font-display);
+      font-size: clamp(1.3rem, 2.5vw, 2rem);
+      font-style: italic;
+      line-height: 1.5;
+      opacity: 0.9;
+      position: relative;
+    }
+
+    .quote-panel blockquote::before {
+      content: '"';
+      font-size: clamp(4rem, 6vw, 6rem);
+      font-family: var(--font-display);
+      position: absolute;
+      top: -30px;
+      left: -20px;
+      color: var(--brown);
+      opacity: 0.4;
+      line-height: 1;
+    }
+
+    .quote-author {
+      margin-top: 20px;
+      font-size: 0.9rem;
+      opacity: 0.6;
+      font-family: var(--font-body);
+      font-style: normal;
+    }
+
+    /* ============ CTA ============ */
+    .cta-section {
+      text-align: center;
+      padding: clamp(48px, 8vh, 80px) clamp(16px, 4vw, 48px);
+      background: linear-gradient(to bottom, var(--cream), var(--cream-dark));
+    }
+
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      margin-bottom: 12px;
+    }
+
+    .cta-section p {
+      color: var(--ink-light);
+      margin-bottom: 28px;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--brown);
+      color: #fff;
+      padding: 14px 40px;
+      border-radius: 32px;
+      text-decoration: none;
+      font-weight: 500;
+      font-size: 1rem;
+      transition: background 0.3s, transform 0.2s, box-shadow 0.3s;
+      box-shadow: 0 4px 16px rgba(166, 123, 91, 0.3);
+    }
+
+    .cta-btn:hover {
+      background: var(--brown-deep);
+      transform: translateY(-2px);
+      box-shadow: 0 6px 24px rgba(166, 123, 91, 0.4);
+    }
+
+    /* ============ FOOTER ============ */
+    .footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.7);
+      padding: clamp(32px, 5vh, 48px) clamp(16px, 4vw, 48px);
+      text-align: center;
+    }
+
+    .footer-signature {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .footer-signature-en {
+      font-family: var(--font-hand);
+      font-size: 1.1rem;
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      opacity: 0.5;
+    }
+
+    /* ============ SCROLL REVEAL ============ */
     .reveal {
       opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible { opacity: 1; transform: none; }
-    .reveal-d1 { transition-delay: 0.1s; }
-    .reveal-d2 { transition-delay: 0.2s; }
-    .reveal-d3 { transition-delay: 0.3s; }
-    .reveal-d4 { transition-delay: 0.4s; }
-    .reveal-d5 { transition-delay: 0.5s; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
+      transform: translateY(30px);
+      transition: opacity 0.7s ease-out, transform 0.7s ease-out;
     }
 
-    /* === 响应式 === */
+    .reveal.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+
+    /* ============ RESPONSIVE ============ */
     @media (max-width: 900px) {
       .hero {
         grid-template-columns: 1fr;
+        text-align: center;
         min-height: auto;
-        padding: 4rem 1.5rem 3rem;
+      }
+
+      .hero-content {
+        max-width: 100%;
+        order: 2;
+      }
+
+      .hero-desc {
+        max-width: 100%;
+      }
+
+      .hero-meta {
+        justify-content: center;
+      }
+
+      .hero-visual {
+        order: 1;
+        max-width: 280px;
+      }
+
+      .sticky-layout {
+        grid-template-columns: 1fr;
+      }
+
+      .sticky-sidebar {
+        position: static;
+      }
+
+      .card-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .brand-stat-grid {
+        grid-template-columns: 1fr 1fr !important;
+      }
+
+      .nav-links {
+        display: none;
+        position: absolute;
+        top: var(--nav-height);
+        left: 0;
+        right: 0;
+        flex-direction: column;
+        background: rgba(253, 248, 240, 0.98);
+        backdrop-filter: blur(16px);
+        padding: 16px;
+        gap: 4px;
+        border-bottom: 1px solid rgba(166, 123, 91, 0.1);
+      }
+
+      .nav-links.open {
+        display: flex;
+      }
+
+      .nav-toggle {
+        display: flex;
       }
     }
 
     @media (max-width: 600px) {
-      body { font-size: 15px; }
+      .card-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .brand-stat-grid {
+        grid-template-columns: 1fr !important;
+        gap: 16px !important;
+      }
+
+      .step-list::before {
+        left: 19px;
+      }
+
+      .step-number {
+        width: 38px;
+        height: 38px;
+        font-size: 0.9rem;
+      }
+
+      .hero-mascot {
+        border-radius: 24px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- ====== HERO ====== -->
-  <!-- 从layouts.md选择合适的Hero布局 -->
-  <section class="hero">
-    <div class="hero-text">
-      <span class="label-caps"><!-- 分类标签 --></span>
-      <h1><!-- 主标题 --></h1>
-      <p><!-- 副标题/描述 --></p>
-    </div>
-    <div class="hero-visual">
-      <!-- 视觉元素：图片/装饰/IP形象 -->
-    </div>
-  </section>
+  <!-- ============ NAVIGATION ============ -->
+  <nav class="nav" id="navbar">
+    <a href="#" class="nav-logo">
+      <img src="avatar.jpg" alt="Bubble" class="nav-avatar" onerror="this.style.display='none'">
+      <span class="nav-name">花心小泡泡</span>
+    </a>
+    <button class="nav-toggle" id="navToggle" aria-label="菜单">
+      <span></span><span></span><span></span>
+    </button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#hero">首页</a></li>
+      <li><a href="#guide">指南</a></li>
+      <li><a href="#cards">卡片</a></li>
+      <li><a href="#steps">流程</a></li>
+      <li><a href="#cta" class="nav-cta">Follow 在下 花心泡</a></li>
+    </ul>
+  </nav>
 
-  <!-- ====== SECTION 1 ====== -->
-  <!-- 选择不同于Hero的布局（如Sticky侧栏/Step流程/卡片网格） -->
-  <section class="section">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-number">01</span>
-        <h2 class="section-title"><!-- Section标题 --></h2>
-      </div>
-      <div class="reveal reveal-d1">
-        <!-- Section内容 -->
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== SECTION 2 ====== -->
-  <!-- 选择另一种不同布局 -->
-  <section class="section section--alt">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-number">02</span>
-        <h2 class="section-title"><!-- Section标题 --></h2>
-      </div>
-      <div class="reveal reveal-d1">
-        <!-- Section内容 -->
+  <!-- ============ HERO ============ -->
+  <section class="hero" id="hero">
+    <div class="hero-content reveal">
+      <span class="hero-badge">设计系统教程</span>
+      <h1 class="hero-title">构建属于你的<br><em>设计语言体系</em></h1>
+      <p class="hero-desc">
+        从品牌基因到组件库，从配色方案到排版节奏，系统化地掌握设计系统的构建方法。
+        让每一次创作都有据可依，让每一个像素都承载品牌灵魂。
+      </p>
+      <div class="hero-meta">
+        <img src="avatar.jpg" alt="Bubble" onerror="this.style.display='none'">
+        <span>花心小泡泡 · 发布于 2026年7月</span>
       </div>
     </div>
-  </section>
-
-  <!-- ====== SECTION 3 ====== -->
-  <!-- 可选：深色面板打破节奏 -->
-  <section class="section" style="background: var(--dark-panel); color: #e2e8f0;">
-    <div class="container">
-      <div class="reveal">
-        <!-- 重点内容/引用 -->
+    <div class="hero-visual reveal reveal-delay-1">
+      <div class="hero-mascot">
+        <span class="hero-mascot-text">Bubble<br>Design<br>System</span>
+        <div class="hero-dots">
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+          <span></span><span></span><span></span>
+        </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== FOOTER ====== -->
-  <footer class="section" style="padding: clamp(40px, 6vh, 80px) 0; text-align: center;">
-    <div class="container">
-      <p style="font-size: 0.85rem; color: var(--ink-faint);"><!-- 底部信息 --></p>
+  <!-- ============ STICKY SIDEBAR + CONTENT ============ -->
+  <section class="section" id="guide">
+    <div class="sticky-layout">
+      <aside class="sticky-sidebar reveal">
+        <h4>内容导航</h4>
+        <ul>
+          <li><a href="#colors" class="active">品牌配色方案</a></li>
+          <li><a href="#typography">字体排版系统</a></li>
+          <li><a href="#spacing">间距与布局</a></li>
+          <li><a href="#components">组件设计规范</a></li>
+          <li><a href="#motion">动效与过渡</a></li>
+          <li><a href="#accessibility">可访问性</a></li>
+        </ul>
+      </aside>
+      <div class="sticky-content reveal reveal-delay-1">
+        <div id="colors">
+          <h3>品牌配色方案</h3>
+          <p>
+            配色是设计系统的灵魂。花心小泡泡的配色方案围绕暖棕色系展开，
+            以 #A67B5B 为主色调，辅以柔和的黄色 #F0C674 和克制的蓝色 #5B8BA0，
+            整体呈现出温暖、自然、专业的视觉感受。
+          </p>
+          <p>
+            在具体应用中，棕色用于主要行动按钮和强调元素，黄色用于高亮和点缀，
+            蓝色用于链接和信息提示。背景采用奶油色 #FDF8F0 营造舒适的阅读环境。
+          </p>
+        </div>
+        <div id="typography">
+          <h3>字体排版系统</h3>
+          <p>
+            我们选择了 Fraunces 作为展示字体，搭配 Noto Sans SC 作为正文字体。
+            Fraunces 优雅的衬线特征赋予标题独特的品牌辨识度，
+            而 Noto Sans SC 的清晰易读保证了长篇内容的阅读体验。
+          </p>
+          <p>
+            代码块使用 Fira Code 等宽字体，手写体使用 Caveat 增加亲切感。
+            通过 clamp() 函数实现流式字体大小，确保在任何屏幕尺寸下都能获得最佳阅读体验。
+          </p>
+        </div>
+        <div id="spacing">
+          <h3>间距与布局</h3>
+          <p>
+            采用 4px 基准的间距体系，所有间距值都是 4 的倍数。
+            页面最大内容宽度通过 clamp(320px, 90vw, 1100px) 动态控制，
+            在保证可读性的同时充分利用屏幕空间。
+          </p>
+          <p>
+            布局策略上采用不对称双栏、粘性侧边栏、三等分网格等多种模式，
+            根据内容类型灵活切换，避免单调的单一布局。
+          </p>
+        </div>
+        <div id="components">
+          <h3>组件设计规范</h3>
+          <p>
+            所有组件都遵循统一的设计语言：圆角 8-16px、柔和的阴影、
+            微妙的边框、以及一致的交互反馈。卡片组件使用白色背景浮于暖色底上，
+            悬停时微微上浮并增强阴影，营造层次感。
+          </p>
+        </div>
+        <div id="motion">
+          <h3>动效与过渡</h3>
+          <p>
+            页面滚动时使用 IntersectionObserver 触发元素渐入动画。
+            过渡时长统一为 0.3s，使用 ease-out 缓动函数，
+            确保动画流畅自然而不突兀。
+          </p>
+        </div>
+        <div id="accessibility">
+          <h3>可访问性</h3>
+          <p>
+            所有文本与背景的对比度都满足 WCAG AA 标准。
+            交互元素具有清晰的焦点样式，支持键盘导航。
+            使用语义化 HTML 标签确保屏幕阅读器友好。
+          </p>
+        </div>
+      </div>
     </div>
+  </section>
+
+  <!-- ============ CARD GRID ============ -->
+  <section class="section" id="cards">
+    <div class="reveal" style="max-width: var(--content-width); margin: 0 auto;">
+      <span class="section-label">核心原则</span>
+      <h2 class="section-title">设计系统的四大支柱</h2>
+      <p class="section-desc">每一个成熟的设计系统都建立在这四个基础之上。</p>
+    </div>
+    <div class="card-grid" style="margin-top: clamp(24px, 3vh, 40px);">
+      <div class="card reveal reveal-delay-1">
+        <div class="card-icon">🎨</div>
+        <h4>一致性 Consistency</h4>
+        <p>统一的视觉语言让用户在不同页面间切换时感受到连贯的体验，降低认知负担，提升品牌信任度。</p>
+      </div>
+      <div class="card reveal reveal-delay-2">
+        <div class="card-icon">⚡</div>
+        <h4>效率 Efficiency</h4>
+        <p>标准化的组件和样式让设计与开发团队能够快速复用，减少重复劳动，将精力集中在解决核心问题上。</p>
+      </div>
+      <div class="card reveal reveal-delay-3">
+        <div class="card-icon">🔧</div>
+        <h4>可维护性 Maintainability</h4>
+        <p>集中管理的设计令牌（Design Tokens）使得全局修改变得简单，一处改动即可同步到所有引用处。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ BRAND PANEL ============ -->
+  <section class="brand-panel">
+    <div class="brand-panel-inner reveal">
+      <span class="section-label">设计数据</span>
+      <h2>花心小泡泡设计系统</h2>
+      <p>一套完整的设计语言体系，涵盖品牌基因、组件库、交互规范与内容策略。历经多个项目的打磨与验证，已形成稳定的设计范式。</p>
+      <div class="brand-stat-grid">
+        <div class="brand-stat">
+          <div class="brand-stat-number">12+</div>
+          <div class="brand-stat-label">配色令牌</div>
+        </div>
+        <div class="brand-stat">
+          <div class="brand-stat-number">24+</div>
+          <div class="brand-stat-label">核心组件</div>
+        </div>
+        <div class="brand-stat">
+          <div class="brand-stat-number">4</div>
+          <div class="brand-stat-label">模板体系</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ STEP TIMELINE ============ -->
+  <section class="section" id="steps">
+    <div class="reveal" style="text-align: center; margin-bottom: clamp(32px, 5vh, 48px);">
+      <span class="section-label">构建流程</span>
+      <h2 class="section-title">从零开始搭建设计系统</h2>
+    </div>
+    <div class="step-list">
+      <div class="step-item reveal reveal-delay-1">
+        <div class="step-number">1</div>
+        <div class="step-body">
+          <h4>定义品牌基因</h4>
+          <p>梳理品牌核心价值，提取关键视觉元素，确定主色调、辅助色、字体组合和设计原则。</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-2">
+        <div class="step-number">2</div>
+        <div class="step-body">
+          <h4>建立设计令牌</h4>
+          <p>将配色、字体、间距、圆角等基础属性抽象为 CSS 变量，形成可复用的设计令牌体系。</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-3">
+        <div class="step-number">3</div>
+        <div class="step-body">
+          <h4>构建组件库</h4>
+          <p>基于设计令牌开发按钮、卡片、导航栏等基础组件，确保每个组件都有完整的交互状态。</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-4">
+        <div class="step-number">4</div>
+        <div class="step-body">
+          <h4>编写页面模板</h4>
+          <p>组合组件形成页面模板，覆盖常见业务场景，为新项目提供快速启动的基础。</p>
+        </div>
+      </div>
+      <div class="step-item reveal reveal-delay-5">
+        <div class="step-number">5</div>
+        <div class="step-body">
+          <h4>持续迭代优化</h4>
+          <p>收集使用反馈，持续完善设计系统，保持与业务需求同步演进。</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DARK QUOTE PANEL ============ -->
+  <section class="quote-panel">
+    <blockquote class="reveal">
+      设计系统不是一张静态的规范文档，而是一个活着的、不断进化的生态系统。它服务于创造，而非限制创造。
+      <div class="quote-author">—— 花心小泡泡</div>
+    </blockquote>
+  </section>
+
+  <!-- ============ CTA ============ -->
+  <section class="cta-section" id="cta">
+    <div class="reveal">
+      <h2>准备好开始构建了吗？</h2>
+      <p>关注花心小泡泡，获取更多设计系统相关的内容与资源。</p>
+      <a href="#" class="cta-btn">Follow 在下 花心泡</a>
+    </div>
+  </section>
+
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-signature">花心小泡泡 · 体验生活，感受体验，记录感受</div>
+    <div class="footer-signature-en">Bubble · Live the experience, feel the moment, capture the memory</div>
+    <div class="footer-copy">&copy; 2026 花心小泡泡 Design System. All rights reserved.</div>
   </footer>
 
-  <!-- ====== Scroll Reveal JS ====== -->
   <script>
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+    // Nav scroll effect
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 20);
+    });
+
+    // Mobile nav toggle
+    const navToggle = document.getElementById('navToggle');
+    const navLinks = document.getElementById('navLinks');
+    navToggle.addEventListener('click', () => {
+      navLinks.classList.toggle('open');
+    });
+
+    // Smooth scroll for nav links
+    document.querySelectorAll('.nav-links a[href^="#"]').forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        const target = document.querySelector(link.getAttribute('href'));
+        if (target) {
+          target.scrollIntoView({ behavior: 'smooth' });
+          navLinks.classList.remove('open');
         }
       });
-    }, { threshold: 0.12 });
+    });
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    // Scroll Reveal with IntersectionObserver
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -60px 0px',
+      threshold: 0.1
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
+        }
+      });
+    }, observerOptions);
+
+    document.querySelectorAll('.reveal').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    // Sticky sidebar active link
+    const sidebarLinks = document.querySelectorAll('.sticky-sidebar a');
+    const contentSections = document.querySelectorAll('.sticky-content [id]');
+
+    window.addEventListener('scroll', () => {
+      let current = '';
+      contentSections.forEach(section => {
+        const sectionTop = section.offsetTop - 120;
+        if (window.scrollY >= sectionTop) {
+          current = section.getAttribute('id');
+        }
+      });
+      sidebarLinks.forEach(link => {
+        link.classList.toggle('active', link.getAttribute('href') === '#' + current);
+      });
+    });
   </script>
 </body>
 </html>

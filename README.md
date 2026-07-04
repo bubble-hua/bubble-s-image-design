@@ -1,124 +1,50 @@
-# Personal Design Skill
+# Bubble Design System
 
-一套给 AI 看的个人品牌设计系统。
-
-把审美写成操作手册，AI 每次帮你做页面时必须翻这本手册，不能自由发挥。**限制 AI 的自由度 = 保证输出质量。**
-
-> ⚠️ **使用前请先完成 `brand-dna.md` 的配置：** 默认品牌色可直接使用，如需替换成你自己的请同步修改模板变量；并放入你自己的头像。
+> 花心小泡泡个人品牌设计系统 — 温暖治愈、自由探索、元气满满、潇洒酷帅的设计语言。
 
 ---
 
-## Demo
+## 快速开始
 
-用这套系统生成的真实页面：
+### 首次使用前必须完成配置
 
-### 📖 教程型 - 分享会页面
+1. 品牌色已配置为花心小泡泡的棕/黄/蓝三色。如需调整，修改 `brand-dna.md` 中的三色色值
+2. 头像已放入 `assets/avatar.jpg`
+3. IP形象已放入 `assets/character.png`
+4. 模板中的作者名/签名档已替换为花心小泡泡
+5. 气质关键词和禁忌清单已根据花心小泡泡品牌调性配置
 
-信息清晰、步骤明确、有节奏的单页科普/教程。
+### 使用方式（7步工作流）
 
-🔗 [在线预览](https://esthersjw.github.io/cola-ob-sharing/cola-ob-sharing.html)
-
----
-
-### 🎪 活动页 / Landing
-
-视觉冲击、深浅面板交替、强节奏感的活动邀请页。
-
-🔗 [在线预览](https://esthersjw.github.io/esther-design-system/demo-landing.html)
-
----
-
-### 📱 App 型 / 功能型
-
-功能优先、交互感、信息密度高的应用型页面。
-
-🔗 [在线预览](https://hiesther.me/tutorials/personal-dashboard/)
-
----
-
-### 📕 小红书图文卡片
-
-3:4 比例、字大、手机可读、一键导出 PNG 的图文卡片。
-
-🔗 [在线预览](https://hiesther.me/tutorials/esther-design-system/demo-readme-cards.html)
-
----
-
-### 🧩 组件库全览
-
-30+ 经过验证的可复用组件。
-
-🔗 [组件库预览](https://hiesther.me/tutorials/esther-design-system/components-preview.html)
-
----
-
-## 核心逻辑
-
-```
-SKILL.md(流程 - AI 按什么步骤干活)
-    ↓
-brand-dna.md + references/*(规范 - 能用什么不能用什么)
-    ↓
-assets/template-*.html(起点 - 从模板改,不从零写)
-```
-
-- AI 不能随便发明布局 → 只能从 15 种里选
-- AI 不能随便用颜色 → 只能用你定义的品牌色 + 扩展规则
-- AI 不能随便写样式 → 必须从组件库里选
-- AI 做完要自检 → 对照 checklist 逐条过，P0 不过就打回
-
----
-
-## 文件结构
-
-```
-esther-design-system/
-├── SKILL.md                    ← 7步工作流(大脑)
-├── brand-dna.md                ← 品牌基因:颜色/字体/气质/禁忌(需配置)
-├── assets/                     ← 模板骨架(起点)
-│   ├── template-tutorial.html      教程页模板
-│   ├── template-landing.html       活动页模板
-│   ├── template-app.html           App型模板
-│   ├── template-cards.html         小红书卡片模板
-│   ├── html2canvas.min.js          卡片导出依赖
-│   └── avatar.jpg                  ← 你的头像(需自行放入,仓库未附带)
-└── references/                 ← 规则和零件(知识库)
-    ├── layouts.md                  15种布局模式(附完整代码)
-    ├── components.md               组件库(30+组件,完整HTML+CSS)
-    ├── checklist.md                质量检查清单(P0/P1/P2)
-    ├── scene-tutorial.md           教程场景规范
-    ├── scene-landing.md            活动页场景规范
-    ├── scene-app.md                App型场景规范
-    └── scene-cards.md              小红书卡片场景规范
-```
-
----
-
-## 7 步工作流
-
-AI 每次做设计必须按这个顺序走：
-
-| # | 做什么 | 为什么 |
-|---|--------|--------|
-| 1 | 问 5 个问题(类型/受众/几屏/素材/约束) | 不自作主张 |
-| 2 | 读 brand-dna + 对应场景文件 | 先学规矩再动手 |
-| 3 | 从 assets/ 复制对应模板 | 从半成品开始，不从零写 |
-| 4 | 从 layouts.md 选 3-5 种布局 | 每个 section 不能一样 |
-| 5 | 从 components.md 选组件 | 禁止用 HTML 默认样式 |
-| 6 | 对照 checklist 自检 | P0 不过就打回 |
-| 7 | 交付 HTML 文件 | 浏览器打开就能看 |
+1. **澄清需求** — 确认类型、受众、Section数、素材、硬约束
+2. **读规范** — 必读 `brand-dna.md`，按需读场景文件
+3. **拷模板** — 从 `assets/` 选择对应模板作为起点
+4. **选布局组合** — 从 `references/layouts.md` 选取3~5种布局
+5. **选组件填充** — 从 `references/components.md` 选取组件
+6. **自检** — 对照 `references/checklist.md` 逐条检查
+7. **交付** — 输出最终HTML文件
 
 ---
 
 ## 品牌基因速览
 
-### 三色（默认配色，可在brand-dna.md中替换为你自己的）
+### 三色（方案A 焦糖奶茶）
 
 | 颜色 | 色值 | 比例 |
 |------|------|------|
-| 主色 | `#2B7FD8` | 60% |
-| 强调色 | `#F4D758` | 30% |
-| 点缀色 | `#E84A5F` | 10% |
+| 主色（棕） | `#A67B5B` | 60% |
+| 强调色（黄） | `#F0C674` | 30% |
+| 点缀色（蓝） | `#5B8BA0` | 10% |
+
+### 背景与文字
+
+| 用途 | 色值 |
+|------|------|
+| 暖底背景 | `#FDF8F0` |
+| 交替背景（深奶底） | `#F5EDE0` |
+| 墨色正文 | `#2D2420` |
+| 次要文字 | `#5C4D44` |
+| 暗色面板（仅全屏HTML） | `#1E1A16` |
 
 ### 字体
 
@@ -130,46 +56,86 @@ AI 每次做设计必须按这个顺序走：
 | 手写/注释 | Caveat |
 | 代码/终端 | Fira Code |
 
-### 气质关键词（请根据你的品牌调性修改）
+### 气质关键词
 
-可爱但有品质 · 手绘蜡笔感 · 有温度 · **不像 AI** · 一看就是你的
+温暖治愈 · 自由探索 · 元气满满 · 潇洒酷帅 · 体验感 · 手绘彩铅感 · 不像AI
 
 ### 禁忌
 
-蓝紫渐变 · glassmorphism · neon · bounce 动画 · Inter/Roboto · 所有 section 居中 · HTML 默认样式 · 看起来像 AI 生成的通用模板
+蓝紫渐变 · glassmorphism · neon · bounce · 颜色过渡失调 · 小家子气 · Inter/Roboto · 所有 section 居中 · HTML 默认样式 · 看起来像 AI 生成的通用模板
 
 ---
 
-## 质量检查
+## 文件结构
 
-**P0(必须全过)**
-
-品牌三色比例 · 无禁忌元素 · 无 HTML 默认样式 · 暖底背景 · 衬线+无衬线混搭 · 响应式 · 每 section 布局不同 · clamp() fluid sizing · 截图发社交媒体不会被说"又是 AI 做的"
-
-**P1(应过)**
-
-至少一个视觉惊喜 section · 字号对比极端 · Scroll Reveal 动效 · 大装饰数字/英文
-
-**P2(加分)**
-
-图片溢出容器 · 深色面板打破节奏 · 装饰元素克制 · prefers-reduced-motion
-
----
-
-## 怎么用
-
-1. Fork 或克隆本仓库
-2. 放入你的头像 `assets/avatar.jpg`
-3. （可选）打开 `brand-dna.md`，把默认品牌色替换成你自己的，并同步修改 `assets/template-*.html` 里 `:root` 的变量
-4. 把 `assets/template-cards.html` 中的作者名替换成你自己的
-5. 把仓库链接发给你的 AI Agent，跟它说：
-
-> 帮我读这个设计系统，以后做页面按这个规范来。
-
-核心不是这些文件本身，是**你的审美判断力**。文件只是把你的判断写成了 AI 能执行的规则。
+```
+bubble-design-system/
+├── README.md                          # 本文件
+├── brand-dna.md                       # 品牌底层规范（必读）
+├── SKILL.md                           # Skill入口文件
+├── .gitignore
+├── assets/
+│   ├── avatar.jpg                     # 头像（600×600px）
+│   ├── character.png                  # IP形象（Q版三视图）
+│   ├── template-tutorial.html         # 教程型模板
+│   ├── template-landing.html          # Landing模板
+│   ├── template-app.html              # App型模板
+│   └── template-cards.html           # 图文卡片模板
+└── references/
+    ├── scene-tutorial.md              # 教程型场景规范
+    ├── scene-landing.md               # Landing场景规范
+    ├── scene-app.md                   # App型场景规范
+    ├── scene-cards.md                 # 图文卡片场景规范
+    ├── layouts.md                     # 16种布局库
+    ├── components.md                  # 44个组件库
+    └── checklist.md                   # 自检清单
+```
 
 ---
 
-## Credits
+## 场景类型速查
 
-Design System framework inspired by [Cola](https://colaos.ai) — the first OS with a soul.
+| 类型 | 场景文件 | 模板 |
+|------|----------|------|
+| 教程型/介绍型/科普型 | `references/scene-tutorial.md` | `assets/template-tutorial.html` |
+| 活动页/分享会/Landing | `references/scene-landing.md` | `assets/template-landing.html` |
+| App型/功能型 | `references/scene-app.md` | `assets/template-app.html` |
+| 图文卡片/小红书图文 | `references/scene-cards.md` | `assets/template-cards.html` |
+
+---
+
+## 关键原则
+
+- **从模板开始改，不从零写** — 模板已内置品牌变量和基础结构
+- **每个 Section 布局必须不同** — 避免单调重复，从 layouts.md 选不同模式
+- **做完必须跑 checklist** — P0 全过才能交付
+- **禁止使用 HTML 默认样式** — 所有组件从 components.md 选用
+- **三色比例**：主色60% + 强调色30% + 点缀色10%
+- **不像AI** — 最高优先级的约束
+
+---
+
+## Demo
+
+> Demo链接待补充
+
+---
+
+## 品牌信息
+
+- **署名**: 花心小泡泡 / Bubble
+- **签名档**: 花心小泡泡 · 体验生活，感受体验，记录感受
+- **CTA**: Follow 在下 花心泡
+
+---
+
+## 自检问题
+
+做完设计后问自己：
+1. 这个页面截图发到社交媒体，会不会被人评论"又是AI做的"？
+2. 能不能一眼认出这是花心小泡泡的品牌？
+3. 有没有哪个部分让你觉得"见过很多次了"？
+
+---
+
+*Bubble Design System — 温暖治愈的个人品牌设计系统。*

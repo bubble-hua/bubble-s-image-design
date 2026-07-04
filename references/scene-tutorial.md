@@ -1,243 +1,515 @@
-# Scene: 介绍型 / 教程型 / 科普型页面
+# Scene: Tutorial / 教程型页面
 
-> 基于 GitHub入门 V5 提炼的设计语言。适用于所有单页HTML科普、教程、功能介绍、概念解释类页面。
-
----
-
-## 🎨 色板
-
-| 用途 | 变量名 | 色值 | 说明 |
-|------|--------|------|------|
-| 主黄 | `--yellow` | `#F4D758` | 强调、装饰圆圈、连接线、badges |
-| 柔黄 | `--yellow-soft` | `#FFF3CD` | 背景块、气泡底色 |
-| 主蓝 | `--blue` | `#2B7FD8` | 英文标题、超链、重点标记 |
-| 深蓝 | `--blue-deep` | `#1E5BA8` | 大装饰字、section数字编号 |
-| 红色 | `--red` | `#E84A5F` | 点缀、高亮下划线、标签 |
-| 奶白底 | `--cream` | `#fefcf6` | 页面主背景 |
-| 深奶底 | `--cream-dark` | `#faf6eb` | section间交替背景 |
-| 墨色 | `--ink` | `#1A1A2E` | 正文主色（非纯黑） |
-| 浅墨 | `--ink-light` | `#4A4A5A` | 次要正文 |
-| 淡墨 | `--ink-faint` | `#8A8A9A` | 辅助文字、标签 |
-
-### 色彩原则
-- 绝不用纯黑 `#000` 或纯白 `#fff`——总是带暖调
-- 主色永远是暖黄+蓝，红色只做点缀
-- 背景用径向渐变制造层次感，不要纯平色
+> 适用于教程、科普、文档、知识分享、文章详情等「信息传递优先」的页面类型。
 
 ---
 
-## 🔤 字体
+## 🎨 色板（方案A 焦糖奶茶）
 
-| 用途 | 字体 | 备注 |
-|------|------|------|
-| 英文标题/装饰 | `Fraunces` (Google Fonts) | italic用于副标题、accent文字 |
-| 中文标题首选 | `Huiwen Mincho`（汇文明朝体） | 品牌真正用的标题字体，需本地字体文件 |
-| 中文标题备选 | `Noto Serif SC` (Google Fonts) | 当无汇文明朝体时使用 |
-| 正文/UI | `Noto Sans SC` + 系统栈 `-apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif` | 无衬线保证可读性 |
-| 手写装饰 | `Caveat` (Google Fonts) | 轻松标注、注释性文字 |
+| 变量名 | 色值 | 用途 | 比例 |
+|--------|------|------|------|
+| `--brown` | `#A67B5B` | 主色调、标题、链接、重点标记 | 60% |
+| `--yellow` | `#F0C674` | 强调色、装饰、高亮、标签 | 30% |
+| `--blue` | `#5B8BA0` | 点缀色、下划线、CTA、标签点缀 | 10% |
+| `--bg-warm` | `#FDF8F0` | 暖底主背景 | — |
+| `--bg-alt` | `#F5EDE0` | 交替/卡片背景（深奶底） | — |
+| `--ink` | `#2D2420` | 墨色正文 | — |
+| `--ink-light` | `#5C4D44` | 次要文字 | — |
+| `--panel-dark` | `#1E1A16` | 暗色面板底色（仅全屏HTML） | — |
 
-### 字号层次（全部用 `clamp()` 做fluid sizing）
-- **Hero大标题**: `clamp(2.8rem, 7vw, 5.5rem)` — 极大，有冲击力
-- **Section标题**: `clamp(1.6rem, 4vw, 2.6rem)` — 大但不压人
-- **卡片标题**: `1.15rem ~ 1.4rem` — 清晰可辨
-- **正文**: `16px` (body base)
-- **辅助文字**: `0.78rem ~ 0.85rem` — 小但可读
-- **大装饰数字**: `clamp(3rem, 8vw, 7rem)` — 超大、低透明度做背景装饰
+### CSS变量声明
 
-### 字体原则
-- 标题用衬线，正文用无衬线——混搭产生节奏
-- 字号对比要极端——大的要很大，小的要真的小
-- `letter-spacing`: 英文大写标签加 `0.1em~0.2em` 间距
-
----
-
-## 📐 布局
-
-### 核心原则
-- **左对齐为主**，不要居中病
-- **不对称**——grid用 `1fr 1.1fr` 或 `0.45fr 1fr` 这种不等分
-- **每个section布局形式不同**——避免单调重复
-- **充足留白**——`clamp()` 控制padding，大屏更透气
-- **max-width: 1300px** + `margin: 0 auto` 约束内容宽度
-
-### 可选的布局模式（按需组合，每页至少3种）
-1. **Hero分栏**: 左文字 + 右大图，grid两栏
-2. **Sticky侧栏**: 左边大装饰字sticky，右边内容滚动
-3. **时间线交错**: 中轴线+左右交替内容块（适合并列要点）
-4. **全宽深色面板**: 突出某个重要内容，打破节奏
-5. **Step引导**: 圆形编号+虚线连接+每步说明
-6. **卡片网格**: 2~3列等宽卡片（注意：不要出现落单的孤儿卡片）
-7. **产品出血型Hero**: 左侧40%紧凑文字（大标题+描述+缩略图），右侧60%大图溢出右边界。图片用 `margin-right: -5vw; border-radius: 24px 0 0 24px`，grid: `grid-template-columns: 0.4fr 0.6fr`
-8. **条纹Editorial**: 条纹分割带（repeating-linear-gradient）做section分隔。内部左图右文，图片可加低饱和度滤镜。标题用Fraunces大号italic，正文小号无衬线
-9. **横向滚动时间线**: flex横排 + scroll-snap + 固定宽度卡片，适合经历展示、项目历程
-10. **全宽品牌色面板**: 背景使用蓝/黄/橙纯色，文字反白。一页最多1~2个，用于打破奶白底的节奏。禁忌：不要在品牌色面板上放蓝色文字
-11. **对称双栏（Pain展示）**: `grid-template-columns: 1fr 1fr`，min-height: 100vh。左侧大字标题，右侧列表/解释。适合问题/痛点、before/after对比
-
-### 间距系统
-- Section之间: `clamp(80px, 12vh, 160px)`
-- 内容块之间: `clamp(40px, 6vw, 100px)`
-- 卡片内padding: `clamp(28px, 3vw, 44px)`
-- 元素间gap: `clamp(24px, 3vw, 48px)`
-
----
-
-## 🎭 装饰元素
-
-### 可用的装饰手法
-- **虚线圆圈**: `border: 2.5px dashed var(--yellow); border-radius: 50%`，半透明，大尺寸做背景
-- **渐变光晕**: `radial-gradient(ellipse, rgba(255,217,61,0.18), transparent)` 做柔和背景
-- **分割线**: `linear-gradient(90deg, transparent, var(--yellow), transparent)` 1px渐隐线
-- **高亮标记**: `background: linear-gradient(180deg, transparent 50%, rgba(255,217,61,0.35) 50%)` 文字底部高亮
-- **大透明数字**: 超大字号 + `opacity: 0.12~0.2` 做section装饰
-- **SVG简笔画**: 用描边风格的简化示意图，不要写实截图
-- **左侧色条**: `border-left: 4px solid var(--yellow/blue/red)` 给卡片或引用加标识
-
-### 条纹肌理分割（替代渐隐线做section divider）
 ```css
-.stripe-divider {
-  height: 24px;
-  background: repeating-linear-gradient(
-    0deg,
-    transparent,
-    transparent 3px,
-    rgba(232, 74, 95, 0.08) 3px,
-    rgba(232, 74, 95, 0.08) 4px
-  );
+:root {
+  --brown: #A67B5B;
+  --yellow: #F0C674;
+  --blue: #5B8BA0;
+  --bg-warm: #FDF8F0;
+  --bg-alt: #F5EDE0;
+  --ink: #2D2420;
+  --ink-light: #5C4D44;
+  --panel-dark: #1E1A16;
 }
 ```
 
-### 关键词高亮底色块（比底部50%下划线更有冲击力）
-```css
-.keyword-highlight {
-  background: rgba(255, 217, 61, 0.25);
-  padding: 0.1em 0.4em;
-  border-radius: 6px;
-  display: inline;
-  box-decoration-break: clone;
-}
+---
+
+## ✨ 气质关键词
+
+设计出来的东西应该让人觉得：
+
+- **温暖治愈** — 像一杯热茶，让人感到安心和放松
+- **自由探索** — 有旅行的呼吸感，不拘束、不沉闷
+- **元气满满** — 积极向上，有生命力和能量
+- **潇洒酷帅** — 不拖泥带水，有态度有风格
+- **体验感** — 不只是看，而是"感受到"那个场景
+- **手绘彩铅感** — 有温度、有人味、有笔触的痕迹
+- **不像AI** — 这是最高优先级的约束
+
+---
+
+## 📐 教程页特有结构
+
+教程页面按"导览 → 正文 → 总结 → CTA"的节奏编排：
+
+### 标准Section序列
+
+1. **Hero** — 标题 + 一句话介绍 + 关键词标签
+2. **概览/目录** — 用卡片或编号列出章节
+3. **正文Section × N** — 每节一个核心知识点
+4. **总结/要点回顾** — 用列表或卡片复述
+5. **CTA/订阅** — 关注/收藏/下一篇文章
+
+### 正文Section内部结构
+
+每个教程Section建议包含：
+
+```
+[编号/图标] 标题
+一句话概述（subtitle）
+正文段落（2-4段，不要wall of text）
+代码块 / 示意图 / 引用块（按需）
+关键要点小结（1-2条）
 ```
 
-### 浮动信息pill（在图片/hero区上浮动小标签）
-```css
-.float-pill {
-  position: absolute;
-  background: var(--cream);
-  padding: 0.5em 1em;
-  border-radius: 100px;
-  font-size: 0.8rem;
-  box-shadow: 0 4px 20px rgba(0,0,0,0.08);
-  display: flex;
+---
+
+## 🧩 教程页专属组件
+
+### 步骤编号
+
+```html
+<span class="step-num" style="
+  display: inline-flex;
   align-items: center;
-  gap: 0.5em;
-}
+  justify-content: center;
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--brown);
+  color: #FDF8F0;
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: 1rem;
+  font-weight: 700;
+  margin-right: 12px;
+  flex-shrink: 0;
+">1</span>
 ```
 
-### 双层装饰框
-```css
-.decorative-frame {
-  position: relative;
-  padding: 16px;
-  border: 2.5px dashed var(--yellow);
-  border-radius: 12px;
-}
-.decorative-frame::before {
-  content: '';
-  position: absolute;
-  inset: -6px;
-  border: 1.5px solid rgba(74, 125, 232, 0.2);
-  border-radius: 16px;
-}
-```
+### 关键词标签
 
-### 全大写字间距标签
-```css
-.label-caps {
-  font-size: 0.75rem;
-  text-transform: uppercase;
-  letter-spacing: 0.15em;
-  font-weight: 500;
+```html
+<span class="tag" style="
+  display: inline-block;
+  padding: 3px 12px;
+  border-radius: 999px;
+  font-size: 0.78rem;
+  background: rgba(240,198,116,0.25);
   color: var(--ink-light);
-}
+  border: 1px solid rgba(240,198,116,0.4);
+  margin-right: 6px;
+  margin-bottom: 6px;
+">关键词</span>
 ```
 
-### 装饰原则
-- 每种装饰最多同时用2-3种，不要堆砌
-- 装饰是为了引导视线和制造节奏，不是为了好看
-- ✅ 用材质感制造温度（条纹、肌理、多层框）
-- ✅ 用出血/溢出制造惊喜（图片超出容器边界）
-- ✅ 用极端字号对比制造节奏（超大装饰字 vs 超小标签）
-- ✅ 用精准的色彩点缀（高亮底色块只用在1-2个关键词上）
+### 高亮标注（文字底部高亮）
 
----
-
-## ✨ 动效
-
-### Scroll Reveal
-```css
-.reveal {
-  opacity: 0;
-  transform: translateY(32px);
-  transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-              transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-}
-.reveal.visible { opacity: 1; transform: none; }
+```html
+<span class="highlight" style="
+  background: linear-gradient(180deg, transparent 50%, rgba(240,198,116,0.35) 50%);
+">需要强调的内容</span>
 ```
-- 用 `IntersectionObserver`，threshold 0.12
-- `unobserve` after triggering（只触发一次）
-- 用 `.reveal-d1` ~ `.reveal-d5` 做 stagger（0.1s递增）
-- 尊重 `prefers-reduced-motion`
-- 选中文本高亮：`::selection { background: #F4D758; color: #1a1a1a; }`
 
-### 动效原则
-- **只用 opacity + transform**，不要animate layout属性
-- **只用 expo ease-out** `cubic-bezier(0.16, 1, 0.3, 1)`——自然减速
-- **不要 bounce/elastic/弹跳**——过时
-- **入场一次就好**——不要滚回去再重新播放
+### 提示框（Tip / Warning / Note）
 
-### 明确禁止
-- ❌ 不要用 `transform: rotate()` 让元素歪着放——这是廉价的假活泼
-- ❌ 不要故意错位/偏移来制造"手工感"
-- ❌ 不要蓝底面板上放红色文字
+```html
+<div class="callout callout-tip" style="
+  border-left: 4px solid var(--yellow);
+  background: var(--bg-alt);
+  padding: 20px 24px;
+  border-radius: 0 8px 8px 0;
+  margin: 28px 0;
+  font-size: 0.92rem;
+  color: var(--ink-light);
+">
+  <strong style="color: var(--brown);">💡 提示：</strong> 提示内容。
+</div>
+```
+
+### 信息卡（定义/概念卡片）
+
+```html
+<div class="info-card" style="
+  background: var(--bg-warm);
+  border: 1px solid rgba(166,123,91,0.2);
+  border-radius: 12px;
+  padding: 28px;
+  margin: 28px 0;
+">
+  <h4 style="margin-top: 0; color: var(--brown); font-family: 'Noto Serif SC', serif;">概念名称</h4>
+  <p style="margin-bottom: 0; color: var(--ink-light);">概念说明内容。</p>
+</div>
+```
+
+### 代码块
+
+```html
+<div class="code-block" style="
+  background: var(--panel-dark);
+  color: #F5EDE0;
+  border-radius: 10px;
+  padding: 24px;
+  margin: 24px 0;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.85rem;
+  line-height: 1.7;
+  overflow-x: auto;
+">
+<pre style="margin: 0;"><code>// 你的代码
+const greeting = "Hello, Bubble!";
+</code></pre>
+</div>
+```
 
 ---
 
-## 📱 响应式
+## 🖼️ 装饰元素
 
-### 断点
-- **900px**: 两栏→单栏，图片缩小，sticky变static
-- **600px**: 字号微缩(15px)，图片进一步缩小
+### 标准装饰手法
 
-### 原则
-- 移动端不是"缩小版桌面"——重新排列而不是挤压
-- 时间线/交错布局在移动端自动变成单列堆叠
-- 不要在移动端隐藏内容
+#### 虚线圆圈
+
+```html
+<div style="
+  width: 280px; height: 280px;
+  border: 2.5px dashed var(--yellow);
+  border-radius: 50%;
+  opacity: 0.3;
+  position: absolute;
+  top: -80px; right: -100px;
+  pointer-events: none;
+"></div>
+```
+
+#### 渐变光晕背景
+
+```html
+<div style="
+  position: absolute;
+  width: 500px; height: 500px;
+  background: radial-gradient(ellipse, rgba(240,198,116,0.15), transparent 70%);
+  top: -100px; left: -150px;
+  pointer-events: none;
+  z-index: 0;
+"></div>
+```
+
+#### 分割线（渐隐线）
+
+```html
+<hr style="
+  border: none;
+  height: 1px;
+  background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+  margin: 48px 0;
+">
+```
+
+#### 高亮标记（文字底部色块）
+
+```html
+<span style="
+  background: linear-gradient(180deg, transparent 55%, rgba(240,198,116,0.4) 55%);
+  padding: 0 4px;
+">被标记的文字</span>
+```
+
+#### 大透明装饰数字
+
+```html
+<div style="
+  font-family: 'Fraunces', serif;
+  font-style: italic;
+  font-size: clamp(3rem, 8vw, 7rem);
+  color: var(--brown);
+  opacity: 0.12;
+  position: absolute;
+  top: -20px; right: 20px;
+  pointer-events: none;
+  user-select: none;
+">03</div>
+```
+
+#### 左侧色条
+
+```html
+<div style="
+  border-left: 4px solid var(--yellow);
+  padding-left: 20px;
+  margin: 24px 0;
+">
+  <p style="margin: 0; color: var(--ink-light);">带有左侧色条标识的内容。</p>
+</div>
+```
+
+### 旅行主题装饰
+
+#### 机票/登机牌风格
+
+```html
+<div class="boarding-pass" style="
+  background: var(--bg-warm);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  padding: 24px 28px;
+  position: relative;
+  overflow: hidden;
+  max-width: 400px;
+">
+  <!-- 虚线撕纸边 -->
+  <div style="
+    position: absolute;
+    left: 0; top: 50%;
+    width: 100%;
+    height: 0;
+    border-top: 2px dashed var(--yellow);
+    opacity: 0.4;
+  "></div>
+  <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+    <div>
+      <div style="font-size: 0.7rem; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.1em;">Boarding Pass</div>
+      <div style="font-family: 'Fraunces', serif; font-size: 1.8rem; font-style: italic; color: var(--brown); margin-top: 4px;">目的地</div>
+    </div>
+    <div style="text-align: right;">
+      <div style="font-size: 0.7rem; color: var(--ink-light);">GATE</div>
+      <div style="font-family: 'Fira Code', monospace; font-size: 1.5rem; color: var(--blue);">B12</div>
+    </div>
+  </div>
+  <div style="margin-top: 20px; display: flex; gap: 24px; font-size: 0.75rem; color: var(--ink-light);">
+    <span>FROM: 出发点</span>
+    <span>TO: 目的地</span>
+    <span>DATE: 日期</span>
+  </div>
+</div>
+```
+
+#### 邮票边框
+
+```html
+<div class="stamp-frame" style="
+  display: inline-block;
+  padding: 8px;
+  background: var(--bg-alt);
+  position: relative;
+">
+  <div style="
+    padding: 20px;
+    border: 3px solid var(--yellow);
+    outline: 2px solid var(--yellow);
+    outline-offset: -8px;
+    position: relative;
+  ">
+    <!-- 锯齿效果通过outline + outline-offset模拟 -->
+    <div style="font-size: 0.7rem; color: var(--ink-light); text-align: center; letter-spacing: 0.1em;">POSTCARD</div>
+    <div style="font-family: 'Caveat', cursive; font-size: 1.2rem; color: var(--brown); text-align: center; margin-top: 4px;">来自旅途的问候</div>
+  </div>
+</div>
+```
+
+#### 地图元素
+
+```html
+<div class="map-marker" style="
+  position: relative;
+  padding: 20px 24px;
+  background: var(--bg-warm);
+  border-radius: 8px;
+  border: 1px solid rgba(166,123,91,0.15);
+">
+  <!-- 定位点 -->
+  <span style="
+    display: inline-block;
+    width: 14px; height: 14px;
+    background: var(--blue);
+    border-radius: 50%;
+    border: 2px solid var(--bg-warm);
+    box-shadow: 0 0 0 3px var(--blue);
+    opacity: 0.8;
+    margin-right: 8px;
+  "></span>
+  <span style="font-family: 'Fira Code', monospace; font-size: 0.8rem; color: var(--ink-light);">
+    35.6762° N, 139.6503° E
+  </span>
+  <!-- 路径虚线 -->
+  <div style="
+    position: absolute;
+    left: 27px; top: 100%;
+    width: 0;
+    height: 30px;
+    border-left: 2px dashed var(--yellow);
+    opacity: 0.5;
+  "></div>
+</div>
+```
+
+#### 胶片/拍立得
+
+```html
+<div class="polaroid" style="
+  display: inline-block;
+  background: var(--bg-warm);
+  padding: 12px 12px 36px 12px;
+  box-shadow: 3px 4px 12px rgba(0,0,0,0.08);
+  transform: rotate(-1.5deg);
+">
+  <div style="
+    width: 200px; height: 160px;
+    background: var(--bg-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.8rem;
+    color: var(--ink-light);
+  ">[ 照片 ]</div>
+  <div style="
+    margin-top: 10px;
+    font-family: 'Caveat', cursive;
+    font-size: 1rem;
+    color: var(--ink);
+    text-align: center;
+  ">旅途中的美好瞬间</div>
+</div>
+```
+
+#### 手账贴纸感
+
+```html
+<div class="sticker" style="
+  display: inline-block;
+  background: rgba(240,198,116,0.2);
+  padding: 6px 14px;
+  border-radius: 4px;
+  transform: rotate(2deg);
+  font-size: 0.8rem;
+  color: var(--brown);
+  box-shadow: 1px 2px 4px rgba(0,0,0,0.06);
+  border: 1px dashed var(--yellow);
+  font-family: 'Caveat', cursive;
+">旅行日记 ✈️</div>
+```
+
+### 材质/肌理
+
+#### 条纹肌理分割
+
+```html
+<div style="
+  height: 12px;
+  background: repeating-linear-gradient(
+    -45deg,
+    transparent,
+    transparent 4px,
+    rgba(240,198,116,0.2) 4px,
+    rgba(240,198,116,0.2) 8px
+  );
+  margin: 40px 0;
+  border-radius: 2px;
+"></div>
+```
+
+#### 网格底纹
+
+```html
+<div style="
+  background-image:
+    linear-gradient(rgba(166,123,91,0.06) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(166,123,91,0.06) 1px, transparent 1px);
+  background-size: 24px 24px;
+  padding: 40px;
+  border-radius: 12px;
+">
+  <p>带网格底纹的内容区</p>
+</div>
+```
+
+#### 彩铅笔触（虚线模拟）
+
+```html
+<div style="
+  padding: 24px;
+  border: 2px dashed var(--brown);
+  border-radius: 8px;
+  opacity: 0.7;
+  background: rgba(166,123,91,0.03);
+">
+  <p style="margin: 0; color: var(--ink-light);">彩铅手绘感边框的内容块</p>
+</div>
+```
+
+#### 水彩晕染光斑
+
+```html
+<div style="
+  position: absolute;
+  width: 300px; height: 300px;
+  background:
+    radial-gradient(ellipse at 30% 40%, rgba(240,198,116,0.12) 0%, transparent 50%),
+    radial-gradient(ellipse at 70% 60%, rgba(91,139,160,0.08) 0%, transparent 50%),
+    radial-gradient(ellipse at 50% 30%, rgba(166,123,91,0.06) 0%, transparent 50%);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 0;
+"></div>
+```
 
 ---
 
-## 📝 内容语气
+## 📐 教程页布局推荐
 
-- 中文为主，英文点缀做装饰/标签
-- 口语化、轻松、像跟朋友解释
-- 用emoji但克制（每个标题一个就够）
-- 类比优先（"就像百度网盘""相当于时光机"）
-- 不堆术语，说人话
-
----
-
-## 🧩 可发散方向
-
-- **配色微调**: 内容跟某品牌相关时可替换主蓝为品牌色，但暖黄+奶白底不变
-- **布局组合**: 十一种布局模式自由组合
-- **装饰密度**: 轻松内容多装饰，严肃内容减少装饰只保留字体层次
-- **IP出现方式**: 不同姿势（叉腰、放大镜、坐椅子等）
-- **深色section**: 可用一个section用深色底（如 `--blue-deep`），制造节奏对比
-- **交互**: 如果内容适合，可加hover状态、tab切换、accordion——但不要为交互而交互
+| Section | 推荐布局 | 说明 |
+|---------|----------|------|
+| Hero | Hero Split / Hero Centered | 大标题 + 一句话 + 标签 |
+| 概览/目录 | Grid 3-col cards / Numbered list | 章节导航 |
+| 正文 | Main content + sidebar / Full width text | 内容为主 |
+| 代码示例 | Split code+preview | 左右对照 |
+| 总结 | Card grid / Horizontal timeline | 要点回顾 |
+| CTA | Banner / Centered CTA | 行动号召 |
 
 ---
 
-## 🎯 设计哲学："为什么好看"的底层逻辑
+## 🎯 教程页自检清单
 
-- **精致的不对称** + **物理材质感** + **极端字号对比**
-- 不是"歪/rotate/错位"——是布局结构本身就有张力
-- 图片应该"活在空间里"而不是"被框住"——至少一处溢出容器
-- 色彩克制但精准——高亮只用在最关键的1-2处
+### P0（必须过）
+- [ ] 三色使用正确（棕60% + 黄30% + 蓝10%）
+- [ ] 背景为暖底 `#FDF8F0` 或 `#F5EDE0`
+- [ ] 正文用墨色 `#2D2420`，非纯黑
+- [ ] 所有组件从components.md选用，无浏览器默认样式
+- [ ] 至少有一种手绘/彩铅感装饰元素
+- [ ] 字号对比极端（Hero大 + 辅助小）
+
+### P1（应过）
+- [ ] 每个Section布局不同
+- [ ] 有旅行主题装饰元素（机票/邮票/地图/拍立得/贴纸至少1种）
+- [ ] 有材质肌理感（条纹/网格/水彩晕染至少1种）
+- [ ] 步骤编号用棕色圆形badge
+- [ ] 代码块使用暗色面板底色
+
+### P2（加分）
+- [ ] 有渐变光晕做section背景
+- [ ] 使用了虚线圆圈装饰
+- [ ] 有渐隐分割线
+- [ ] 大透明数字做section装饰
+- [ ] 整体截图不会被说"又是AI做的"
+- [ ] 一眼能认出是花心小泡泡的品牌
+
+---
+
+## 📝 品牌信息
+
+- **署名**: 花心小泡泡 / Bubble
+- **签名档**: 花心小泡泡 · 体验生活，感受体验，记录感受
+- **CTA**: Follow 在下 花心泡
+
+---
+
+*This scene file builds on top of brand-dna.md. Always reference brand-dna.md for the full brand specification.*

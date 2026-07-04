@@ -3,306 +3,765 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><!-- 活动标题 --></title>
+  <title>花心小泡泡 · 创意设计分享会</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;1,9..144,400&family=Caveat:wght@400;700&family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Fira+Code:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* === CSS变量 === */
     :root {
-      --blue: #2B7FD8;
-      --blue-deep: #1E5BA8;
-      --yellow: #F4D758;
-      --yellow-soft: #FFF3CD;
-      --red: #E84A5F;
-      --cream: #fefcf6;
-      --cream-dark: #faf6eb;
-      --ink: #1A1A2E;
-      --ink-light: #4A4A5A;
-      --ink-faint: #8A8A9A;
-      --dark-panel: #151821;
-      /* 合作品牌色（按需启用） */
-      /* --partner: #F1752D; */
+      --brown: #A67B5B;
+      --brown-deep: #8B6343;
+      --yellow: #F0C674;
+      --yellow-soft: #FDF0D0;
+      --blue: #5B8BA0;
+      --blue-deep: #4A7A8E;
+      --cream: #FDF8F0;
+      --cream-dark: #F5EDE0;
+      --ink: #2D2420;
+      --ink-light: #5C4D44;
+      --ink-faint: #8A7D74;
+      --dark-panel: #1E1A16;
+      --terminal-green: #6B9E5A;
+      --font-display: 'Fraunces', 'Noto Serif SC', serif;
+      --font-body: 'Noto Sans SC', sans-serif;
+      --font-hand: 'Caveat', cursive;
+      --font-mono: 'Fira Code', monospace;
+      --font-serif: 'Noto Serif SC', serif;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      scroll-behavior: smooth;
+      font-size: clamp(15px, 1.2vw, 18px);
+    }
 
     body {
-      font-family: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
+      font-family: var(--font-body);
       color: var(--ink);
       background: var(--cream);
+      line-height: 1.75;
+      -webkit-font-smoothing: antialiased;
     }
 
-    ::selection {
-      background: var(--yellow);
-      color: var(--ink);
-    }
-
-    .container {
-      max-width: 1300px;
-      margin: 0 auto;
-      padding: 0 2rem;
-    }
-
-    /* === HERO 全屏 === */
-    .hero {
+    /* ============ HERO FULLSCREEN ============ */
+    .hero-full {
       min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
       justify-content: center;
-      padding: 40px 24px;
       text-align: center;
+      padding: clamp(24px, 4vw, 48px) clamp(16px, 4vw, 48px);
       position: relative;
+      overflow: hidden;
+      background: linear-gradient(160deg, var(--cream) 0%, var(--cream-dark) 40%, var(--yellow-soft) 100%);
     }
 
-    .hero h1 {
-      font-family: 'Noto Serif SC', serif;
-      font-weight: 900;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
-      line-height: 1.15;
-      margin-bottom: 1.5rem;
+    .hero-full::before {
+      content: '';
+      position: absolute;
+      width: 600px;
+      height: 600px;
+      background: radial-gradient(circle, rgba(166, 123, 91, 0.06) 0%, transparent 70%);
+      border-radius: 50%;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      animation: heroPulse 6s ease-in-out infinite;
     }
 
-    .hero p {
-      font-size: 1.1rem;
+    @keyframes heroPulse {
+      0%, 100% { transform: translate(-50%, -50%) scale(1); }
+      50% { transform: translate(-50%, -50%) scale(1.15); }
+    }
+
+    .hero-avatar {
+      width: clamp(100px, 15vw, 140px);
+      height: clamp(100px, 15vw, 140px);
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--yellow);
+      margin-bottom: clamp(20px, 3vh, 32px);
+      position: relative;
+      z-index: 1;
+      animation: avatarFloat 4s ease-in-out infinite;
+    }
+
+    @keyframes avatarFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
+    }
+
+    .hero-tag {
+      display: inline-block;
+      background: var(--brown);
+      color: #fff;
+      padding: 6px 20px;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 500;
+      margin-bottom: clamp(12px, 2vh, 20px);
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.8s ease-out 0.2s both;
+    }
+
+    .hero-title {
+      font-family: var(--font-display);
+      font-size: clamp(2.2rem, 6vw, 4.5rem);
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.8s ease-out 0.4s both;
+    }
+
+    .hero-title .highlight {
+      color: var(--brown);
+      position: relative;
+      display: inline-block;
+    }
+
+    .hero-title .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 8px;
+      background: var(--yellow);
+      opacity: 0.4;
+      z-index: -1;
+      border-radius: 4px;
+    }
+
+    .hero-subtitle {
+      font-size: clamp(1rem, 1.5vw, 1.25rem);
       color: var(--ink-light);
-      max-width: 600px;
+      margin-top: clamp(12px, 2vh, 20px);
+      position: relative;
+      z-index: 1;
+      animation: fadeInUp 0.8s ease-out 0.6s both;
     }
 
-    .hero .label-caps {
+    .hero-scroll-hint {
+      position: absolute;
+      bottom: clamp(24px, 4vh, 40px);
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 8px;
+      opacity: 0.5;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateX(-50%) translateY(0); }
+      50% { transform: translateX(-50%) translateY(8px); }
+    }
+
+    .hero-scroll-hint span {
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+    }
+
+    .hero-scroll-hint .arrow {
+      width: 20px;
+      height: 20px;
+      border-right: 2px solid var(--ink-faint);
+      border-bottom: 2px solid var(--ink-faint);
+      transform: rotate(45deg);
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============ GUEST CARDS ============ */
+    .section {
+      padding: clamp(48px, 8vh, 80px) clamp(16px, 4vw, 48px);
+    }
+
+    .section-label {
+      font-family: var(--font-mono);
       font-size: 0.75rem;
       text-transform: uppercase;
-      letter-spacing: 0.15em;
-      font-weight: 500;
-      color: var(--ink-faint);
-      margin-bottom: 1rem;
-    }
-
-    /* === 三栏Section === */
-    .section { padding: clamp(80px, 12vh, 160px) 0; }
-    .section--alt { background: var(--cream-dark); }
-
-    .section-header {
-      margin-bottom: clamp(40px, 6vw, 80px);
-    }
-
-    .section-number {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      color: var(--blue);
-      opacity: 0.3;
+      letter-spacing: 0.1em;
+      color: var(--brown);
+      margin-bottom: 8px;
       display: block;
-      margin-bottom: 0.25rem;
     }
 
     .section-title {
-      font-family: 'Noto Serif SC', serif;
-      font-weight: 900;
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      font-weight: 600;
+      line-height: 1.2;
+      margin-bottom: clamp(16px, 2vh, 24px);
     }
 
-    .three-col {
+    .section-header {
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto clamp(32px, 5vh, 48px);
+    }
+
+    .guest-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
       gap: clamp(20px, 2.5vw, 32px);
+      max-width: clamp(320px, 90vw, 1000px);
+      margin: 0 auto;
     }
 
-    .chair-card {
+    .guest-card {
       background: #fff;
-      border-radius: 16px;
-      padding: clamp(24px, 3vw, 36px);
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 2px 20px rgba(45, 36, 32, 0.05);
+      border: 1px solid rgba(166, 123, 91, 0.08);
+      transition: transform 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94), box-shadow 0.35s;
+      opacity: 0;
+      transform: translateY(30px);
+    }
+
+    .guest-card.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .guest-card:hover {
+      transform: translateY(-6px) !important;
+      box-shadow: 0 12px 40px rgba(45, 36, 32, 0.1);
+    }
+
+    .guest-card-cover {
+      height: clamp(120px, 16vw, 160px);
+      background: linear-gradient(135deg, var(--yellow-soft), var(--cream-dark));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(2rem, 3vw, 3rem);
+    }
+
+    .guest-card-body {
+      padding: clamp(16px, 2vw, 24px);
+    }
+
+    .guest-card-body h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .guest-card-body .role {
+      font-size: 0.8rem;
+      color: var(--brown);
+      margin-bottom: 8px;
+    }
+
+    .guest-card-body p {
+      font-size: 0.85rem;
+      color: var(--ink-light);
+      line-height: 1.6;
+    }
+
+    /* ============ DARK QUOTE PANEL ============ */
+    .dark-panel {
+      background: var(--dark-panel);
+      color: #fff;
+      padding: clamp(48px, 10vh, 100px) clamp(16px, 4vw, 48px);
+      text-align: center;
       position: relative;
       overflow: hidden;
-      box-shadow: 0 4px 20px rgba(0,0,0,.06);
     }
-    .chair-card::before {
+
+    .dark-panel::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-    }
-    .chair-card:nth-child(1)::before { background: var(--blue); }
-    .chair-card:nth-child(2)::before { background: var(--yellow); }
-    .chair-card:nth-child(3)::before { background: var(--red); }
-
-    /* === 深色面板 === */
-    .dark-section {
-      background: var(--dark-panel);
-      color: #e2e8f0;
-      padding: clamp(80px, 12vh, 160px) 0;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      border: 1px solid rgba(240, 198, 116, 0.08);
+      top: -100px;
+      right: -100px;
     }
 
-    .dark-section .quote-text {
-      font-family: 'Noto Serif SC', serif;
-      font-size: clamp(1.3rem, 3vw, 2rem);
-      font-weight: 700;
-      line-height: 1.8;
-      max-width: 720px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .dark-section .quote-text em {
-      color: var(--yellow);
-      font-style: normal;
-    }
-
-    /* === Pull Quote === */
-    .viral-pullquote {
-      padding: 36px 40px;
-      background: var(--cream);
-      border-radius: 16px;
-      border: 2px solid var(--yellow);
-      position: relative;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .viral-pullquote::before {
-      content: '"';
-      font-family: 'Fraunces', serif;
-      font-size: 5rem;
-      color: var(--yellow);
+    .dark-panel::after {
+      content: '';
       position: absolute;
-      top: -10px; left: 20px;
-      opacity: 0.5;
-      line-height: 1;
-    }
-    .viral-pullquote p {
-      font-family: 'Noto Serif SC', serif;
-      font-size: clamp(1.1rem, 2vw, 1.4rem);
-      font-weight: 700;
-      line-height: 1.8;
+      width: 200px;
+      height: 200px;
+      border-radius: 50%;
+      border: 1px solid rgba(240, 198, 116, 0.06);
+      bottom: -60px;
+      left: -60px;
     }
 
-    /* === CTA === */
-    .cta-section {
-      text-align: center;
-      padding: clamp(80px, 12vh, 160px) 2rem;
+    .dark-panel .section-label {
+      color: var(--yellow);
     }
-    .cta-section h2 {
-      font-family: 'Noto Serif SC', serif;
-      font-size: clamp(1.6rem, 4vw, 2.6rem);
-      margin-bottom: 1rem;
+
+    .dark-panel blockquote {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2.8vw, 2.2rem);
+      font-style: italic;
+      max-width: 680px;
+      margin: 0 auto;
+      line-height: 1.5;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.8s, transform 0.8s;
     }
-    .cta-section p {
-      font-size: 1rem;
+
+    .dark-panel blockquote.revealed {
+      opacity: 0.9;
+      transform: translateY(0);
+    }
+
+    .dark-panel .attribution {
+      margin-top: 24px;
+      font-size: 0.85rem;
+      opacity: 0.5;
+    }
+
+    /* ============ TIMELINE ============ */
+    .timeline {
+      max-width: 680px;
+      margin: 0 auto;
+      position: relative;
+    }
+
+    .timeline::before {
+      content: '';
+      position: absolute;
+      left: 50%;
+      top: 0;
+      bottom: 0;
+      width: 1px;
+      background: linear-gradient(to bottom, var(--yellow), var(--brown), var(--blue));
+      transform: translateX(-50%);
+    }
+
+    .timeline-item {
+      display: flex;
+      align-items: flex-start;
+      margin-bottom: clamp(32px, 5vh, 48px);
+      position: relative;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+
+    .timeline-item.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .timeline-item:nth-child(odd) {
+      flex-direction: row;
+      padding-right: calc(50% + 24px);
+      text-align: right;
+    }
+
+    .timeline-item:nth-child(even) {
+      flex-direction: row-reverse;
+      padding-left: calc(50% + 24px);
+      text-align: left;
+    }
+
+    .timeline-dot {
+      position: absolute;
+      left: 50%;
+      top: 6px;
+      width: 14px;
+      height: 14px;
+      border-radius: 50%;
+      background: var(--yellow);
+      border: 3px solid #fff;
+      box-shadow: 0 0 0 2px var(--yellow);
+      transform: translateX(-50%);
+      z-index: 1;
+    }
+
+    .timeline-content h4 {
+      font-family: var(--font-display);
+      font-size: 1.1rem;
+      margin-bottom: 4px;
+    }
+
+    .timeline-content .time {
+      font-family: var(--font-mono);
+      font-size: 0.8rem;
+      color: var(--brown);
+      margin-bottom: 8px;
+    }
+
+    .timeline-content p {
+      font-size: 0.85rem;
       color: var(--ink-light);
-      margin-bottom: 2rem;
     }
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 16px 36px;
-      background: var(--blue);
+
+    /* ============ PULL QUOTE ============ */
+    .pull-quote-section {
+      background: #fff;
+      padding: clamp(48px, 10vh, 100px) clamp(16px, 4vw, 48px);
+      text-align: center;
+    }
+
+    .pull-quote {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    .pull-quote .quote-mark {
+      font-family: var(--font-display);
+      font-size: clamp(4rem, 6vw, 6rem);
+      color: var(--yellow);
+      line-height: 1;
+      opacity: 0;
+      transform: scale(0.5);
+      transition: opacity 0.6s, transform 0.6s;
+    }
+
+    .pull-quote .quote-mark.revealed {
+      opacity: 1;
+      transform: scale(1);
+    }
+
+    .pull-quote p {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 3vw, 2.4rem);
+      font-weight: 300;
+      line-height: 1.4;
+      color: var(--ink);
+      margin: 16px 0;
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s 0.15s, transform 0.6s 0.15s;
+    }
+
+    .pull-quote p.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .pull-quote .quote-source {
+      font-family: var(--font-hand);
+      font-size: 1.2rem;
+      color: var(--brown);
+      opacity: 0;
+      transform: translateY(20px);
+      transition: opacity 0.6s 0.3s, transform 0.6s 0.3s;
+    }
+
+    .pull-quote .quote-source.revealed {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    /* ============ CTA ============ */
+    .cta-section {
+      background: linear-gradient(135deg, var(--cream-dark), var(--yellow-soft));
+      padding: clamp(48px, 10vh, 100px) clamp(16px, 4vw, 48px);
+      text-align: center;
+    }
+
+    .cta-section h2 {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.6rem);
+      margin-bottom: 12px;
+    }
+
+    .cta-section p {
+      color: var(--ink-light);
+      margin-bottom: clamp(24px, 3vh, 36px);
+      font-size: 1rem;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      background: var(--brown);
       color: #fff;
-      border-radius: 12px;
+      padding: 16px 48px;
+      border-radius: 36px;
       text-decoration: none;
       font-weight: 600;
-      font-size: 1rem;
-      transition: transform .2s, box-shadow .2s;
-    }
-    .cta-button:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(43,127,216,0.3);
-    }
-
-    /* === Scroll Reveal === */
-    .reveal {
-      opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible { opacity: 1; transform: none; }
-    .reveal-d1 { transition-delay: 0.1s; }
-    .reveal-d2 { transition-delay: 0.2s; }
-    .reveal-d3 { transition-delay: 0.3s; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
+      font-size: 1.05rem;
+      transition: all 0.35s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+      box-shadow: 0 4px 20px rgba(166, 123, 91, 0.3);
+      position: relative;
+      overflow: hidden;
     }
 
-    /* === 响应式 === */
+    .cta-btn::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: rgba(255, 255, 255, 0.15);
+      border-radius: 50%;
+      transform: translate(-50%, -50%);
+      transition: width 0.6s, height 0.6s;
+    }
+
+    .cta-btn:hover {
+      background: var(--brown-deep);
+      transform: translateY(-3px);
+      box-shadow: 0 8px 30px rgba(166, 123, 91, 0.5),
+                  0 0 40px rgba(166, 123, 91, 0.15);
+    }
+
+    .cta-btn:hover::before {
+      width: 400px;
+      height: 400px;
+    }
+
+    .cta-btn span {
+      position: relative;
+      z-index: 1;
+    }
+
+    /* ============ FOOTER ============ */
+    .footer {
+      background: var(--ink);
+      color: rgba(255,255,255,0.7);
+      padding: clamp(32px, 5vh, 48px) clamp(16px, 4vw, 48px);
+      text-align: center;
+    }
+
+    .footer-signature {
+      font-family: var(--font-serif);
+      font-size: 0.9rem;
+      margin-bottom: 8px;
+      color: rgba(255,255,255,0.8);
+    }
+
+    .footer-signature-en {
+      font-family: var(--font-hand);
+      font-size: 1.1rem;
+      color: var(--yellow);
+      margin-bottom: 16px;
+    }
+
+    .footer-copy {
+      font-size: 0.75rem;
+      opacity: 0.5;
+    }
+
+    /* ============ RESPONSIVE ============ */
     @media (max-width: 900px) {
-      .hero { min-height: auto; padding: 4rem 1.5rem; }
-      .three-col { grid-template-columns: 1fr; }
-      .cta-button { width: 100%; justify-content: center; }
+      .guest-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .timeline::before {
+        left: 24px;
+      }
+
+      .timeline-item:nth-child(odd),
+      .timeline-item:nth-child(even) {
+        flex-direction: row;
+        padding-left: 56px;
+        padding-right: 0;
+        text-align: left;
+      }
+
+      .timeline-dot {
+        left: 24px;
+      }
     }
 
     @media (max-width: 600px) {
-      body { font-size: 15px; }
+      .guest-grid {
+        grid-template-columns: 1fr;
+        max-width: 380px;
+      }
+
+      .timeline-item:nth-child(odd),
+      .timeline-item:nth-child(even) {
+        padding-left: 48px;
+      }
+
+      .timeline-dot {
+        left: 18px;
+        width: 12px;
+        height: 12px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- ====== HERO 全屏 ====== -->
-  <section class="hero">
-    <span class="label-caps"><!-- 活动类型/日期 --></span>
-    <h1><!-- 活动主标题 --></h1>
-    <p><!-- 活动副标题/一句话描述 --></p>
+  <!-- ============ HERO FULLSCREEN ============ -->
+  <section class="hero-full">
+    <img src="avatar.jpg" alt="花心小泡泡" class="hero-avatar" onerror="this.style.display='none'">
+    <div class="hero-tag">2026 年度特别活动</div>
+    <h1 class="hero-title">创意设计<br><span class="highlight">分享之夜</span></h1>
+    <p class="hero-subtitle">一场关于设计系统、品牌视觉与创意表达的深度对话</p>
+    <div class="hero-scroll-hint">
+      <span>向下滚动探索</span>
+      <div class="arrow"></div>
+    </div>
   </section>
 
-  <!-- ====== 三栏亮点 ====== -->
+  <!-- ============ GUEST CARDS ============ -->
   <section class="section">
-    <div class="container">
-      <div class="section-header reveal">
-        <span class="section-number">01</span>
-        <h2 class="section-title"><!-- 亮点/嘉宾/核心价值 --></h2>
+    <div class="section-header">
+      <span class="section-label">特邀嘉宾</span>
+      <h2 class="section-title">与行业先锋面对面</h2>
+      <p style="color: var(--ink-light); font-size: 0.9rem;">来自设计、技术与内容领域的资深创作者，分享他们的实践与思考。</p>
+    </div>
+    <div class="guest-grid">
+      <div class="guest-card" data-reveal>
+        <div class="guest-card-cover" style="background: linear-gradient(135deg, #FDF0D0, #F5EDE0);">🎨</div>
+        <div class="guest-card-body">
+          <h4>品牌视觉设计之道</h4>
+          <div class="role">视觉设计师</div>
+          <p>从品牌基因到视觉系统，探索设计语言的一致性与表达力，构建有温度的品牌体验。</p>
+        </div>
       </div>
-      <div class="three-col">
-        <div class="chair-card reveal reveal-d1">
-          <!-- 卡片1内容 -->
+      <div class="guest-card" data-reveal>
+        <div class="guest-card-cover" style="background: linear-gradient(135deg, #E8F0F3, #DCE8ED);">💻</div>
+        <div class="guest-card-body">
+          <h4>设计系统的工程化实践</h4>
+          <div class="role">前端工程师</div>
+          <p>将设计令牌转化为可维护的代码体系，实现设计与开发的高效协作与快速迭代。</p>
         </div>
-        <div class="chair-card reveal reveal-d2">
-          <!-- 卡片2内容 -->
+      </div>
+      <div class="guest-card" data-reveal>
+        <div class="guest-card-cover" style="background: linear-gradient(135deg, #F5EDE0, #EDE0D0);">✍️</div>
+        <div class="guest-card-body">
+          <h4>内容策略与设计叙事</h4>
+          <div class="role">内容创作者</div>
+          <p>用文字与视觉共同构建叙事，让设计系统不仅仅是规范，更是品牌故事的载体。</p>
         </div>
-        <div class="chair-card reveal reveal-d3">
-          <!-- 卡片3内容 -->
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ DARK PANEL ============ -->
+  <section class="dark-panel">
+    <span class="section-label">金句时刻</span>
+    <blockquote data-reveal>
+      最好的设计系统，不是最完整的规范文档，而是能让团队成员不假思索地做出正确设计决策的那一套。
+      <div class="attribution">—— 花心小泡泡</div>
+    </blockquote>
+  </section>
+
+  <!-- ============ TIMELINE ============ -->
+  <section class="section">
+    <div class="section-header">
+      <span class="section-label">活动流程</span>
+      <h2 class="section-title">分享之夜时间线</h2>
+    </div>
+    <div class="timeline">
+      <div class="timeline-item" data-reveal>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>开场致辞</h4>
+          <div class="time">19:00 — 19:15</div>
+          <p>欢迎致辞与活动介绍，了解今晚的分享议程与互动环节。</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-reveal>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>主题分享：设计系统入门</h4>
+          <div class="time">19:15 — 19:50</div>
+          <p>从零开始了解设计系统的核心概念、构建方法与常见误区。</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-reveal>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>案例剖析：真实项目复盘</h4>
+          <div class="time">19:50 — 20:30</div>
+          <p>深入拆解一个完整的设计系统构建案例，从决策到落地的全过程。</p>
+        </div>
+      </div>
+      <div class="timeline-item" data-reveal>
+        <div class="timeline-dot"></div>
+        <div class="timeline-content">
+          <h4>圆桌讨论与问答</h4>
+          <div class="time">20:30 — 21:00</div>
+          <p>嘉宾与观众互动交流，解答设计系统实践中的具体问题。</p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== 深色面板（金句/核心观点） ====== -->
-  <section class="dark-section">
-    <div class="container reveal">
-      <p class="quote-text"><!-- 引用的 <em>重点词</em> 内容 --></p>
+  <!-- ============ PULL QUOTE ============ -->
+  <section class="pull-quote-section">
+    <div class="pull-quote">
+      <div class="quote-mark" data-reveal>&ldquo;</div>
+      <p data-reveal>设计不是为了装饰，而是为了让信息被更好地理解与感受。</p>
+      <div class="quote-source" data-reveal>—— 花心小泡泡</div>
     </div>
   </section>
 
-  <!-- ====== Pull Quote ====== -->
-  <section class="section section--alt">
-    <div class="container">
-      <div class="viral-pullquote reveal">
-        <p><!-- 核心金句 --></p>
-      </div>
-    </div>
-  </section>
-
-  <!-- ====== CTA行动区 ====== -->
+  <!-- ============ CTA ============ -->
   <section class="cta-section">
-    <h2 class="reveal"><!-- 行动号召标题 --></h2>
-    <p class="reveal reveal-d1"><!-- 行动描述 --></p>
-    <a href="#" class="cta-button reveal reveal-d2"><!-- 按钮文案 --></a>
+    <h2>加入我们，一起探索设计的边界</h2>
+    <p>关注花心小泡泡，不错过每一次创意分享与设计干货。</p>
+    <a href="#" class="cta-btn"><span>Follow 在下 花心泡</span></a>
   </section>
 
-  <!-- ====== Scroll Reveal JS ====== -->
+  <!-- ============ FOOTER ============ -->
+  <footer class="footer">
+    <div class="footer-signature">花心小泡泡 · 体验生活，感受体验，记录感受</div>
+    <div class="footer-signature-en">Bubble · Live the experience, feel the moment, capture the memory</div>
+    <div class="footer-copy">&copy; 2026 花心小泡泡 Design System. All rights reserved.</div>
+  </footer>
+
   <script>
-    const observer = new IntersectionObserver((entries) => {
+    // Intersection Observer for reveal animations
+    const observerOptions = {
+      root: null,
+      rootMargin: '0px 0px -40px 0px',
+      threshold: 0.1
+    };
+
+    const revealObserver = new IntersectionObserver((entries) => {
       entries.forEach(entry => {
         if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
+          entry.target.classList.add('revealed');
+          revealObserver.unobserve(entry.target);
         }
       });
-    }, { threshold: 0.12 });
+    }, observerOptions);
 
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    document.querySelectorAll('[data-reveal]').forEach(el => {
+      revealObserver.observe(el);
+    });
+
+    // Guest cards staggered animation
+    const guestCards = document.querySelectorAll('.guest-card');
+    guestCards.forEach((card, i) => {
+      card.style.transitionDelay = `${i * 0.12}s`;
+    });
+
+    const guestObserver = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('revealed');
+          guestObserver.unobserve(entry.target);
+        }
+      });
+    }, { threshold: 0.1 });
+
+    guestCards.forEach(card => guestObserver.observe(card));
   </script>
 </body>
 </html>

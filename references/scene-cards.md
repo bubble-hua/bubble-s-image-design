@@ -1,134 +1,768 @@
-# Scene: 小红书图文卡片（3:4）
+# Scene: Cards / 图文卡片
 
-> 适用于将文章、教程、观点拆解为小红书图文卡片。单个HTML文件包含所有卡片，支持一键导出PNG。
-
----
-
-## 触发场景
-
-用户说"做图文卡片"、"小红书图文"、"文章转卡片"、"帮我转成图文"、"做卡片"、"转成图文"等。
+> 适用于小红书图文、文章转卡片、社交媒体图文、知识卡片等「3:4竖版卡片」场景。
 
 ---
 
-## 📐 卡片规格
+## 🎨 色板（方案A 焦糖奶茶）
 
-| 属性 | 值 |
-|------|-----|
-| 尺寸 | 1080×1440px（3:4） |
-| 最多张数 | 18张（小红书上限） |
-| 文件形式 | 所有卡片放一个HTML文件，每张一个 `div.card` |
-| 导出方式 | 顶部固定"一键导出PNG"按钮（html2canvas本地文件 + JSZip打包为zip一次性下载） |
-| 浏览器预览 | `transform: scale(0.45); transform-origin: top center; margin-bottom: -792px` |
-| 本地服务器 | 用 `python3 -m http.server 8765` 打开，确保html2canvas加载正常 |
+3:4卡片场景使用以下色值，**禁止深色底**：
 
----
+| 变量名 | 色值 | 用途 |
+|--------|------|------|
+| `--brown` | `#A67B5B` | 主色调、标题、蓝色高亮块（替代原蓝色） |
+| `--yellow` | `#F0C674` | 强调色、封面边框、装饰 |
+| `--blue` | `#5B8BA0` | 点缀色、点缀标签 |
+| `--bg-warm` | `#FDF8F0` | 暖底主背景 |
+| `--bg-alt` | `#F5EDE0` | 交替/卡片背景 |
+| `--ink` | `#2D2420` | 墨色正文 |
+| `--ink-light` | `#5C4D44` | 次要文字 |
+| `--panel-dark` | `#1E1A16` | ⚠️ 卡片场景禁止使用深色底 |
 
-## 🔤 字号规范（1080×1440画面）
-
-| 用途 | 字号 | 说明 |
-|------|------|------|
-| 封面/金句大标题 | 72-96px | Noto Serif SC，冲击力 |
-| 页面标题 | 48-60px | Noto Serif SC |
-| 正文/列表项 | 36-42px | Noto Sans SC |
-| 辅助说明 | 28-32px | 浅色、次要信息 |
-| 小标签/badge | 24-28px | 大写字间距标签或小pill |
-| 代码块内文字 | 28-32px | Fira Code |
-
----
-
-## 📝 排版原则
-
-### 密度控制
-- **内容少的页**（封面、金句、小结）→ 字巨大、大量留白、视觉冲击
-- **内容多的页**（对比、列表、代码结构）→ 杂志排版，信息密度合理但不拥挤
-- 每页都要适配画面，内容撑满但有呼吸感
-
-### 变化感
-- 每页排版要有变化——不能所有页都一样的layout
-- 深色面板页 / 浅色页 / 强调色面板穿插使用
-- 大留白页和信息密度页交替
-
-### 绝对禁忌
-- ❌ 不要用左侧彩色竖线的卡片
-- ❌ 不要用红色圆点前缀
-- ❌ 不要千篇一律列表（每项前面一个圆点/数字的平铺排列）
-- ❌ 不要HTML默认blockquote样式
-- ❌ 不要所有页都用同一种layout
+```css
+:root {
+  --brown: #A67B5B;
+  --yellow: #F0C674;
+  --blue: #5B8BA0;
+  --bg-warm: #FDF8F0;
+  --bg-alt: #F5EDE0;
+  --ink: #2D2420;
+  --ink-light: #5C4D44;
+}
+```
 
 ---
 
-## 🧩 卡片结构模板
+## 📐 卡片尺寸规范
 
-### P1 封面
-- 大标题（84px）用汇文明朝体（Huiwen Mincho），关键词用蓝色高亮块（`background: #2B7FD8; color: #fff; padding: 4px 16px; border-radius: 6px`）
-- 副标题（44px）一行显示，紧跟标题下方，`white-space: nowrap`
-- 圆形头像（`avatar.jpg`，120px，`border: 4px solid #F4D758`）
-- 署名（作者名）44px + 介绍34px
-- 整体边框：`border: 28px solid #F4D758`
-- 背景加浅色网格质感（`background-image: linear-gradient(rgba(0,0,0,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(0,0,0,0.03) 1px, transparent 1px); background-size: 40px 40px`）
-- 中间留白区域给用户放效果图/截图
+### 小红书图文标准尺寸
 
-### P2-Pn 内容页
-- 根据内容量决定排版密度
-- 每页选择不同的排版手法（见下方推荐列表）
-- 页码编号用 oversized 淡色装饰数字
+| 尺寸 | 比例 | 适用场景 |
+|------|------|----------|
+| 1080×1440px | 3:4 | 标准图文卡片（推荐） |
+| 1080×1080px | 1:1 | 方形卡片/封面 |
+| 1080×1920px | 9:16 | 长图/信息图 |
 
-### 最后一页 尾页
-- 金句（oversized引号装饰 `"` ，Fraunces 200px，opacity 0.15）
-- 圆形头像 + 署名（作者名）
-- CTA：「关注 + 作者名」（英文卡片可用你的固定英文 CTA 短语）
-- 一行小字：你的签名档（见 `components.md` #43，中英文按卡片语言选择）
-- 底部品牌三色装饰条
+### 卡片内边距
+
+```css
+.card {
+  padding: clamp(40px, 5%, 64px);
+  max-width: 1080px;
+  aspect-ratio: 3 / 4;
+}
+```
 
 ---
 
-## 🎨 推荐排版手法
+## 🎴 卡片类型
 
-从V3验证通过的案例总结，按需组合：
+### 封面卡片（Cover Card）
 
-| 手法 | 适用场景 | 要点 |
-|------|----------|------|
-| 深色面板 | 代码、文件树、重点强调 | 暗色背景(#1A1A2E)+亮色文字，圆角16px |
-| oversized编号 | 步骤/流程展示 | 极大(64-120px)极淡色(opacity 0.12)做背景装饰 |
-| 色块交替行 | 对比/表格 | 暖底行(#faf6eb) vs 白底行(#fff) 交替 |
-| 大箭头流程 | 步骤连接 | 蓝色箭头(48px)连接流程块 |
-| 代码面板 | 代码/文件树/命令 | 深色底+Fira Code+三色圆点title bar |
-| 金句装饰 | 核心观点/结尾 | oversized引号+白底圆角卡片 |
-| 问题→解法对比行 | before/after | 左红底右蓝底，✗ vs ✓ 前缀 |
-| 图标+文字横排 | 要点/优势列表 | emoji/icon左对齐+文字说明 |
+封面是整组图文的第一张，决定点击率。
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 48px;
+  position: relative;
+  overflow: hidden;
+  border: 3px solid var(--yellow);
+  border-radius: 16px;
+">
+  <!-- 装饰光晕 -->
+  <div style="
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(ellipse, rgba(240,198,116,0.12), transparent 70%);
+    top: -50px; left: -50px;
+    pointer-events: none;
+  "></div>
+
+  <!-- 标签 -->
+  <div style="
+    font-size: 0.78rem;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.12em;
+    margin-bottom: 20px;
+    position: relative;
+    z-index: 1;
+  ">BUBBLE · TRAVEL NOTES</div>
+
+  <!-- 大标题 -->
+  <h1 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(2rem, 5vw, 3.2rem);
+    color: var(--ink);
+    line-height: 1.3;
+    margin: 0 0 16px 0;
+    position: relative;
+    z-index: 1;
+  ">
+    在东京<br>寻找<span style="color: var(--brown);">治愈感</span>
+  </h1>
+
+  <!-- 副标题 -->
+  <p style="
+    font-size: 1rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+    max-width: 380px;
+    margin: 0 0 32px 0;
+    position: relative;
+    z-index: 1;
+  ">
+    花心小泡泡 · 体验生活，感受体验，记录感受
+  </p>
+
+  <!-- CTA -->
+  <div style="
+    padding: 8px 24px;
+    background: var(--brown);
+    color: #FDF8F0;
+    border-radius: 999px;
+    font-size: 0.85rem;
+    font-weight: 600;
+    position: relative;
+    z-index: 1;
+  ">Follow 在下 花心泡</div>
+
+  <!-- 底部装饰：虚线圆圈 -->
+  <div style="
+    width: 200px; height: 200px;
+    border: 2px dashed var(--yellow);
+    border-radius: 50%;
+    opacity: 0.25;
+    position: absolute;
+    bottom: -60px; right: -60px;
+    pointer-events: none;
+  "></div>
+</div>
+```
+
+### 正文卡片（Content Card）
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  padding: 56px 48px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+">
+  <!-- 编号 -->
+  <div style="
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: clamp(3rem, 8vw, 7rem);
+    color: var(--brown);
+    opacity: 0.12;
+    position: absolute;
+    top: 20px; right: 30px;
+    line-height: 1;
+    pointer-events: none;
+  ">01</div>
+
+  <!-- 小标题 -->
+  <div style="
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    margin-bottom: 20px;
+  ">
+    <span style="
+      width: 8px; height: 8px;
+      background: var(--yellow);
+      border-radius: 50%;
+    "></span>
+    <span style="
+      font-size: 0.78rem;
+      color: var(--blue);
+      letter-spacing: 0.08em;
+    ">CHAPTER ONE</span>
+  </div>
+
+  <!-- 标题 -->
+  <h2 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    color: var(--ink);
+    line-height: 1.3;
+    margin: 0 0 24px 0;
+  ">
+    清晨的<span style="
+      background: linear-gradient(180deg, transparent 55%, rgba(240,198,116,0.35) 55%);
+      padding: 0 4px;
+    ">筑地市场</span>
+  </h2>
+
+  <!-- 正文 -->
+  <p style="
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+    margin: 0 0 20px 0;
+  ">
+    凌晨五点的筑地市场已经热闹非凡。金枪鱼拍卖的吆喝声、刀具碰撞的清脆声、新鲜海产的咸腥味，构成了东京最真实的清晨。
+  </p>
+
+  <p style="
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.8;
+    margin: 0 0 28px 0;
+  ">
+    一碗热腾腾的海鲜丼，配上手打芥末，是最地道的东京味道。
+  </p>
+
+  <!-- 棕色高亮块（替代原蓝色） -->
+  <div style="
+    background: rgba(166,123,91,0.1);
+    border-left: 4px solid var(--brown);
+    padding: 16px 20px;
+    border-radius: 0 8px 8px 0;
+    margin-bottom: 24px;
+  ">
+    <p style="
+      font-size: 0.9rem;
+      color: var(--brown);
+      margin: 0;
+      line-height: 1.6;
+    ">
+      <strong>旅行小贴士：</strong>筑地市场周日和周三休市，建议早上6点前到达，避开游客高峰。
+    </p>
+  </div>
+
+  <!-- 底部署名 -->
+  <div style="
+    position: absolute;
+    bottom: 40px; left: 48px;
+    font-size: 0.78rem;
+    color: var(--ink-light);
+  ">
+    @ 花心小泡泡
+  </div>
+</div>
+```
+
+### 品牌三色比例卡（6:3:1）
+
+展示品牌三色比例关系的卡片。
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  padding: 56px 48px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  border-radius: 16px;
+">
+  <div style="
+    font-size: 0.78rem;
+    color: var(--blue);
+    letter-spacing: 0.08em;
+    margin-bottom: 28px;
+  ">BRAND COLORS</div>
+
+  <!-- 棕色 60% -->
+  <div style="
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  ">
+    <div style="
+      width: 60%;
+      height: 48px;
+      background: var(--brown);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+    ">
+      <span style="color: #FDF8F0; font-family: 'Fira Code', monospace; font-size: 0.85rem;">#A67B5B</span>
+    </div>
+    <span style="font-size: 0.9rem; color: var(--ink-light);">60%</span>
+  </div>
+
+  <!-- 黄色 30% -->
+  <div style="
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 16px;
+  ">
+    <div style="
+      width: 30%;
+      height: 48px;
+      background: var(--yellow);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding-left: 20px;
+    ">
+      <span style="color: var(--ink); font-family: 'Fira Code', monospace; font-size: 0.85rem;">#F0C674</span>
+    </div>
+    <span style="font-size: 0.9rem; color: var(--ink-light);">30%</span>
+  </div>
+
+  <!-- 蓝色 10% -->
+  <div style="
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    margin-bottom: 32px;
+  ">
+    <div style="
+      width: 10%;
+      height: 48px;
+      background: var(--blue);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      padding-left: 12px;
+    ">
+      <span style="color: #FDF8F0; font-family: 'Fira Code', monospace; font-size: 0.78rem;">#5B8B</span>
+    </div>
+    <span style="font-size: 0.9rem; color: var(--ink-light);">10%</span>
+  </div>
+
+  <!-- 说明 -->
+  <p style="
+    font-size: 0.9rem;
+    color: var(--ink-light);
+    line-height: 1.6;
+    margin: 0;
+  ">
+    主色60% · 强调色30% · 点缀色10%<br>
+    点缀色永远是点缀，不做主色
+  </p>
+</div>
+```
+
+### 总结卡片（Summary Card）
+
+整组图文的最后一张，用于总结和CTA。
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-alt);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 48px;
+  border-radius: 16px;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- 水彩光斑 -->
+  <div style="
+    position: absolute;
+    width: 300px; height: 300px;
+    background:
+      radial-gradient(ellipse at 30% 40%, rgba(240,198,116,0.1) 0%, transparent 50%),
+      radial-gradient(ellipse at 70% 60%, rgba(166,123,91,0.06) 0%, transparent 50%);
+    border-radius: 50%;
+    top: -50px; right: -50px;
+    pointer-events: none;
+  "></div>
+
+  <div style="position: relative; z-index: 1;">
+    <div style="
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 2rem;
+      color: var(--brown);
+      margin-bottom: 16px;
+    ">Bubble</div>
+
+    <h2 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.6rem;
+      color: var(--ink);
+      margin: 0 0 16px 0;
+    ">感谢阅读</h2>
+
+    <p style="
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+      max-width: 340px;
+      margin: 0 0 28px 0;
+    ">
+      花心小泡泡 · 体验生活，感受体验，记录感受
+    </p>
+
+    <div style="
+      display: inline-block;
+      padding: 12px 32px;
+      background: var(--brown);
+      color: #FDF8F0;
+      border-radius: 999px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      margin-bottom: 24px;
+    ">Follow 在下 花心泡</div>
+
+    <div style="
+      font-size: 0.78rem;
+      color: var(--ink-light);
+      opacity: 0.7;
+    ">更多旅行笔记，持续更新中</div>
+  </div>
+</div>
+```
 
 ---
 
-## 🏷️ 品牌规范引用
+## 🖌️ 卡片排版手法
 
-- 所有颜色、字体、禁忌遵守 `brand-dna.md`
-- 头像源文件：`assets/avatar.jpg`（HTML内用相对路径 `avatar.jpg` 引用，交付时复制到输出HTML同目录）
-- 署名固定为你在 `template-cards.html` 中配置的作者名（模板内为占位符，使用前替换）
-- 品牌三色比例：主色6 : 强调3 : 点缀1
-- 背景主色：奶白 `#fefcf6` / 深奶 `#faf6eb`，深色面板用 `#1A1A2E`
+### 手法1：大标题居中 + 底部分割
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 48px;
+  border-radius: 16px;
+">
+  <div style="text-align: center; flex: 1; display: flex; flex-direction: column; justify-content: center;">
+    <h2 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: 2.2rem;
+      color: var(--ink);
+      line-height: 1.4;
+      margin: 0;
+    ">标题内容</h2>
+    <p style="color: var(--ink-light); margin-top: 16px;">副标题说明</p>
+  </div>
+  <hr style="
+    border: none;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--yellow), transparent);
+  ">
+  <div style="
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding-top: 16px;
+    font-size: 0.78rem;
+    color: var(--ink-light);
+  ">
+    <span>@ 花心小泡泡</span>
+    <span>01/05</span>
+  </div>
+</div>
+```
+
+### 手法2：左文右图（左右分栏）
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  display: flex;
+  padding: 0;
+  border-radius: 16px;
+  overflow: hidden;
+">
+  <!-- 左侧文字 -->
+  <div style="
+    flex: 1;
+    padding: 48px 36px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  ">
+    <h3 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.5rem;
+      color: var(--ink);
+      margin: 0 0 16px 0;
+    ">标题</h3>
+    <p style="
+      font-size: 0.95rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+      margin: 0;
+    ">内容描述文字，简洁有力地传达核心信息。</p>
+  </div>
+  <!-- 右侧图片/色块 -->
+  <div style="
+    flex: 1;
+    background: var(--bg-alt);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+  ">
+    <div style="
+      width: 120px; height: 120px;
+      border: 2px dashed var(--yellow);
+      border-radius: 50%;
+      opacity: 0.4;
+    "></div>
+  </div>
+</div>
+```
+
+### 手法3：编号列表 + 左侧色条
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  padding: 48px;
+  border-radius: 16px;
+">
+  <h2 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: 1.6rem;
+    color: var(--ink);
+    margin: 0 0 32px 0;
+  ">三步开启<span style="color: var(--brown);">旅程</span></h2>
+
+  <div style="display: flex; flex-direction: column; gap: 24px;">
+    <div style="
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    ">
+      <span style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px; height: 36px;
+        background: var(--brown);
+        color: #FDF8F0;
+        border-radius: 50%;
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: 1rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      ">1</span>
+      <div style="
+        border-left: 3px solid var(--yellow);
+        padding-left: 16px;
+      ">
+        <strong style="display: block; color: var(--ink); margin-bottom: 4px;">选择目的地</strong>
+        <span style="font-size: 0.85rem; color: var(--ink-light);">从愿望清单中挑选你的下一站</span>
+      </div>
+    </div>
+
+    <div style="
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    ">
+      <span style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px; height: 36px;
+        background: var(--brown);
+        color: #FDF8F0;
+        border-radius: 50%;
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: 1rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      ">2</span>
+      <div style="
+        border-left: 3px solid var(--yellow);
+        padding-left: 16px;
+      ">
+        <strong style="display: block; color: var(--ink); margin-bottom: 4px;">规划路线</strong>
+        <span style="font-size: 0.85rem; color: var(--ink-light);">用地图标记想去的每一个角落</span>
+      </div>
+    </div>
+
+    <div style="
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    ">
+      <span style="
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width: 36px; height: 36px;
+        background: var(--brown);
+        color: #FDF8F0;
+        border-radius: 50%;
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: 1rem;
+        font-weight: 700;
+        flex-shrink: 0;
+      ">3</span>
+      <div style="
+        border-left: 3px solid var(--yellow);
+        padding-left: 16px;
+      ">
+        <strong style="display: block; color: var(--ink); margin-bottom: 4px;">出发记录</strong>
+        <span style="font-size: 0.85rem; color: var(--ink-light);">带上相机和笔记本，记录每一个瞬间</span>
+      </div>
+    </div>
+  </div>
+</div>
+```
+
+### 手法4：引用/金句卡片
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  padding: 60px 48px;
+  border-radius: 16px;
+  position: relative;
+">
+  <!-- 大引号装饰 -->
+  <div style="
+    font-family: 'Fraunces', serif;
+    font-size: 8rem;
+    color: var(--brown);
+    opacity: 0.1;
+    line-height: 1;
+    position: absolute;
+    top: 40px; left: 40px;
+    pointer-events: none;
+  ">"</div>
+
+  <blockquote style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.4rem, 3vw, 1.8rem);
+    color: var(--ink);
+    line-height: 1.6;
+    margin: 0 0 24px 0;
+    position: relative;
+    z-index: 1;
+  ">
+    旅行不是为了到达目的地，<br>
+    而是为了在路上<span style="
+      background: linear-gradient(180deg, transparent 55%, rgba(240,198,116,0.35) 55%);
+      padding: 0 4px;
+    ">发现自己</span>。
+  </blockquote>
+
+  <div style="
+    font-size: 0.85rem;
+    color: var(--ink-light);
+    position: relative;
+    z-index: 1;
+  ">— 花心小泡泡</div>
+</div>
+```
+
+### 手法5：大透明数字 + 文字叠加
+
+```html
+<div style="
+  width: 100%;
+  aspect-ratio: 3 / 4;
+  background: var(--bg-warm);
+  padding: 48px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 16px;
+">
+  <!-- 超大透明数字 -->
+  <div style="
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 12rem;
+    color: var(--brown);
+    opacity: 0.08;
+    line-height: 0.8;
+    position: absolute;
+    bottom: -30px; right: -20px;
+    pointer-events: none;
+  ">03</div>
+
+  <div style="position: relative; z-index: 1;">
+    <h2 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: 1.8rem;
+      color: var(--ink);
+      margin: 0 0 20px 0;
+    ">第三章</h2>
+    <p style="
+      font-size: 1rem;
+      color: var(--ink-light);
+      line-height: 1.8;
+      margin: 0;
+    ">正文内容区域，与背景数字形成层次对比。</p>
+  </div>
+</div>
+```
 
 ---
 
-## 🌍 英文卡片补充规范
+## 🎯 卡片页面自检清单
 
-用于 Twitter/Instagram 等出海平台的英文卡片，在上述规范基础上调整：
+### P0（必须过）
+- [ ] 3:4比例正确
+- [ ] **禁止深色底**（`#1E1A16` 不可用于卡片场景）
+- [ ] 三色比例正确（棕60% + 黄30% + 蓝10%）
+- [ ] 封面边框使用黄色 `#F0C674`
+- [ ] 棕色高亮块使用 `#A67B5B`（替代原蓝色）
+- [ ] 署名：花心小泡泡
+- [ ] CTA：Follow 在下 花心泡
+- [ ] 签名档：花心小泡泡 · 体验生活，感受体验，记录感受
 
-- 标题/金句用 **Fraunces italic**（替代中文的 Noto Serif SC），手写标注用 **Caveat**
-- 文案风格：除专有名词/缩写外全小写，句首字母大写
-- 英文单词较长，标题字号可比中文规范上浮（封面可到 110-130px），注意单词换行不截断
-- 尾页 CTA 用你的固定英文短语替代「关注 + 作者名」，签名档用英文版（见 `components.md` #43）
+### P1（应过）
+- [ ] 每张卡片使用不同的排版手法
+- [ ] 有封面卡 + 正文卡 + 总结卡的完整结构
+- [ ] 文字字号对比极端
+- [ ] 有至少一种装饰元素
+
+### P2（加分）
+- [ ] 有品牌三色比例展示卡
+- [ ] 有金句/引用卡
+- [ ] 有旅行主题装饰（机票/邮票/拍立得）
+- [ ] 有手绘彩铅感装饰
+- [ ] 整体看起来不像AI生成的
 
 ---
 
-## ✅ Checklist（做完自查）
+## 📝 品牌信息
 
-- [ ] 每页字号是否适配手机阅读（标题≥48px，正文≥36px）
-- [ ] 是否有丑的默认组件（竖线列表、红圆点、默认blockquote）
-- [ ] 每页是否撑满画面（内容占满1080×1440，有呼吸感但不留大片空白）
-- [ ] 页面之间排版是否有变化（不能连续3页同一layout）
-- [ ] 品牌三色比例 6:3:1
-- [ ] 头像和署名是否正确（圆形头像+作者名）
-- [ ] 导出按钮是否工作（html2canvas本地文件 + JSZip CDN、exportAll打包zip一次性下载）
-- [ ] 卡片是否居中显示（transform-origin: top center）
-- [ ] 用localhost打开测试导出（file://协议下js加载受限）
-- [ ] 总张数≤18
+- **署名**: 花心小泡泡 / Bubble
+- **签名档**: 花心小泡泡 · 体验生活，感受体验，记录感受
+- **CTA**: Follow 在下 花心泡
+
+---
+
+*This scene file builds on top of brand-dna.md. Always reference brand-dna.md for the full brand specification.*

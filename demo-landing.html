@@ -3,698 +3,1244 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>AI 创作者之夜 — 人与AI共创的分享会</title>
+  <title>花心小泡泡 · 设计系统</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Fraunces:ital,opsz,wght@0,9..144,400;0,9..144,900;1,9..144,400&family=Caveat:wght@400;700&family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600;700&family=Fira+Code:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,500;0,9..144,600;0,9..144,700;1,9..144,300;1,9..144,400;1,9..144,500;1,9..144,600;1,9..144,700&family=Noto+Sans+SC:wght@300;400;500;600;700&family=Noto+Serif+SC:wght@400;500;600;700&display=swap" rel="stylesheet">
   <style>
-    /* === CSS变量 === */
+    /* ========================================
+       花心小泡泡 设计系统 · Demo Landing Page
+       ======================================== */
+
     :root {
-      --blue: #2B7FD8;
-      --blue-deep: #1E5BA8;
-      --yellow: #F4D758;
-      --yellow-soft: #FFF3CD;
-      --red: #E84A5F;
-      --cream: #fefcf6;
-      --cream-dark: #faf6eb;
-      --ink: #1A1A2E;
-      --ink-light: #4A4A5A;
-      --ink-faint: #8A8A9A;
-      --dark-panel: #151821;
+      --brown: #A67B5B;
+      --brown-deep: #8B6343;
+      --yellow: #F0C674;
+      --yellow-soft: #FDF0D0;
+      --blue: #5B8BA0;
+      --blue-deep: #4A7A8E;
+      --cream: #FDF8F0;
+      --cream-dark: #F5EDE0;
+      --ink: #2D2420;
+      --ink-light: #5C4D44;
+      --ink-faint: #8A7D74;
+      --dark-panel: #1E1A16;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    /* ---------- Reset ---------- */
+    *, *::before, *::after {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      scroll-behavior: smooth;
+    }
 
     body {
-      font-family: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
-      font-size: 16px;
-      line-height: 1.7;
+      font-family: 'Noto Sans SC', 'Noto Serif SC', sans-serif;
       color: var(--ink);
-      background: var(--cream);
+      background-color: var(--cream);
+      line-height: 1.75;
+      overflow-x: hidden;
     }
 
-    ::selection {
-      background: var(--yellow);
-      color: var(--ink);
-    }
-
+    /* ---------- Utility ---------- */
     .container {
       max-width: 1300px;
       margin: 0 auto;
-      padding: 0 2rem;
+      padding: 0 clamp(20px, 5vw, 60px);
     }
 
-    /* === NAV === */
-    nav {
+    /* ---------- Navigation ---------- */
+    .nav {
       position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      padding: 1rem 2rem;
-      background: rgba(254,252,246,.85);
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 1000;
+      padding: clamp(12px, 2vw, 20px) 0;
+      transition: background 0.35s ease, box-shadow 0.35s ease, padding 0.35s ease;
       backdrop-filter: blur(12px);
-      border-bottom: 1px solid rgba(26,26,26,.06);
+      -webkit-backdrop-filter: blur(12px);
+      background: rgba(253, 248, 240, 0.72);
+    }
+
+    .nav.scrolled {
+      background: rgba(253, 248, 240, 0.94);
+      box-shadow: 0 2px 20px rgba(45, 36, 32, 0.08);
+      padding: clamp(8px, 1.5vw, 14px) 0;
+    }
+
+    .nav-inner {
+      max-width: 1300px;
+      margin: 0 auto;
+      padding: 0 clamp(20px, 5vw, 60px);
       display: flex;
       align-items: center;
       justify-content: space-between;
     }
-    nav.scrolled {
-      box-shadow: 0 2px 20px rgba(0,0,0,.06);
-    }
-    .nav-logo {
+
+    .nav-brand {
       font-family: 'Fraunces', serif;
-      font-weight: 900;
-      font-size: 1.1rem;
-      color: var(--ink);
+      font-weight: 600;
+      font-size: clamp(18px, 3vw, 24px);
+      color: var(--brown);
+      letter-spacing: 0.02em;
     }
+
     .nav-links {
       display: flex;
-      gap: 2rem;
+      gap: clamp(16px, 3vw, 36px);
+      list-style: none;
     }
+
     .nav-links a {
       text-decoration: none;
-      color: var(--ink);
-      font-size: 0.85rem;
+      color: var(--ink-light);
+      font-size: clamp(14px, 1.8vw, 16px);
+      font-weight: 500;
+      transition: color 0.25s;
       position: relative;
     }
+
     .nav-links a::after {
       content: '';
       position: absolute;
-      bottom: -4px; left: 0; right: 0;
+      bottom: -4px;
+      left: 0;
+      width: 0;
       height: 2px;
-      background: var(--yellow);
-      transform: scaleX(0);
-      transition: transform .25s ease-out;
-    }
-    .nav-links a:hover::after {
-      transform: scaleX(1);
+      background: var(--brown);
+      border-radius: 1px;
+      transition: width 0.3s ease;
     }
 
-    /* === HERO 全屏 === */
+    .nav-links a:hover {
+      color: var(--brown);
+    }
+
+    .nav-links a:hover::after {
+      width: 100%;
+    }
+
+    /* ---------- Section Common ---------- */
+    .section {
+      padding: clamp(60px, 10vw, 120px) 0;
+      position: relative;
+    }
+
+    .section-label {
+      display: inline-block;
+      font-family: 'Fira Code', monospace;
+      font-size: clamp(12px, 1.4vw, 13px);
+      color: var(--brown);
+      text-transform: uppercase;
+      letter-spacing: 0.12em;
+      margin-bottom: clamp(8px, 1.5vw, 16px);
+    }
+
+    .section-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 600;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: clamp(12px, 2vw, 20px);
+    }
+
+    .section-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--ink-faint);
+      max-width: 640px;
+      line-height: 1.8;
+    }
+
+    /* ---------- Hero ---------- */
     .hero {
       min-height: 100vh;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 80px 24px 60px;
-      text-align: center;
+      padding-top: clamp(80px, 12vw, 140px);
+      padding-bottom: clamp(60px, 8vw, 100px);
       position: relative;
       overflow: hidden;
     }
-    .hero::before {
-      content: '';
+
+    /* 装饰光晕 */
+    .hero-glow {
       position: absolute;
-      top: -20%; right: -10%;
-      width: 500px; height: 500px;
       border-radius: 50%;
-      background: radial-gradient(circle, rgba(244,215,88,0.12) 0%, transparent 70%);
+      filter: blur(80px);
       pointer-events: none;
-    }
-    .hero::after {
-      content: '';
-      position: absolute;
-      bottom: -10%; left: -5%;
-      width: 400px; height: 400px;
-      border-radius: 50%;
-      background: radial-gradient(circle, rgba(43,127,216,0.08) 0%, transparent 70%);
-      pointer-events: none;
+      z-index: 0;
     }
 
-    .hero .label-caps {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.75rem;
-      text-transform: uppercase;
-      letter-spacing: 0.15em;
-      font-weight: 500;
-      color: var(--ink-faint);
-      margin-bottom: 1.5rem;
+    .hero-glow--top {
+      width: clamp(300px, 50vw, 600px);
+      height: clamp(300px, 50vw, 600px);
+      background: radial-gradient(circle, rgba(240, 198, 116, 0.35) 0%, transparent 70%);
+      top: -15%;
+      right: -10%;
     }
 
-    .hero h1 {
-      font-family: 'Noto Serif SC', serif;
-      font-weight: 900;
-      font-size: clamp(2.8rem, 7vw, 5.5rem);
+    .hero-glow--bottom {
+      width: clamp(250px, 40vw, 500px);
+      height: clamp(250px, 40vw, 500px);
+      background: radial-gradient(circle, rgba(240, 198, 116, 0.25) 0%, transparent 70%);
+      bottom: -10%;
+      left: -8%;
+    }
+
+    /* 背景大数字 */
+    .hero-bg-num {
+      position: absolute;
+      font-family: 'Fraunces', serif;
+      font-weight: 700;
+      font-size: clamp(200px, 28vw, 400px);
+      color: rgba(166, 123, 91, 0.03);
+      z-index: 0;
+      pointer-events: none;
+      user-select: none;
+      line-height: 1;
+    }
+
+    .hero-bg-num--left {
+      top: 10%;
+      left: -5%;
+    }
+
+    .hero-bg-num--right {
+      bottom: 5%;
+      right: -3%;
+    }
+
+    /* 虚线圆装饰 */
+    .hero-dotted-circle {
+      position: absolute;
+      border: 2px dashed var(--yellow);
+      border-radius: 50%;
+      opacity: 0.25;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .hero-dotted-circle--1 {
+      width: clamp(180px, 22vw, 280px);
+      height: clamp(180px, 22vw, 280px);
+      top: 15%;
+      right: 18%;
+    }
+
+    .hero-dotted-circle--2 {
+      width: clamp(100px, 12vw, 160px);
+      height: clamp(100px, 12vw, 160px);
+      bottom: 20%;
+      right: 40%;
+    }
+
+    .hero-content {
+      position: relative;
+      z-index: 2;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: clamp(40px, 8vw, 80px);
+      align-items: center;
+    }
+
+    .hero-text {
+      display: flex;
+      flex-direction: column;
+      gap: clamp(16px, 2.5vw, 28px);
+    }
+
+    .hero-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(36px, 7vw, 72px);
+      font-weight: 600;
+      color: var(--ink);
       line-height: 1.15;
-      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .hero-title .highlight {
+      color: var(--brown);
       position: relative;
     }
-    .hero h1 .hl {
-      background: linear-gradient(transparent 60%, rgba(244,215,88,0.4) 60%);
-      padding: 0 6px;
+
+    .hero-title .highlight::after {
+      content: '';
+      position: absolute;
+      bottom: 4px;
+      left: 0;
+      right: 0;
+      height: 10px;
+      background: var(--yellow-soft);
+      border-radius: 4px;
+      z-index: -1;
     }
 
     .hero-subtitle {
-      font-size: 1.15rem;
-      color: var(--ink-light);
-      max-width: 560px;
-      margin-bottom: 2.5rem;
+      font-size: clamp(16px, 2.2vw, 20px);
+      color: var(--ink-faint);
+      line-height: 1.8;
+      max-width: 480px;
     }
 
-    .hero-meta {
+    .hero-pills {
       display: flex;
       flex-wrap: wrap;
-      gap: 1.5rem;
+      gap: 10px;
+    }
+
+    .pill {
+      display: inline-block;
+      padding: clamp(6px, 1vw, 8px) clamp(14px, 2vw, 22px);
+      border-radius: 999px;
+      font-size: clamp(13px, 1.6vw, 15px);
+      font-weight: 500;
+      border: 1.5px solid var(--brown);
+      color: var(--brown);
+      background: transparent;
+      transition: all 0.3s ease;
+    }
+
+    .pill:hover {
+      background: var(--brown);
+      color: #fff;
+    }
+
+    /* 头像 */
+    .hero-avatar-wrap {
+      display: flex;
       justify-content: center;
-      font-size: 0.88rem;
-      color: var(--ink-light);
-    }
-    .hero-meta span {
-      display: inline-flex;
       align-items: center;
-      gap: 6px;
-    }
-    .hero-meta .dot {
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--yellow);
-    }
-
-    /* === Sections === */
-    .section { padding: clamp(80px, 12vh, 160px) 0; }
-    .section--alt { background: var(--cream-dark); }
-
-    .section-header {
-      margin-bottom: clamp(40px, 6vw, 80px);
-    }
-    .section-number {
-      font-family: 'Fraunces', serif;
-      font-style: italic;
-      font-size: clamp(1.4rem, 3vw, 2rem);
-      color: var(--blue);
-      opacity: 0.3;
-      display: block;
-      margin-bottom: 0.25rem;
-    }
-    .section-title {
-      font-family: 'Noto Serif SC', serif;
-      font-weight: 900;
-      font-size: clamp(1.4rem, 3vw, 2.2rem);
-    }
-
-    /* === 嘉宾卡片 === */
-    .speaker-grid {
-      display: grid;
-      grid-template-columns: repeat(3, 1fr);
-      gap: clamp(20px, 2.5vw, 32px);
-    }
-    .speaker-card {
-      background: #fff;
-      border-radius: 20px;
-      padding: clamp(28px, 3vw, 40px);
       position: relative;
-      overflow: hidden;
-      box-shadow: 0 4px 24px rgba(0,0,0,.05);
-      transition: transform 0.3s ease;
     }
-    .speaker-card:hover {
-      transform: translateY(-4px);
+
+    .hero-avatar-ring {
+      width: clamp(220px, 32vw, 360px);
+      height: clamp(220px, 32vw, 360px);
+      border-radius: 50%;
+      border: 6px solid var(--yellow);
+      padding: 10px;
+      position: relative;
+      animation: avatarFloat 4s ease-in-out infinite;
     }
-    .speaker-card::before {
+
+    @keyframes avatarFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-12px); }
+    }
+
+    .hero-avatar-ring::before {
       content: '';
       position: absolute;
-      top: 0; left: 0; right: 0;
-      height: 4px;
-    }
-    .speaker-card:nth-child(1)::before { background: var(--blue); }
-    .speaker-card:nth-child(2)::before { background: var(--yellow); }
-    .speaker-card:nth-child(3)::before { background: var(--red); }
-
-    .speaker-avatar {
-      width: 64px; height: 64px;
+      inset: -16px;
       border-radius: 50%;
-      margin-bottom: 1.2rem;
+      border: 2px dashed var(--yellow);
+      opacity: 0.5;
+      animation: spinSlow 30s linear infinite;
+    }
+
+    @keyframes spinSlow {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .hero-avatar {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      object-fit: cover;
+      display: block;
+    }
+
+    /* 头像占位 */
+    .hero-avatar-placeholder {
+      width: 100%;
+      height: 100%;
+      border-radius: 50%;
+      background: linear-gradient(135deg, var(--yellow-soft), var(--cream-dark));
       display: flex;
       align-items: center;
       justify-content: center;
-      font-size: 1.8rem;
+      font-family: 'Fraunces', serif;
+      font-size: clamp(48px, 8vw, 80px);
+      color: var(--brown);
     }
-    .speaker-card:nth-child(1) .speaker-avatar { background: rgba(43,127,216,0.08); }
-    .speaker-card:nth-child(2) .speaker-avatar { background: rgba(244,215,88,0.15); }
-    .speaker-card:nth-child(3) .speaker-avatar { background: rgba(232,74,95,0.08); }
 
-    .speaker-name {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 1.15rem;
-      font-weight: 700;
-      margin-bottom: 4px;
+    /* ---------- Cards Section ---------- */
+    .cards-section {
+      background: var(--cream-dark);
+      position: relative;
+      overflow: hidden;
     }
-    .speaker-role {
-      font-size: 0.78rem;
-      color: var(--blue);
-      font-weight: 500;
-      margin-bottom: 12px;
+
+    .cards-section .section-header {
+      text-align: center;
+      margin-bottom: clamp(40px, 7vw, 72px);
     }
-    .speaker-topic {
-      font-size: 0.88rem;
-      color: var(--ink-light);
+
+    .cards-section .section-desc {
+      margin: 0 auto;
+    }
+
+    .cards-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(20px, 3vw, 32px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .card {
+      background: #fff;
+      border-radius: 20px;
+      padding: clamp(24px, 4vw, 40px) clamp(20px, 3vw, 32px);
+      box-shadow: 0 4px 24px rgba(45, 36, 32, 0.06);
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: 20px 20px 0 0;
+    }
+
+    .card--tutorial::before { background: var(--brown); }
+    .card--landing::before { background: var(--yellow); }
+    .card--app::before { background: var(--blue); }
+    .card--graphic::before { background: var(--ink-light); }
+
+    .card:hover {
+      transform: translateY(-6px);
+      box-shadow: 0 12px 40px rgba(45, 36, 32, 0.12);
+    }
+
+    .card-icon {
+      width: clamp(44px, 6vw, 56px);
+      height: clamp(44px, 6vw, 56px);
+      border-radius: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(22px, 3vw, 28px);
+      margin-bottom: clamp(16px, 2.5vw, 24px);
+    }
+
+    .card-icon--tutorial { background: rgba(166, 123, 91, 0.12); color: var(--brown); }
+    .card-icon--landing { background: rgba(240, 198, 116, 0.2); color: #b8902a; }
+    .card-icon--app { background: rgba(91, 139, 160, 0.12); color: var(--blue); }
+    .card-icon--graphic { background: rgba(92, 77, 68, 0.1); color: var(--ink-light); }
+
+    .card-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(18px, 2.4vw, 24px);
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: clamp(8px, 1.2vw, 12px);
+    }
+
+    .card-desc {
+      font-size: clamp(13px, 1.6vw, 15px);
+      color: var(--ink-faint);
       line-height: 1.7;
     }
 
-    /* === 活动亮点 === */
-    .highlights-grid {
-      display: grid;
-      grid-template-columns: repeat(2, 1fr);
-      gap: 24px;
-    }
-    .highlight-card {
-      display: flex;
-      align-items: stretch;
-      background: #fff;
-      border-radius: 16px;
-      overflow: hidden;
-      box-shadow: 0 2px 16px rgba(0,0,0,0.04);
-    }
-    .highlight-icon {
-      flex: 0 0 80px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 1.8rem;
-    }
-    .highlight-card:nth-child(1) .highlight-icon { background: rgba(43,127,216,0.06); }
-    .highlight-card:nth-child(2) .highlight-icon { background: rgba(244,215,88,0.12); }
-    .highlight-card:nth-child(3) .highlight-icon { background: rgba(232,74,95,0.06); }
-    .highlight-card:nth-child(4) .highlight-icon { background: rgba(43,127,216,0.06); }
-    .highlight-content {
-      flex: 1;
-      padding: 20px 24px;
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-    }
-    .highlight-content h3 {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 1rem;
-      font-weight: 700;
-      margin-bottom: 6px;
-    }
-    .highlight-content p {
-      font-size: 0.82rem;
-      color: var(--ink-light);
-      line-height: 1.6;
-    }
-
-    /* === 深色面板 === */
-    .dark-section {
+    /* ---------- Quote Panel ---------- */
+    .quote-section {
       background: var(--dark-panel);
-      color: #e2e8f0;
-      padding: clamp(80px, 12vh, 160px) 0;
-    }
-    .dark-section .quote-text {
-      font-family: 'Noto Serif SC', serif;
-      font-size: clamp(1.3rem, 3vw, 2rem);
-      font-weight: 700;
-      line-height: 1.8;
-      max-width: 720px;
-      margin: 0 auto;
-      text-align: center;
-    }
-    .dark-section .quote-text em {
-      color: var(--yellow);
-      font-style: normal;
-    }
-    .dark-section .quote-attr {
-      text-align: center;
-      margin-top: 1.5rem;
-      font-size: 0.82rem;
-      opacity: 0.5;
-      font-family: 'Fira Code', monospace;
-    }
-
-    /* === 品牌色面板（时间线） === */
-    .brand-section {
-      background: var(--blue);
-      color: #fff;
-      padding: clamp(80px, 12vh, 160px) 0;
       position: relative;
       overflow: hidden;
     }
-    .brand-section::before {
-      content: '';
+
+    .quote-glow {
       position: absolute;
-      top: -50%; right: -10%;
-      width: 600px; height: 600px;
+      width: clamp(300px, 50vw, 500px);
+      height: clamp(300px, 50vw, 500px);
       border-radius: 50%;
-      background: rgba(255,255,255,0.04);
+      filter: blur(100px);
+      background: radial-gradient(circle, rgba(240, 198, 116, 0.15) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
       pointer-events: none;
     }
-    .brand-section .section-header .section-number {
-      color: rgba(255,255,255,0.4);
-    }
-    .brand-section .section-header .section-title {
-      color: #fff;
+
+    .quote-inner {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      padding: clamp(60px, 10vw, 100px) clamp(20px, 5vw, 40px);
     }
 
-    .timeline-list {
-      max-width: 700px;
-      margin: 0 auto;
-      position: relative;
-      padding-left: 40px;
+    .quote-marks {
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: clamp(80px, 14vw, 160px);
+      color: var(--yellow);
+      opacity: 0.25;
+      line-height: 1;
+      margin-bottom: -40px;
     }
-    .timeline-list::before {
-      content: '';
-      position: absolute;
-      left: 12px;
-      top: 8px; bottom: 8px;
-      width: 2px;
-      background: rgba(255,255,255,0.2);
-    }
-    .timeline-item {
-      position: relative;
-      margin-bottom: clamp(28px, 4vw, 48px);
-    }
-    .timeline-item:last-child { margin-bottom: 0; }
-    .timeline-item::before {
-      content: '';
-      position: absolute;
-      left: -34px;
-      top: 8px;
-      width: 12px; height: 12px;
-      border-radius: 50%;
-      background: var(--yellow);
-      border: 2px solid rgba(255,255,255,0.3);
-    }
-    .timeline-time {
-      font-family: 'Fira Code', monospace;
-      font-size: 0.75rem;
-      opacity: 0.7;
-      margin-bottom: 4px;
-    }
-    .timeline-title {
+
+    .quote-text {
       font-family: 'Noto Serif SC', serif;
-      font-size: 1.05rem;
-      font-weight: 700;
-      margin-bottom: 4px;
+      font-size: clamp(22px, 4vw, 36px);
+      font-weight: 500;
+      color: #E8DDD0;
+      line-height: 1.6;
+      max-width: 720px;
+      margin: 0 auto clamp(24px, 3vw, 36px);
     }
-    .timeline-desc {
-      font-size: 0.82rem;
-      opacity: 0.75;
+
+    .quote-author {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(20px, 2.8vw, 28px);
+      color: var(--yellow);
+      opacity: 0.8;
+    }
+
+    /* ---------- Color Showcase ---------- */
+    .color-section .section-header {
+      text-align: center;
+      margin-bottom: clamp(40px, 7vw, 64px);
+    }
+
+    .color-section .section-desc {
+      margin: 0 auto;
+    }
+
+    .color-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: clamp(20px, 3vw, 32px);
+    }
+
+    .color-card {
+      border-radius: 20px;
+      overflow: hidden;
+      box-shadow: 0 4px 20px rgba(45, 36, 32, 0.08);
+      transition: transform 0.35s ease;
+    }
+
+    .color-card:hover {
+      transform: translateY(-4px);
+    }
+
+    .color-swatch {
+      height: clamp(140px, 18vw, 200px);
+      position: relative;
+    }
+
+    .color-swatch--brown { background: linear-gradient(135deg, var(--brown), var(--brown-deep)); }
+    .color-swatch--yellow { background: linear-gradient(135deg, var(--yellow), var(--yellow-soft)); }
+    .color-swatch--blue { background: linear-gradient(135deg, var(--blue), var(--blue-deep)); }
+
+    .color-swatch-label {
+      position: absolute;
+      bottom: 16px;
+      left: 20px;
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      background: rgba(0,0,0,0.3);
+      color: #fff;
+      padding: 4px 10px;
+      border-radius: 6px;
+    }
+
+    .color-info {
+      background: #fff;
+      padding: clamp(20px, 3vw, 28px);
+    }
+
+    .color-name {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(16px, 2vw, 20px);
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 6px;
+    }
+
+    .color-hex {
+      font-family: 'Fira Code', monospace;
+      font-size: clamp(12px, 1.4vw, 14px);
+      color: var(--ink-faint);
+      margin-bottom: 10px;
+    }
+
+    .color-ratio {
+      display: flex;
+      gap: 6px;
+      align-items: center;
+    }
+
+    .ratio-bar {
+      flex: 1;
+      height: 6px;
+      border-radius: 3px;
+      background: var(--cream-dark);
+      overflow: hidden;
+    }
+
+    .ratio-fill {
+      height: 100%;
+      border-radius: 3px;
+    }
+
+    .ratio-fill--brown { background: var(--brown); }
+    .ratio-fill--yellow { background: var(--yellow); }
+    .ratio-fill--blue { background: var(--blue); }
+
+    .ratio-text {
+      font-family: 'Fira Code', monospace;
+      font-size: 11px;
+      color: var(--ink-faint);
+      white-space: nowrap;
+    }
+
+    /* ---------- Component Preview ---------- */
+    .comp-section {
+      background: var(--cream-dark);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .comp-section .section-header {
+      text-align: center;
+      margin-bottom: clamp(40px, 7vw, 64px);
+    }
+
+    .comp-section .section-desc {
+      margin: 0 auto;
+    }
+
+    .comp-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(16px, 2.5vw, 28px);
+      position: relative;
+      z-index: 1;
+    }
+
+    .comp-card {
+      background: #fff;
+      border-radius: 16px;
+      padding: clamp(18px, 2.5vw, 28px);
+      box-shadow: 0 2px 16px rgba(45, 36, 32, 0.05);
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+      border: 1px solid transparent;
+    }
+
+    .comp-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 8px 28px rgba(45, 36, 32, 0.1);
+      border-color: var(--yellow);
+    }
+
+    .comp-preview {
+      height: clamp(80px, 10vw, 120px);
+      border-radius: 10px;
+      margin-bottom: clamp(12px, 1.8vw, 18px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: clamp(28px, 4vw, 40px);
+    }
+
+    .comp-preview--quote {
+      background: linear-gradient(135deg, var(--yellow-soft), #FDE8C0);
+    }
+    .comp-preview--code {
+      background: linear-gradient(135deg, #2D2D2D, #3D3D3D);
+    }
+    .comp-preview--steps {
+      background: linear-gradient(135deg, rgba(91,139,160,0.1), rgba(91,139,160,0.2));
+    }
+    .comp-preview--grid {
+      background: linear-gradient(135deg, rgba(166,123,91,0.08), rgba(166,123,91,0.15));
+    }
+    .comp-preview--timeline {
+      background: linear-gradient(135deg, var(--cream-dark), #EDE0D0);
+    }
+    .comp-preview--cta {
+      background: linear-gradient(135deg, var(--brown), var(--brown-deep));
+      color: #fff;
+    }
+    .comp-preview--card {
+      background: linear-gradient(135deg, rgba(240,198,116,0.12), rgba(240,198,116,0.25));
+    }
+    .comp-preview--stats {
+      background: linear-gradient(135deg, rgba(91,139,160,0.15), rgba(166,123,91,0.1));
+    }
+
+    .comp-preview-code {
+      font-family: 'Fira Code', monospace;
+      font-size: 12px;
+      color: #A0D0A0;
       line-height: 1.6;
     }
 
-    /* === Pull Quote === */
-    .viral-pullquote {
-      padding: 36px 40px;
-      background: var(--cream);
-      border-radius: 16px;
-      border: 2px solid var(--yellow);
-      position: relative;
-      max-width: 720px;
-      margin: 0 auto;
-    }
-    .viral-pullquote::before {
-      content: '"';
+    .comp-name {
       font-family: 'Fraunces', serif;
-      font-size: 5rem;
-      color: var(--yellow);
-      position: absolute;
-      top: -10px; left: 20px;
-      opacity: 0.5;
-      line-height: 1;
-    }
-    .viral-pullquote p {
-      font-family: 'Noto Serif SC', serif;
-      font-size: clamp(1.1rem, 2vw, 1.4rem);
-      font-weight: 700;
-      line-height: 1.8;
-    }
-    .viral-pullquote .quote-source {
-      margin-top: 12px;
-      font-family: 'Fira Code', monospace;
-      font-size: 0.75rem;
-      color: var(--ink-faint);
+      font-size: clamp(15px, 1.8vw, 18px);
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
     }
 
-    /* === CTA === */
+    .comp-tag {
+      font-size: clamp(11px, 1.3vw, 12px);
+      color: var(--ink-faint);
+      font-family: 'Fira Code', monospace;
+    }
+
+    /* ---------- CTA Section ---------- */
     .cta-section {
       text-align: center;
-      padding: clamp(80px, 12vh, 160px) 2rem;
+      position: relative;
+      overflow: hidden;
     }
-    .cta-section h2 {
-      font-family: 'Noto Serif SC', serif;
-      font-weight: 900;
-      font-size: clamp(1.6rem, 4vw, 2.6rem);
-      margin-bottom: 1rem;
+
+    .cta-glow {
+      position: absolute;
+      width: clamp(400px, 60vw, 700px);
+      height: clamp(400px, 60vw, 700px);
+      border-radius: 50%;
+      filter: blur(120px);
+      background: radial-gradient(circle, rgba(240, 198, 116, 0.2) 0%, transparent 70%);
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      pointer-events: none;
     }
-    .cta-section p {
-      font-size: 1rem;
-      color: var(--ink-light);
-      margin-bottom: 2rem;
-      max-width: 480px;
-      margin-left: auto;
-      margin-right: auto;
+
+    .cta-content {
+      position: relative;
+      z-index: 1;
     }
-    .cta-button {
-      display: inline-flex;
-      align-items: center;
-      gap: 8px;
-      padding: 16px 36px;
-      background: var(--blue);
-      color: #fff;
-      border-radius: 12px;
-      text-decoration: none;
+
+    .cta-title {
+      font-family: 'Fraunces', serif;
+      font-size: clamp(28px, 5.5vw, 52px);
       font-weight: 600;
-      font-size: 1rem;
-      transition: transform .2s, box-shadow .2s;
+      color: var(--ink);
+      line-height: 1.25;
+      margin-bottom: clamp(12px, 2vw, 20px);
     }
-    .cta-button:hover {
+
+    .cta-desc {
+      font-size: clamp(15px, 2vw, 18px);
+      color: var(--ink-faint);
+      max-width: 560px;
+      margin: 0 auto clamp(28px, 4vw, 40px);
+      line-height: 1.8;
+    }
+
+    .cta-btn {
+      display: inline-block;
+      padding: clamp(14px, 2vw, 18px) clamp(36px, 6vw, 56px);
+      background: var(--brown);
+      color: #fff;
+      border-radius: 999px;
+      font-size: clamp(15px, 2vw, 18px);
+      font-weight: 600;
+      text-decoration: none;
+      letter-spacing: 0.03em;
+      transition: all 0.35s ease;
+      box-shadow: 0 4px 16px rgba(166, 123, 91, 0.35);
+    }
+
+    .cta-btn:hover {
+      background: var(--brown-deep);
       transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(43,127,216,0.3);
+      box-shadow: 0 8px 28px rgba(166, 123, 91, 0.45);
     }
-    .cta-note {
-      margin-top: 1rem;
-      font-size: 0.78rem;
+
+    .cta-signature {
+      margin-top: clamp(24px, 3.5vw, 36px);
+      font-family: 'Caveat', cursive;
+      font-size: clamp(18px, 2.5vw, 26px);
       color: var(--ink-faint);
     }
 
-    /* === Footer === */
+    /* ---------- Footer ---------- */
     .footer {
-      padding: 2rem;
+      border-top: 1px solid rgba(166, 123, 91, 0.15);
+      padding: clamp(32px, 5vw, 48px) 0;
       text-align: center;
-      font-size: 0.75rem;
-      color: var(--ink-faint);
-      border-top: 1px solid rgba(0,0,0,0.04);
     }
 
-    /* === Scroll Reveal === */
+    .footer-signature {
+      font-family: 'Caveat', cursive;
+      font-size: clamp(18px, 2.5vw, 24px);
+      color: var(--ink-faint);
+      margin-bottom: 8px;
+    }
+
+    .footer-copy {
+      font-size: clamp(12px, 1.4vw, 14px);
+      color: var(--ink-faint);
+      opacity: 0.6;
+    }
+
+    /* ---------- Scroll Reveal ---------- */
     .reveal {
       opacity: 0;
-      transform: translateY(32px);
-      transition: opacity 0.7s cubic-bezier(0.16, 1, 0.3, 1),
-                  transform 0.7s cubic-bezier(0.16, 1, 0.3, 1);
-    }
-    .reveal.visible { opacity: 1; transform: none; }
-    .reveal-d1 { transition-delay: 0.1s; }
-    .reveal-d2 { transition-delay: 0.2s; }
-    .reveal-d3 { transition-delay: 0.3s; }
-    .reveal-d4 { transition-delay: 0.4s; }
-
-    @media (prefers-reduced-motion: reduce) {
-      .reveal { opacity: 1; transform: none; transition: none; }
+      transform: translateY(40px);
+      transition: opacity 0.7s ease, transform 0.7s ease;
     }
 
-    /* === 响应式 === */
+    .reveal.visible {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.4s; }
+    .reveal-delay-5 { transition-delay: 0.5s; }
+    .reveal-delay-6 { transition-delay: 0.6s; }
+    .reveal-delay-7 { transition-delay: 0.7s; }
+    .reveal-delay-8 { transition-delay: 0.8s; }
+
+    /* ---------- Responsive: 900px ---------- */
     @media (max-width: 900px) {
-      .hero { min-height: auto; padding: 6rem 1.5rem 4rem; }
-      .speaker-grid { grid-template-columns: 1fr; }
-      .highlights-grid { grid-template-columns: 1fr; }
-      .timeline-list { padding-left: 36px; }
-      .cta-button { width: 100%; justify-content: center; }
-      .nav-links { gap: 1rem; }
+      .hero-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-subtitle {
+        margin: 0 auto;
+      }
+
+      .hero-pills {
+        justify-content: center;
+      }
+
+      .hero-avatar-wrap {
+        order: -1;
+      }
+
+      .cards-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .comp-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .color-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .color-card:last-child {
+        grid-column: span 2;
+        max-width: 400px;
+        justify-self: center;
+      }
     }
 
+    /* ---------- Responsive: 600px ---------- */
     @media (max-width: 600px) {
-      body { font-size: 15px; }
-      .nav-links { display: none; }
-      .hero-meta { flex-direction: column; gap: 0.5rem; }
+      .cards-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .comp-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+
+      .color-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .color-card:last-child {
+        grid-column: span 1;
+        max-width: none;
+        justify-self: auto;
+      }
+
+      .nav-links {
+        gap: 14px;
+      }
+
+      .hero-bg-num {
+        font-size: clamp(120px, 40vw, 200px);
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- ====== NAV ====== -->
-  <nav>
-    <span class="nav-logo">AI 创作者之夜</span>
-    <div class="nav-links">
-      <a href="#speakers">嘉宾</a>
-      <a href="#highlights">亮点</a>
-      <a href="#agenda">议程</a>
-      <a href="#register">报名</a>
+  <!-- ====== Navigation ====== -->
+  <nav class="nav" id="nav">
+    <div class="nav-inner">
+      <span class="nav-brand">花心小泡泡</span>
+      <ul class="nav-links">
+        <li><a href="#hero">首页</a></li>
+        <li><a href="#cards">场景</a></li>
+        <li><a href="#colors">配色</a></li>
+        <li><a href="#components">组件</a></li>
+        <li><a href="#cta">关注</a></li>
+      </ul>
     </div>
   </nav>
 
-  <!-- ====== HERO 全屏（浅） ====== -->
-  <section class="hero">
-    <span class="label-caps">2026.07.12 · 线下分享会 · 北京</span>
-    <h1>AI <span class="hl">创作者</span>之夜</h1>
-    <p class="hero-subtitle">一场关于人与AI共创的深度对话——当创作者遇上大模型，灵感与算力如何共舞？</p>
-    <div class="hero-meta">
-      <span><span class="dot"></span>3位跨界嘉宾</span>
-      <span><span class="dot"></span>4小时沉浸体验</span>
-      <span><span class="dot"></span>限额80人</span>
+  <!-- ====== Hero ====== -->
+  <section class="hero section" id="hero">
+    <!-- 装饰元素 -->
+    <div class="hero-glow hero-glow--top"></div>
+    <div class="hero-glow hero-glow--bottom"></div>
+    <div class="hero-bg-num hero-bg-num--left">B</div>
+    <div class="hero-bg-num hero-bg-num--right">01</div>
+    <div class="hero-dotted-circle hero-dotted-circle--1"></div>
+    <div class="hero-dotted-circle hero-dotted-circle--2"></div>
+
+    <div class="container hero-content">
+      <div class="hero-text reveal">
+        <h1 class="hero-title">
+          花心小泡泡<br><span class="highlight">设计系统</span>
+        </h1>
+        <p class="hero-subtitle">
+          一套温暖治愈、自由灵动的设计语言体系。融合手绘彩铅质感与现代极简美学，
+          让每个产品都拥有独特的「泡泡」气质。
+        </p>
+        <div class="hero-pills">
+          <span class="pill">温暖治愈</span>
+          <span class="pill">自由探索</span>
+          <span class="pill">元气满满</span>
+          <span class="pill">潇洒酷帅</span>
+          <span class="pill">体验感</span>
+        </div>
+      </div>
+      <div class="hero-avatar-wrap reveal reveal-delay-2">
+        <div class="hero-avatar-ring">
+          <div class="hero-avatar-placeholder" id="avatar-container">
+            <!-- 尝试加载头像，失败则显示占位 -->
+          </div>
+        </div>
+      </div>
     </div>
   </section>
 
-  <!-- ====== 嘉宾介绍（浅底） ====== -->
-  <section class="section" id="speakers">
+  <!-- ====== 场景卡片 ====== -->
+  <section class="cards-section section" id="cards">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">01</span>
-        <h2 class="section-title">分享嘉宾</h2>
+        <span class="section-label">// 适用场景</span>
+        <h2 class="section-title">四种核心场景类型</h2>
+        <p class="section-desc">
+          无论你的产品形态是什么，花心小泡泡都能提供恰到好处的设计支撑。
+        </p>
       </div>
-      <div class="speaker-grid">
-        <div class="speaker-card reveal reveal-d1">
-          <div class="speaker-avatar">🎨</div>
-          <h3 class="speaker-name">林知微</h3>
-          <p class="speaker-role">独立插画师 · AI共创实验者</p>
-          <p class="speaker-topic">从手绘到AI辅助创作，她如何用Midjourney和手绘结合，完成了一本独立绘本的全流程。</p>
+
+      <div class="cards-grid">
+        <div class="card card--tutorial reveal reveal-delay-1">
+          <div class="card-icon card-icon--tutorial">📖</div>
+          <h3 class="card-title">教程页面</h3>
+          <p class="card-desc">
+            步骤流程清晰，手绘风格点缀，让学习变成一种享受。支持多级导航、代码示例嵌入、进度追踪。
+          </p>
         </div>
-        <div class="speaker-card reveal reveal-d2">
-          <div class="speaker-avatar">🧠</div>
-          <h3 class="speaker-name">陈觉</h3>
-          <p class="speaker-role">AIGC产品负责人 · 前大厂算法专家</p>
-          <p class="speaker-topic">大模型落地产品的第一年：哪些AI应用真的跑通了？哪些只是Demo？</p>
+
+        <div class="card card--landing reveal reveal-delay-2">
+          <div class="card-icon card-icon--landing">🚀</div>
+          <h3 class="card-title">Landing 页面</h3>
+          <p class="card-desc">
+            大气 Hero + 节奏分明的信息层级，配合柔和动效，打造令人心动的第一印象。
+          </p>
         </div>
-        <div class="speaker-card reveal reveal-d3">
-          <div class="speaker-avatar">✍️</div>
-          <h3 class="speaker-name">苏小也</h3>
-          <p class="speaker-role">独立写作者 · Newsletter主理人</p>
-          <p class="speaker-topic">用AI做研究助手而非替代者——如何让Claude帮你写出真正有灵魂的长文。</p>
+
+        <div class="card card--app reveal reveal-delay-3">
+          <div class="card-icon card-icon--app">📱</div>
+          <h3 class="card-title">App 型界面</h3>
+          <p class="card-desc">
+            组件密集但不拥挤，卡片、列表、导航栏高度模块化，适合数据驱动的产品后台。
+          </p>
+        </div>
+
+        <div class="card card--graphic reveal reveal-delay-4">
+          <div class="card-icon card-icon--graphic">✨</div>
+          <h3 class="card-title">图文卡片</h3>
+          <p class="card-desc">
+            温暖色调 + 圆润边角 + 丰富留白，专为内容展示场景设计，如博客、作品集。
+          </p>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== 深色面板 + 金句 ====== -->
-  <section class="dark-section">
-    <div class="container reveal">
-      <p class="quote-text">AI不会取代创作者，但<em>会用AI的创作者</em>会取代不会用的。<br>这不是一句口号，而是我们正在经历的现实。</p>
-      <p class="quote-attr">— 本次活动发起人 · 不二</p>
+  <!-- ====== 金句面板 ====== -->
+  <section class="quote-section section" id="quote">
+    <div class="quote-glow"></div>
+    <div class="quote-inner reveal">
+      <div class="quote-marks">"</div>
+      <p class="quote-text">
+        体验生活，感受体验，记录感受
+      </p>
+      <p class="quote-author">— 花心小泡泡</p>
     </div>
   </section>
 
-  <!-- ====== 活动亮点（浅底交替） ====== -->
-  <section class="section section--alt" id="highlights">
+  <!-- ====== 品牌色展示 ====== -->
+  <section class="color-section section" id="colors">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">02</span>
-        <h2 class="section-title">活动亮点</h2>
+        <span class="section-label">// 品牌色</span>
+        <h2 class="section-title">三色配色体系</h2>
+        <p class="section-desc">
+          棕色承载稳重与温度，黄色带来温暖与活力，蓝色注入沉静与深度。
+        </p>
       </div>
-      <div class="highlights-grid">
-        <div class="highlight-card reveal reveal-d1">
-          <div class="highlight-icon">🎙️</div>
-          <div class="highlight-content">
-            <h3>真实案例拆解</h3>
-            <p>不讲概念，只讲落地。每位嘉宾带来一个完整的AI共创项目复盘。</p>
+
+      <div class="color-grid">
+        <!-- 棕色 -->
+        <div class="color-card reveal reveal-delay-1">
+          <div class="color-swatch color-swatch--brown">
+            <span class="color-swatch-label">#A67B5B</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">棕色 · Brown</div>
+            <div class="color-hex">Primary / #A67B5B</div>
+            <div class="color-ratio">
+              <div class="ratio-bar">
+                <div class="ratio-fill ratio-fill--brown" style="width: 45%;"></div>
+              </div>
+              <span class="ratio-text">主色 45%</span>
+            </div>
           </div>
         </div>
-        <div class="highlight-card reveal reveal-d2">
-          <div class="highlight-icon">🤝</div>
-          <div class="highlight-content">
-            <h3>圆桌深度对话</h3>
-            <p>嘉宾与观众围绕争议话题展开讨论——AI创作的边界在哪里？</p>
+
+        <!-- 黄色 -->
+        <div class="color-card reveal reveal-delay-2">
+          <div class="color-swatch color-swatch--yellow">
+            <span class="color-swatch-label" style="color: var(--ink); background: rgba(255,255,255,0.5);">#F0C674</span>
+          </div>
+          <div class="color-info">
+            <div class="color-name">黄色 · Yellow</div>
+            <div class="color-hex">Accent / #F0C674</div>
+            <div class="color-ratio">
+              <div class="ratio-bar">
+                <div class="ratio-fill ratio-fill--yellow" style="width: 30%;"></div>
+              </div>
+              <span class="ratio-text">强调 30%</span>
+            </div>
           </div>
         </div>
-        <div class="highlight-card reveal reveal-d3">
-          <div class="highlight-icon">⚡</div>
-          <div class="highlight-content">
-            <h3>现场Prompt工坊</h3>
-            <p>30分钟动手环节，跟着嘉宾用真实工具完成一个AI创作小作品。</p>
+
+        <!-- 蓝色 -->
+        <div class="color-card reveal reveal-delay-3">
+          <div class="color-swatch color-swatch--blue">
+            <span class="color-swatch-label">#5B8BA0</span>
           </div>
-        </div>
-        <div class="highlight-card reveal reveal-d4">
-          <div class="highlight-icon">🍷</div>
-          <div class="highlight-content">
-            <h3>Afterparty交流</h3>
-            <p>轻松的红酒交流时间，和同频的创作者聊聊彼此的AI工作流。</p>
+          <div class="color-info">
+            <div class="color-name">蓝色 · Blue</div>
+            <div class="color-hex">Support / #5B8BA0</div>
+            <div class="color-ratio">
+              <div class="ratio-bar">
+                <div class="ratio-fill ratio-fill--blue" style="width: 25%;"></div>
+              </div>
+              <span class="ratio-text">辅助 25%</span>
+            </div>
           </div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== 品牌色面板 · 议程时间线 ====== -->
-  <section class="brand-section" id="agenda">
+  <!-- ====== 组件预览 ====== -->
+  <section class="comp-section section" id="components">
     <div class="container">
       <div class="section-header reveal">
-        <span class="section-number">03</span>
-        <h2 class="section-title">活动议程</h2>
+        <span class="section-label">// 组件库</span>
+        <h2 class="section-title">特色组件预览</h2>
+        <p class="section-desc">
+          从引用块到时间线，每个组件都经过精心打磨，开箱即用。
+        </p>
       </div>
-      <div class="timeline-list">
-        <div class="timeline-item reveal reveal-d1">
-          <p class="timeline-time">14:00 – 14:30</p>
-          <h4 class="timeline-title">签到入场 · 破冰交流</h4>
-          <p class="timeline-desc">领取资料包，和同频创作者先碰个面</p>
+
+      <div class="comp-grid">
+        <!-- 引用 -->
+        <div class="comp-card reveal reveal-delay-1">
+          <div class="comp-preview comp-preview--quote">💬</div>
+          <div class="comp-name">引用块 Quote</div>
+          <div class="comp-tag">blockquote</div>
         </div>
-        <div class="timeline-item reveal reveal-d2">
-          <p class="timeline-time">14:30 – 15:20</p>
-          <h4 class="timeline-title">林知微：AI绘本创作全流程</h4>
-          <p class="timeline-desc">从灵感构思到成书出版的完整链路拆解</p>
+
+        <!-- 代码面板 -->
+        <div class="comp-card reveal reveal-delay-2">
+          <div class="comp-preview comp-preview--code">
+            <div class="comp-preview-code">
+              <span style="color:#C0A0C0;">const</span> <span style="color:#A0D0A0;">bubble</span> = <span style="color:#E0D080;">'花心泡'</span>;
+            </div>
+          </div>
+          <div class="comp-name">代码面板 Code</div>
+          <div class="comp-tag">code-block</div>
         </div>
-        <div class="timeline-item reveal reveal-d3">
-          <p class="timeline-time">15:20 – 16:10</p>
-          <h4 class="timeline-title">陈觉：AIGC产品的真实战场</h4>
-          <p class="timeline-desc">跑通的、跑死的——一年产品探索的坦率复盘</p>
+
+        <!-- 步骤流程 -->
+        <div class="comp-card reveal reveal-delay-3">
+          <div class="comp-preview comp-preview--steps">🔢</div>
+          <div class="comp-name">步骤流程 Steps</div>
+          <div class="comp-tag">stepper</div>
         </div>
-        <div class="timeline-item reveal reveal-d4">
-          <p class="timeline-time">16:10 – 17:00</p>
-          <h4 class="timeline-title">苏小也：AI辅助写作的工作流</h4>
-          <p class="timeline-desc">Research → Outline → Draft → Polish 全链路实操</p>
+
+        <!-- 卡片网格 -->
+        <div class="comp-card reveal reveal-delay-4">
+          <div class="comp-preview comp-preview--grid">🗂️</div>
+          <div class="comp-name">卡片网格 Grid</div>
+          <div class="comp-tag">card-grid</div>
         </div>
-        <div class="timeline-item reveal">
-          <p class="timeline-time">17:00 – 17:40</p>
-          <h4 class="timeline-title">圆桌讨论 + Prompt工坊</h4>
-          <p class="timeline-desc">争议话题对话 + 现场动手创作</p>
+
+        <!-- 时间线 -->
+        <div class="comp-card reveal reveal-delay-5">
+          <div class="comp-preview comp-preview--timeline">📅</div>
+          <div class="comp-name">时间线 Timeline</div>
+          <div class="comp-tag">timeline</div>
         </div>
-        <div class="timeline-item reveal">
-          <p class="timeline-time">17:40 – 18:30</p>
-          <h4 class="timeline-title">Afterparty · 自由交流</h4>
-          <p class="timeline-desc">红酒小食、名片互换、项目对接</p>
+
+        <!-- CTA 按钮 -->
+        <div class="comp-card reveal reveal-delay-6">
+          <div class="comp-preview comp-preview--cta">👆</div>
+          <div class="comp-name" style="color:#fff;">CTA 按钮</div>
+          <div class="comp-tag" style="color:rgba(255,255,255,0.6);">call-to-action</div>
+        </div>
+
+        <!-- 图文卡片 -->
+        <div class="comp-card reveal reveal-delay-7">
+          <div class="comp-preview comp-preview--card">🖼️</div>
+          <div class="comp-name">图文卡片 Card</div>
+          <div class="comp-tag">media-card</div>
+        </div>
+
+        <!-- 数据统计 -->
+        <div class="comp-card reveal reveal-delay-8">
+          <div class="comp-preview comp-preview--stats">📊</div>
+          <div class="comp-name">数据统计 Stats</div>
+          <div class="comp-tag">statistics</div>
         </div>
       </div>
     </div>
   </section>
 
-  <!-- ====== Pull Quote（浅底） ====== -->
-  <section class="section">
-    <div class="container">
-      <div class="viral-pullquote reveal">
-        <p>最好的AI创作不是让机器替你思考，而是让机器帮你抵达那些独自一人到不了的地方。</p>
-        <span class="quote-source">— 苏小也，Newsletter「一个人的编辑部」</span>
-      </div>
+  <!-- ====== CTA ====== -->
+  <section class="cta-section section" id="cta">
+    <div class="cta-glow"></div>
+    <div class="container cta-content reveal">
+      <h2 class="cta-title">准备好一起探索了吗？</h2>
+      <p class="cta-desc">
+        花心小泡泡设计系统正在持续生长中，期待你的关注与反馈。
+      </p>
+      <a href="#" class="cta-btn">Follow 在下 花心泡</a>
+      <p class="cta-signature">花心小泡泡 · 体验生活，感受体验，记录感受</p>
     </div>
-  </section>
-
-  <!-- ====== CTA 报名区 ====== -->
-  <section class="cta-section" id="register">
-    <h2 class="reveal">和我们一起，探索共创的边界</h2>
-    <p class="reveal reveal-d1">7月12日下午，北京国贸三期·共创空间。<br>80个席位，报满即止。</p>
-    <a href="#" class="cta-button reveal reveal-d2">立即报名 →</a>
-    <p class="cta-note reveal reveal-d3">早鸟票 ¥99 · 含资料包+Afterparty</p>
   </section>
 
   <!-- ====== Footer ====== -->
-  <footer class="footer">
-    <p>AI 创作者之夜 © 2026 · 由不二发起 · Powered by Esther Design System</p>
+  <footer class="footer" id="footer">
+    <div class="container">
+      <p class="footer-signature">花心小泡泡 · 体验生活，感受体验，记录感受</p>
+      <p class="footer-copy">&copy; 2026 花心小泡泡 设计系统 · Bubble Design System</p>
+    </div>
   </footer>
 
   <!-- ====== Scripts ====== -->
   <script>
-    // Scroll Reveal
-    const observer = new IntersectionObserver((entries) => {
-      entries.forEach(entry => {
-        if (entry.isIntersecting) {
-          entry.target.classList.add('visible');
-          observer.unobserve(entry.target);
-        }
-      });
-    }, { threshold: 0.12 });
-    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+    (function () {
+      'use strict';
 
-    // Nav scroll effect
-    window.addEventListener('scroll', () => {
-      document.querySelector('nav').classList.toggle('scrolled', window.scrollY > 40);
-    });
+      /* ---------- Nav scroll effect ---------- */
+      const nav = document.getElementById('nav');
+      let lastScrollY = 0;
+
+      function onScroll() {
+        const y = window.scrollY;
+        if (y > 60) {
+          nav.classList.add('scrolled');
+        } else {
+          nav.classList.remove('scrolled');
+        }
+        lastScrollY = y;
+      }
+
+      window.addEventListener('scroll', onScroll, { passive: true });
+      // 初始检查
+      onScroll();
+
+      /* ---------- Scroll Reveal (IntersectionObserver) ---------- */
+      const revealElements = document.querySelectorAll('.reveal');
+
+      const observer = new IntersectionObserver(
+        function (entries) {
+          entries.forEach(function (entry) {
+            if (entry.isIntersecting) {
+              entry.target.classList.add('visible');
+              observer.unobserve(entry.target);
+            }
+          });
+        },
+        {
+          threshold: 0.12,
+          rootMargin: '0px 0px -40px 0px',
+        }
+      );
+
+      revealElements.forEach(function (el) {
+        observer.observe(el);
+      });
+
+      /* ---------- Avatar fallback ---------- */
+      (function () {
+        const container = document.getElementById('avatar-container');
+        if (!container) return;
+
+        const img = document.createElement('img');
+        img.src = 'avatar.jpg';
+        img.alt = '花心小泡泡头像';
+        img.className = 'hero-avatar';
+
+        img.onload = function () {
+          container.innerHTML = '';
+          container.appendChild(img);
+        };
+
+        img.onerror = function () {
+          // 保持占位内容（占位已在 HTML 中）
+        };
+
+        // 先触发加载检查
+        // 如果缓存命中 onload 可能不会触发，用 complete 检查
+        if (img.complete && img.naturalWidth > 0) {
+          container.innerHTML = '';
+          container.appendChild(img);
+        }
+      })();
+
+      /* ---------- Smooth scroll for nav links ---------- */
+      document.querySelectorAll('.nav-links a').forEach(function (link) {
+        link.addEventListener('click', function (e) {
+          e.preventDefault();
+          const targetId = this.getAttribute('href');
+          if (!targetId) return;
+          const target = document.querySelector(targetId);
+          if (target) {
+            target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+          }
+        });
+      });
+    })();
   </script>
+
 </body>
 </html>

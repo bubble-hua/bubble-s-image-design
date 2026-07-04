@@ -1,737 +1,1023 @@
-# 布局模式库
+# Layouts / 布局库
 
-> 15种经过验证的布局模式，按使用频率排序。每个section选不同的布局，组合使用。
+> 16种布局模式，为每个Section分配不同布局。每个Section布局必须不同。
 
 ---
 
-## 1. Hero双栏不对称（文字+视觉）
-
-**适用**: 分享会Landing、教程首屏、产品介绍首屏
-
-```html
-<section class="hero">
-  <div class="hero-text">
-    <span class="label-caps">CATEGORY</span>
-    <h1>主标题</h1>
-    <p>描述文字</p>
-  </div>
-  <div class="hero-visual">
-    <!-- 图片或装饰 -->
-  </div>
-</section>
-```
+## CSS变量声明（所有布局共用）
 
 ```css
-.hero {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 0.6fr;
-  align-items: center;
-  gap: 48px;
-  padding: 6rem 2rem 4rem;
+:root {
+  --brown: #A67B5B;
+  --yellow: #F0C674;
+  --blue: #5B8BA0;
+  --bg-warm: #FDF8F0;
+  --bg-alt: #F5EDE0;
+  --ink: #2D2420;
+  --ink-light: #5C4D44;
+  --panel-dark: #1E1A16;
+  --green: #6B9E5A;
 }
 ```
 
-⚠️ 注意：不要做成对称50/50，不对称比例才有张力。
-
 ---
 
-## 2. Sticky侧栏 + 内容滚动
-
-**适用**: 长内容分段展示、知识点讲解、深度内容
+## 布局1：Hero Split（左右分栏）
 
 ```html
-<section class="layout-sticky">
-  <div class="sticky-side">
-    <span class="section-number">01</span>
-    <h2>Section标题</h2>
+<section style="
+  display: flex;
+  align-items: center;
+  gap: clamp(40px, 6vw, 80px);
+  min-height: 80vh;
+  padding: clamp(60px, 10vh, 120px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 1300px;
+  margin: 0 auto;
+">
+  <div style="flex: 1;">
+    <div style="
+      font-size: 0.85rem;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    ">SUBTITLE</div>
+    <h1 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      color: var(--ink);
+      line-height: 1.15;
+      margin: 0 0 20px 0;
+    ">
+      大标题<span style="color: var(--brown);">关键词</span>
+    </h1>
+    <p style="
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 32px;
+    ">副标题或描述文字。</p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <a href="#" style="
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 14px 32px;
+        background: var(--brown);
+        color: #FDF8F0;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+      ">CTA按钮 →</a>
+    </div>
   </div>
-  <div class="content-scroll">
-    <!-- 滚动内容 -->
+  <div style="flex: 1; position: relative; min-height: 400px;">
+    <div style="
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(ellipse, rgba(240,198,116,0.12), transparent 70%);
+      top: -50px; right: -100px;
+      pointer-events: none;
+    "></div>
+    <div style="
+      width: 300px; height: 300px;
+      border: 2.5px dashed var(--yellow);
+      border-radius: 50%;
+      opacity: 0.25;
+      position: absolute;
+      top: 10%; right: 5%;
+    "></div>
   </div>
 </section>
 ```
 
-```css
-.layout-sticky {
-  display: grid;
-  grid-template-columns: 0.35fr 1fr;
+---
+
+## 布局2：Hero Centered（居中）
+
+```html
+<section style="
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 85vh;
+  padding: clamp(60px, 10vh, 120px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  position: relative;
+  overflow: hidden;
+">
+  <div style="
+    position: absolute;
+    width: 600px; height: 600px;
+    background: radial-gradient(ellipse, rgba(240,198,116,0.1), transparent 70%);
+    top: -100px; left: 50%;
+    transform: translateX(-50%);
+    pointer-events: none;
+  "></div>
+  <div style="
+    font-size: 0.85rem;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+  ">SUBTITLE</div>
+  <h1 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    color: var(--ink);
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+    max-width: 800px;
+  ">
+    大标题<br><span style="color: var(--brown);">关键词</span>
+  </h1>
+  <p style="
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 36px;
+  ">描述文字。</p>
+  <a href="#" style="
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 16px 40px;
+    background: var(--brown);
+    color: #FDF8F0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+  ">CTA按钮 →</a>
+</section>
+```
+
+---
+
+## 布局3：Grid 2-Column Cards
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-alt);
+  max-width: 1300px;
+  margin: 0 auto;
+">
+  <h2 style="
+    text-align: center;
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 clamp(40px, 6vw, 80px) 0;
+  ">Section<span style="color: var(--brown);">标题</span></h2>
+
+  <div style="
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: clamp(24px, 3vw, 48px);
+  ">
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      padding: clamp(28px, 3vw, 44px);
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">卡片标题</h3>
+      <p style="color: var(--ink-light); line-height: 1.7; margin: 0;">卡片内容描述。</p>
+    </div>
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      padding: clamp(28px, 3vw, 44px);
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">卡片标题</h3>
+      <p style="color: var(--ink-light); line-height: 1.7; margin: 0;">卡片内容描述。</p>
+    </div>
+  </div>
+</section>
+```
+
+---
+
+## 布局4：Grid 3-Column Cards
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 1300px;
+  margin: 0 auto;
+">
+  <h2 style="
+    text-align: center;
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 clamp(40px, 6vw, 80px) 0;
+  ">Section<span style="color: var(--brown);">标题</span></h2>
+
+  <div style="
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: clamp(24px, 3vw, 48px);
+  ">
+    <div style="
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: clamp(28px, 3vw, 44px);
+      text-align: center;
+    ">
+      <div style="
+        width: 48px; height: 48px;
+        background: rgba(240,198,116,0.25);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.4rem;
+      ">①</div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">标题</h3>
+      <p style="color: var(--ink-light); line-height: 1.6; margin: 0; font-size: 0.92rem;">描述文字。</p>
+    </div>
+    <div style="
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: clamp(28px, 3vw, 44px);
+      text-align: center;
+    ">
+      <div style="
+        width: 48px; height: 48px;
+        background: rgba(240,198,116,0.25);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.4rem;
+      ">②</div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">标题</h3>
+      <p style="color: var(--ink-light); line-height: 1.6; margin: 0; font-size: 0.92rem;">描述文字。</p>
+    </div>
+    <div style="
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: clamp(28px, 3vw, 44px);
+      text-align: center;
+    ">
+      <div style="
+        width: 48px; height: 48px;
+        background: rgba(240,198,116,0.25);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.4rem;
+      ">③</div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">标题</h3>
+      <p style="color: var(--ink-light); line-height: 1.6; margin: 0; font-size: 0.92rem;">描述文字。</p>
+    </div>
+  </div>
+</section>
+```
+
+---
+
+## 布局5：Alternating Rows（交替行）
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  flex-direction: column;
   gap: clamp(40px, 6vw, 100px);
-  align-items: start;
-}
-.sticky-side {
-  position: sticky;
-  top: 80px;
-}
-```
-
-⚠️ 注意：移动端（<900px）sticky变static，变为正常纵向堆叠。
-
----
-
-## 3. 三等分卡片网格
-
-**适用**: 功能展示、能力矩阵、并列要点
-
-```html
-<div class="features-grid">
-  <div class="feature-card">...</div>
-  <div class="feature-card">...</div>
-  <div class="feature-card">...</div>
-</div>
-```
-
-```css
-.features-grid {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: clamp(20px, 2.5vw, 32px);
-}
-@media (max-width: 900px) {
-  .features-grid { grid-template-columns: 1fr; }
-}
-```
-
-⚠️ 注意：不要出现落单的孤儿卡片，保持3/6/9的数量。
-
----
-
-## 4. 纵向Step流程线
-
-**适用**: 安装步骤、流程教程、教学引导
-
-```html
-<div class="steps-container">
-  <div class="step-item">
-    <span class="step-num">1</span>
-    <div class="step-content">
-      <h3>步骤标题</h3>
-      <p>步骤描述</p>
+">
+  <!-- 行1：文字左 + 图片右 -->
+  <div style="
+    display: flex;
+    align-items: center;
+    gap: clamp(40px, 6vw, 80px);
+  ">
+    <div style="flex: 1;">
+      <span style="
+        display: inline-block;
+        padding: 3px 12px;
+        background: rgba(240,198,116,0.2);
+        color: var(--ink-light);
+        border-radius: 999px;
+        font-size: 0.78rem;
+        margin-bottom: 12px;
+      ">步骤 01</span>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        font-size: 1.5rem;
+        color: var(--ink);
+        margin: 0 0 12px 0;
+      ">标题</h3>
+      <p style="color: var(--ink-light); line-height: 1.7; margin: 0;">描述文字。</p>
+    </div>
+    <div style="
+      flex: 1;
+      height: 320px;
+      background: var(--bg-alt);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    ">
+      <span style="color: var(--ink-light);">[图片/插图]</span>
     </div>
   </div>
-  <!-- 更多步骤 -->
-</div>
-```
 
-```css
-.steps-container {
-  display: flex;
-  flex-direction: column;
-  gap: clamp(32px, 4vw, 56px);
-  padding-left: 60px;
-  position: relative;
-}
-.steps-container::before {
-  content: '';
-  position: absolute;
-  left: 22px;
-  top: 40px; bottom: 40px;
-  width: 2px;
-  border-left: 2px dashed var(--yellow);
-}
-.step-item {
-  position: relative;
-}
-.step-num {
-  position: absolute;
-  left: -60px;
-  width: 44px; height: 44px;
-  border-radius: 50%;
-  background: var(--blue);
-  color: #fff;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Fraunces', serif;
-  font-weight: 700;
-}
-```
-
-⚠️ 注意：步骤不超过5个，超过则拆分成多组。
-
----
-
-## 5. 中轴时间线交错
-
-**适用**: 内容对比、时间线、并列要点展示
-
-```html
-<div class="timeline">
-  <div class="timeline-axis"></div>
-  <div class="timeline-item">
-    <div class="timeline-content">...</div>
-    <div class="timeline-visual">...</div>
-  </div>
-  <div class="timeline-item reverse">
-    <div class="timeline-visual">...</div>
-    <div class="timeline-content">...</div>
-  </div>
-</div>
-```
-
-```css
-.timeline {
-  position: relative;
-}
-.timeline-axis {
-  position: absolute;
-  left: 50%;
-  top: 0; bottom: 0;
-  width: 2px;
-  background: rgba(43, 127, 216, 0.15);
-}
-.timeline-item {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  gap: 60px;
-  margin-bottom: clamp(40px, 6vw, 80px);
-}
-@media (max-width: 900px) {
-  .timeline-axis { display: none; }
-  .timeline-item { grid-template-columns: 1fr; }
-}
-```
-
-⚠️ 注意：移动端自动变为单列堆叠。
-
----
-
-## 6. 全宽深色面板
-
-**适用**: 重要引用、核心观点、代码展示（打破奶白底节奏）
-
-```html
-<section class="dark-section">
-  <div class="container">
-    <blockquote class="dark-quote">重要观点</blockquote>
+  <!-- 行2：图片左 + 文字右 -->
+  <div style="
+    display: flex;
+    align-items: center;
+    gap: clamp(40px, 6vw, 80px);
+    flex-direction: row-reverse;
+  ">
+    <div style="flex: 1;">
+      <span style="
+        display: inline-block;
+        padding: 3px 12px;
+        background: rgba(240,198,116,0.2);
+        color: var(--ink-light);
+        border-radius: 999px;
+        font-size: 0.78rem;
+        margin-bottom: 12px;
+      ">步骤 02</span>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        font-size: 1.5rem;
+        color: var(--ink);
+        margin: 0 0 12px 0;
+      ">标题</h3>
+      <p style="color: var(--ink-light); line-height: 1.7; margin: 0;">描述文字。</p>
+    </div>
+    <div style="
+      flex: 1;
+      height: 320px;
+      background: var(--bg-alt);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+    ">
+      <span style="color: var(--ink-light);">[图片/插图]</span>
+    </div>
   </div>
 </section>
 ```
 
-```css
-.dark-section {
-  background: #151821;
-  color: #e2e8f0;
-  padding: clamp(60px, 8vh, 120px) 0;
-}
-.dark-section .container {
+---
+
+## 布局6：Full-width Text（全宽文字）
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 800px;
+  margin: 0 auto;
+">
+  <h2 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 24px 0;
+  ">
+    Section<span style="color: var(--brown);">标题</span>
+  </h2>
+  <p style="
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.9;
+    margin: 0 0 20px 0;
+  ">正文段落内容，保持适当的行距和段落间距，让长文本阅读起来舒适。</p>
+  <p style="
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.9;
+    margin: 0;
+  ">第二段正文内容。</p>
+</section>
+```
+
+---
+
+## 布局7：Split Code + Preview（代码+预览）
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-alt);
   max-width: 1300px;
   margin: 0 auto;
-  padding: 0 2rem;
-}
-```
-
-⚠️ 注意：一页最多用1~2个深色面板，用于制造节奏对比。
-
----
-
-## 7. 横向Step连接线
-
-**适用**: 简短的3~4步骤概览
-
-```html
-<div class="steps-layout">
-  <div class="step-card">
-    <span class="step-dot">1</span>
-    <h4>步骤名</h4>
-    <p>简述</p>
-  </div>
-  <div class="step-card">
-    <span class="step-dot">2</span>
-    <h4>步骤名</h4>
-    <p>简述</p>
-  </div>
-  <div class="step-card">
-    <span class="step-dot">3</span>
-    <h4>步骤名</h4>
-    <p>简述</p>
-  </div>
-</div>
-```
-
-```css
-.steps-layout {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 0;
-  position: relative;
-}
-.steps-layout::before {
-  content: '';
-  position: absolute;
-  top: 28px;
-  left: 28px; right: 28px;
-  height: 3px;
-  background: linear-gradient(90deg, var(--yellow), var(--blue));
-}
-.step-card {
-  text-align: center;
-  padding: 0 1rem;
-}
-.step-dot {
-  width: 56px; height: 56px;
-  border-radius: 50%;
-  background: var(--blue);
-  color: #fff;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  font-family: 'Fraunces', serif;
-  font-size: 1.2rem;
-  font-weight: 700;
-  position: relative;
-  z-index: 1;
-}
-```
-
-⚠️ 注意：仅适合3~4步，超过则用纵向Step。
-
----
-
-## 8. Hero全屏居中型
-
-**适用**: 个人品牌首页、产品发布页（强视觉冲击力首屏）
-
-```html
-<section class="hero-centered">
-  <div class="hero-card">
-    <!-- 核心内容 -->
+">
+  <div style="
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: clamp(24px, 3vw, 48px);
+  ">
+    <!-- 代码块 -->
+    <div style="
+      background: var(--panel-dark);
+      border-radius: 12px;
+      padding: 28px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.85rem;
+      line-height: 1.7;
+      color: rgba(245,237,224,0.85);
+      overflow-x: auto;
+    ">
+<pre style="margin: 0;"><code>// 代码示例
+function hello() {
+  console.log("Hello, Bubble!");
+}</code></pre>
+    </div>
+    <!-- 预览 -->
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      padding: 28px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <span style="color: var(--ink-light);">[预览区域]</span>
+    </div>
   </div>
 </section>
 ```
 
-```css
-.hero-centered {
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 6rem 2rem 4rem;
-}
-.hero-card {
-  background: #fff;
-  border-radius: 24px;
-  padding: clamp(2.5rem, 5vw, 4.5rem);
-  box-shadow: 0 4px 32px rgba(26,26,26,.08);
-  max-width: 720px;
-  width: 100%;
-}
-```
-
-⚠️ 注意：居中型仅限Hero首屏使用一次，后续section必须左对齐为主。
-
 ---
 
-## 9. Hero单栏纵向（中心辐射型）
-
-**适用**: 活动分享页、情感叙事页（以头像/Logo为中心展开）
+## 布局8：Stats Row（数据行）
 
 ```html
-<section class="hero-vertical">
-  <div class="hero-avatar"><!-- 头像 --></div>
-  <h1>标题</h1>
-  <p class="hero-subtitle">副标题描述</p>
-  <div class="hero-tags">
-    <span class="tag">标签1</span>
-    <span class="tag">标签2</span>
-  </div>
-</section>
-```
-
-```css
-.hero-vertical {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  justify-content: center;
-  padding: 40px 24px;
-  text-align: center;
-}
-.hero-avatar {
-  width: clamp(120px, 18vw, 180px);
-  height: clamp(120px, 18vw, 180px);
-  border-radius: 50%;
-  margin-bottom: 2rem;
-}
-```
-
-⚠️ 注意：仅限Hero区域，后续section不要继续居中。
-
----
-
-## 10. 自适应卡片网格（auto-fill）
-
-**适用**: 技能卡片、书籍卡片、不确定数量的内容集合
-
-```html
-<div class="auto-grid">
-  <div class="card">...</div>
-  <div class="card">...</div>
-  <!-- 任意数量 -->
-</div>
-```
-
-```css
-.auto-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
-  gap: 1rem;
-}
-```
-
-⚠️ 注意：适合内容数量不固定的场景，会自动换行。
-
----
-
-## 11. 全宽品牌色面板
-
-**适用**: 情绪高潮、CTA邀请、核心观点（打破奶白底节奏）
-
-```html
-<section class="section-accent">
-  <div class="container">
-    <h2>核心观点</h2>
-    <p>描述文字</p>
-  </div>
-</section>
-```
-
-```css
-.section-accent {
-  background: var(--blue);
-  color: #fff;
-  padding: clamp(80px, 12vh, 160px) 0;
-  position: relative;
-  overflow: hidden;
-}
-.section-accent .container {
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
   max-width: 1300px;
   margin: 0 auto;
-  padding: 0 2rem;
-}
-```
-
-⚠️ 注意：一页最多1~2个。可换用黄色（文字改为墨色）。不要在品牌色面板上放蓝色文字。
-
----
-
-## 12. 横向滚动时间线
-
-**适用**: 经历时间线、横向浏览内容
-
-```html
-<div class="timeline-scroll">
-  <div class="timeline-card">
-    <span class="year">2022</span>
-    <h4>事件标题</h4>
-    <p>描述</p>
-  </div>
-  <div class="timeline-card">
-    <span class="year">2023</span>
-    <h4>事件标题</h4>
-    <p>描述</p>
-  </div>
-  <!-- 更多卡片 -->
-</div>
-```
-
-```css
-.timeline-scroll {
-  display: flex;
-  gap: 1.5rem;
-  overflow-x: auto;
-  scroll-snap-type: x mandatory;
-  -webkit-overflow-scrolling: touch;
-  padding-bottom: 2rem;
-}
-.timeline-card {
-  flex: 0 0 300px;
-  scroll-snap-align: start;
-  background: #fff;
-  border-radius: 16px;
-  padding: clamp(24px, 3vw, 36px);
-  box-shadow: 0 4px 20px rgba(0,0,0,.06);
-}
-.timeline-card .year {
-  font-family: 'Fraunces', serif;
-  font-size: 1.8rem;
-  color: var(--blue);
-  opacity: 0.6;
-}
-```
-
-⚠️ 注意：需要自定义scrollbar样式保持品牌一致性。
-
----
-
-## 13. 分栏对称（Pain Point展示）
-
-**适用**: 问题vs方案对比、冲突展示、before/after
-
-```html
-<section class="split-section">
-  <div class="split-left">
-    <h2>问题/痛点</h2>
-  </div>
-  <div class="split-right">
-    <ul>
-      <li>具体问题1</li>
-      <li>具体问题2</li>
-    </ul>
+">
+  <div style="
+    display: flex;
+    justify-content: center;
+    gap: clamp(40px, 8vw, 100px);
+    flex-wrap: wrap;
+    text-align: center;
+  ">
+    <div>
+      <div style="
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        color: var(--brown);
+        line-height: 1;
+      ">128</div>
+      <div style="
+        font-size: 0.85rem;
+        color: var(--ink-light);
+        margin-top: 8px;
+      ">旅行笔记</div>
+    </div>
+    <div>
+      <div style="
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        color: var(--brown);
+        line-height: 1;
+      ">37</div>
+      <div style="
+        font-size: 0.85rem;
+        color: var(--ink-light);
+        margin-top: 8px;
+      ">城市足迹</div>
+    </div>
+    <div>
+      <div style="
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        color: var(--brown);
+        line-height: 1;
+      ">10k+</div>
+      <div style="
+        font-size: 0.85rem;
+        color: var(--ink-light);
+        margin-top: 8px;
+      ">读者伙伴</div>
+    </div>
   </div>
 </section>
 ```
 
-```css
-.split-section {
-  min-height: 100vh;
-  display: grid;
-  grid-template-columns: 1fr 1fr;
-  overflow: hidden;
-}
-.split-left {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: clamp(40px, 6vw, 80px);
-}
-.split-right {
-  display: flex;
-  align-items: center;
-  padding: clamp(40px, 6vw, 80px);
-  background: var(--cream-dark);
-}
-@media (max-width: 900px) {
-  .split-section { grid-template-columns: 1fr; min-height: auto; }
-}
-```
-
-⚠️ 注意：左侧放大字标题，右侧放具体内容/列表。
-
 ---
 
-## 14. Tab切换单栏（Dashboard型）
-
-**适用**: 个人看板、功能切换、数据面板
+## 布局9：Timeline（时间线）
 
 ```html
-<div class="dashboard">
-  <div class="tab-bar">
-    <button class="tab active" data-tab="tab1">标签1</button>
-    <button class="tab" data-tab="tab2">标签2</button>
-  </div>
-  <div class="tab-content active" id="tab1">内容1</div>
-  <div class="tab-content" id="tab2">内容2</div>
-</div>
-```
-
-```css
-.dashboard {
-  max-width: 820px;
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 800px;
   margin: 0 auto;
-}
-.tab-bar {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  border-bottom: 2px solid #eee;
-  margin-bottom: 2rem;
-}
-.tab {
-  padding: 10px 20px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 0.9rem;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-}
-.tab.active {
-  border-bottom-color: var(--blue);
-  color: var(--blue);
-  font-weight: 600;
-}
-.tab-content { display: none; }
-.tab-content.active { display: block; }
-```
+">
+  <h2 style="
+    text-align: center;
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 clamp(40px, 6vw, 80px) 0;
+  ">时间<span style="color: var(--brown);">线</span></h2>
 
-⚠️ 注意：仅用于App型/功能型页面，教程页不需要Tab。
+  <div style="position: relative; padding-left: 32px;">
+    <!-- 竖线 -->
+    <div style="
+      position: absolute;
+      left: 11px; top: 0; bottom: 0;
+      width: 2px;
+      background: linear-gradient(180deg, var(--yellow), var(--brown), var(--blue));
+    "></div>
+
+    <!-- 节点1 -->
+    <div style="position: relative; margin-bottom: 40px;">
+      <div style="
+        position: absolute;
+        left: -27px; top: 4px;
+        width: 14px; height: 14px;
+        background: var(--brown);
+        border-radius: 50%;
+        border: 3px solid var(--bg-warm);
+        box-shadow: 0 0 0 3px var(--brown);
+      "></div>
+      <div style="font-size: 0.78rem; color: var(--blue); margin-bottom: 4px;">2024.03</div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--ink);
+        margin: 0 0 8px 0;
+      ">东京之旅</h3>
+      <p style="color: var(--ink-light); font-size: 0.92rem; line-height: 1.6; margin: 0;">描述内容。</p>
+    </div>
+
+    <!-- 节点2 -->
+    <div style="position: relative; margin-bottom: 40px;">
+      <div style="
+        position: absolute;
+        left: -27px; top: 4px;
+        width: 14px; height: 14px;
+        background: var(--yellow);
+        border-radius: 50%;
+        border: 3px solid var(--bg-warm);
+        box-shadow: 0 0 0 3px var(--yellow);
+      "></div>
+      <div style="font-size: 0.78rem; color: var(--blue); margin-bottom: 4px;">2024.06</div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--ink);
+        margin: 0 0 8px 0;
+      ">京都漫步</h3>
+      <p style="color: var(--ink-light); font-size: 0.92rem; line-height: 1.6; margin: 0;">描述内容。</p>
+    </div>
+
+    <!-- 节点3 -->
+    <div style="position: relative;">
+      <div style="
+        position: absolute;
+        left: -27px; top: 4px;
+        width: 14px; height: 14px;
+        background: var(--blue);
+        border-radius: 50%;
+        border: 3px solid var(--bg-warm);
+        box-shadow: 0 0 0 3px var(--blue);
+      "></div>
+      <div style="font-size: 0.78rem; color: var(--blue); margin-bottom: 4px;">2024.12</div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--ink);
+        margin: 0 0 8px 0;
+      ">北海道之冬</h3>
+      <p style="color: var(--ink-light); font-size: 0.92rem; line-height: 1.6; margin: 0;">描述内容。</p>
+    </div>
+  </div>
+</section>
+```
 
 ---
 
-## 15. 无限画布（Canvas型）
-
-**适用**: 白板应用、信息可视化、自由布局
+## 布局10：Banner（横幅CTA）
 
 ```html
-<div class="canvas-area">
-  <div class="canvas-grid">
-    <div class="canvas-transform" id="canvasTransform">
-      <!-- 自由放置的卡片 -->
-    </div>
-  </div>
-</div>
+<section style="
+  padding: clamp(60px, 8vh, 100px) clamp(20px, 4vw, 60px);
+  background: var(--yellow);
+  text-align: center;
+">
+  <h2 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 16px 0;
+  ">准备好开始<span style="color: var(--brown);">旅程</span>了吗？</h2>
+  <p style="
+    font-size: 1rem;
+    color: var(--ink-light);
+    margin-bottom: 32px;
+  ">花心小泡泡 · 体验生活，感受体验，记录感受</p>
+  <a href="#" style="
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    background: var(--ink);
+    color: var(--yellow);
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  ">Follow 在下 花心泡 →</a>
+</section>
 ```
-
-```css
-.canvas-area {
-  position: fixed;
-  top: 48px; left: 220px; right: 0; bottom: 0;
-  overflow: hidden;
-  cursor: grab;
-}
-.canvas-area:active { cursor: grabbing; }
-.canvas-grid {
-  width: 100%; height: 100%;
-  background-image: radial-gradient(circle, rgba(74,124,201,0.13) 1.2px, transparent 1.2px);
-  background-size: 28px 28px;
-}
-.canvas-transform {
-  position: absolute;
-  transform-origin: 0 0;
-  will-change: transform;
-}
-```
-
-⚠️ 注意：需要配合JS实现拖拽/缩放。仅用于App型页面。
 
 ---
 
-## 16. Sticky编号侧栏 + 大图杂志卡片
-
-**适用**: 步骤教程、流程拆解、图文并茂的长教程（步骤5~10个）
+## 布局11：Dark Panel（暗色面板）
 
 ```html
-<div class="layout-sticky-mag">
-  <div class="sidebar">
-    <ul class="nav">
-      <li>步骤名1</li>
-      <li>步骤名2</li>
-      <li>步骤名3</li>
-    </ul>
-  </div>
-  <div class="steps-content">
-    <div class="step-item step-observe" data-index="0">
-      <img src="step-image.png" alt="">
-      <div class="step-text">
-        <span class="step-num">01</span>
-        <div class="step-info">
-          <h4>步骤标题</h4>
-          <p>步骤描述</p>
-        </div>
-      </div>
-    </div>
-    <!-- 更多步骤 -->
-  </div>
-</div>
-```
-
-```css
-.layout-sticky-mag {
-  display: grid;
-  grid-template-columns: 200px 1fr;
-  gap: 48px;
-}
-.layout-sticky-mag .sidebar {
-  position: sticky;
-  top: 40px;
-  align-self: start;
-}
-.layout-sticky-mag .nav {
-  list-style: none;
-  counter-reset: step;
-}
-.layout-sticky-mag .nav li {
-  counter-increment: step;
-  padding: 10px 0;
-  font-size: 0.85rem;
-  color: var(--ink-faint);
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  transition: all 0.3s ease;
-}
-.layout-sticky-mag .nav li::before {
-  content: counter(step, decimal-leading-zero);
-  font-family: 'Fraunces', serif;
-  font-size: 1.5rem;
-  font-weight: 900;
-  color: rgba(43,127,216,0.12);
-  min-width: 36px;
-  transition: all 0.3s ease;
-}
-.layout-sticky-mag .nav li.active {
-  color: var(--ink);
-  font-weight: 700;
-}
-.layout-sticky-mag .nav li.active::before {
-  color: var(--blue);
-  font-size: 1.8rem;
-}
-.steps-content {
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-.step-item {
-  border-radius: 14px;
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--panel-dark);
+  color: #F5EDE0;
+  position: relative;
   overflow: hidden;
-  box-shadow: 0 3px 16px rgba(0,0,0,0.05);
-  background: white;
-}
-.step-item img {
-  width: 100%;
-  display: block;
-}
-.step-item .step-text {
-  padding: 32px 36px;
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 20px;
-  align-items: start;
-}
-.step-item .step-num {
-  font-family: 'Fraunces', serif;
-  font-size: 3rem;
-  font-weight: 900;
-  line-height: 1;
-  color: rgba(43,127,216,0.15);
-}
-.step-item:nth-child(3n+2) .step-num { color: rgba(244,215,88,0.35); }
-.step-item:nth-child(3n) .step-num { color: rgba(232,74,95,0.2); }
-.step-item .step-info h4 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: 1.3rem;
-  font-weight: 900;
-  margin-bottom: 8px;
-  line-height: 1.4;
-}
-.step-item .step-info p {
-  font-size: 1rem;
-  color: var(--ink-light);
-  line-height: 1.9;
-}
-@media (max-width: 900px) {
-  .layout-sticky-mag { grid-template-columns: 1fr; }
-  .layout-sticky-mag .sidebar { display: none; }
-  .step-item .step-text { grid-template-columns: 1fr; }
-  .step-item .step-num { font-size: 2rem; }
-}
+">
+  <div style="
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(ellipse, rgba(240,198,116,0.08), transparent 70%);
+    top: -50px; right: -100px;
+    pointer-events: none;
+  "></div>
+
+  <div style="
+    max-width: 1300px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  ">
+    <h2 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      color: #F5EDE0;
+      margin: 0 0 20px 0;
+    ">
+      暗色面板中的<span style="color: var(--yellow);">内容</span>
+    </h2>
+    <p style="
+      font-size: 1rem;
+      color: rgba(245,237,224,0.7);
+      line-height: 1.7;
+      max-width: 600px;
+      margin-bottom: 36px;
+    ">描述文字在暗色背景中呈现。</p>
+    <a href="#" style="
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px;
+      background: var(--yellow);
+      color: var(--ink);
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+    ">行动按钮 →</a>
+  </div>
+</section>
 ```
 
-**JS配套**（侧栏滚动联动高亮）:
-```javascript
-const navItems = document.querySelectorAll('.nav li');
-const stepObserver = new IntersectionObserver((entries) => {
-  entries.forEach(entry => {
-    if (entry.isIntersecting) {
-      const idx = parseInt(entry.target.dataset.index);
-      navItems.forEach((li, i) => li.classList.toggle('active', i === idx));
-    }
-  });
-}, { threshold: 0.35, rootMargin: '-15% 0px -50% 0px' });
-document.querySelectorAll('.step-observe').forEach(el => stepObserver.observe(el));
+---
+
+## 布局12：Masonry Grid（瀑布流）
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 1300px;
+  margin: 0 auto;
+">
+  <h2 style="
+    text-align: center;
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 clamp(40px, 6vw, 80px) 0;
+  ">作品<span style="color: var(--brown);">展示</span></h2>
+
+  <div style="
+    column-count: 3;
+    column-gap: clamp(20px, 3vw, 32px);
+  ">
+    <div style="
+      break-inside: avoid;
+      margin-bottom: clamp(20px, 3vw, 32px);
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 8px 0;
+      ">卡片1</h3>
+      <p style="color: var(--ink-light); font-size: 0.9rem; line-height: 1.6; margin: 0;">内容描述。</p>
+    </div>
+    <div style="
+      break-inside: avoid;
+      margin-bottom: clamp(20px, 3vw, 32px);
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 8px 0;
+      ">卡片2</h3>
+      <p style="color: var(--ink-light); font-size: 0.9rem; line-height: 1.6; margin: 0;">较长的内容描述，展示瀑布流的高度差异。</p>
+    </div>
+    <div style="
+      break-inside: avoid;
+      margin-bottom: clamp(20px, 3vw, 32px);
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: 28px;
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 8px 0;
+      ">卡片3</h3>
+      <p style="color: var(--ink-light); font-size: 0.9rem; line-height: 1.6; margin: 0;">内容描述。</p>
+    </div>
+  </div>
+</section>
 ```
 
-⚠️ 注意：步骤5~10个最合适。超过10个太长，少于5个用横向Step连接线（#7）更紧凑。大图是关键——每一步都必须有一张占满宽度的配图。编号三色轮换（蓝/黄/红）保持节奏。移动端侧栏隐藏，变成纯纵向滚动。
+---
+
+## 布局13：Sidebar + Content（侧边栏+内容）
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 1300px;
+  margin: 0 auto;
+  display: flex;
+  gap: clamp(40px, 6vw, 80px);
+">
+  <!-- 侧边栏 -->
+  <aside style="
+    width: 240px;
+    flex-shrink: 0;
+  ">
+    <div style="
+      background: var(--bg-alt);
+      border-radius: 12px;
+      padding: 24px;
+      position: sticky;
+      top: 24px;
+    ">
+      <h4 style="
+        font-family: 'Noto Serif SC', serif;
+        color: var(--brown);
+        margin: 0 0 16px 0;
+      ">目录</h4>
+      <nav style="display: flex; flex-direction: column; gap: 10px;">
+        <a href="#" style="
+          color: var(--ink);
+          text-decoration: none;
+          font-size: 0.9rem;
+          padding: 6px 10px;
+          border-radius: 6px;
+          background: rgba(240,198,116,0.15);
+        ">第一章</a>
+        <a href="#" style="
+          color: var(--ink-light);
+          text-decoration: none;
+          font-size: 0.9rem;
+          padding: 6px 10px;
+          border-radius: 6px;
+        ">第二章</a>
+        <a href="#" style="
+          color: var(--ink-light);
+          text-decoration: none;
+          font-size: 0.9rem;
+          padding: 6px 10px;
+          border-radius: 6px;
+        ">第三章</a>
+      </nav>
+    </div>
+  </aside>
+
+  <!-- 主内容 -->
+  <main style="flex: 1; min-width: 0;">
+    <article>
+      <h2 style="
+        font-family: 'Noto Serif SC', serif;
+        font-size: clamp(1.6rem, 4vw, 2.6rem);
+        color: var(--ink);
+        margin: 0 0 24px 0;
+      ">文章<span style="color: var(--brown);">标题</span></h2>
+      <p style="
+        font-size: 1.05rem;
+        color: var(--ink-light);
+        line-height: 1.9;
+        margin: 0 0 20px 0;
+      ">正文内容...</p>
+    </article>
+  </main>
+</section>
+```
+
+---
+
+## 布局14：Gallery / 画廊
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-alt);
+  max-width: 1300px;
+  margin: 0 auto;
+">
+  <div style="
+    display: grid;
+    grid-template-columns: 2fr 1fr 1fr;
+    grid-template-rows: 200px 200px;
+    gap: 16px;
+  ">
+    <div style="
+      grid-row: span 2;
+      background: var(--bg-warm);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      border: 2px solid var(--yellow);
+    "><span style="color: var(--ink-light);">大图</span></div>
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(166,123,91,0.12);
+    "><span style="color: var(--ink-light);">图片2</span></div>
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(166,123,91,0.12);
+    "><span style="color: var(--ink-light);">图片3</span></div>
+    <div style="
+      grid-column: span 2;
+      background: var(--bg-warm);
+      border-radius: 12px;
+      display: flex; align-items: center; justify-content: center;
+      border: 1px solid rgba(166,123,91,0.12);
+    "><span style="color: var(--ink-light);">图片4</span></div>
+  </div>
+</section>
+```
+
+---
+
+## 布局15：Testimonial / 引用
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  max-width: 800px;
+  margin: 0 auto;
+  text-align: center;
+">
+  <div style="
+    font-family: 'Fraunces', serif;
+    font-size: 6rem;
+    color: var(--brown);
+    opacity: 0.15;
+    line-height: 1;
+    margin-bottom: -30px;
+  ">"</div>
+  <blockquote style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.2rem, 2.5vw, 1.6rem);
+    color: var(--ink);
+    line-height: 1.7;
+    margin: 0 0 24px 0;
+  ">
+    旅行不是为了到达目的地，<br>
+    而是为了在路上<span style="
+      background: linear-gradient(180deg, transparent 55%, rgba(240,198,116,0.35) 55%);
+      padding: 0 4px;
+    ">发现自己</span>。
+  </blockquote>
+  <div style="
+    font-size: 0.9rem;
+    color: var(--ink-light);
+  ">— 花心小泡泡</div>
+</section>
+```
+
+---
+
+## 布局16：Footer（页脚）
+
+```html
+<footer style="
+  padding: clamp(60px, 8vh, 100px) clamp(20px, 4vw, 60px);
+  background: var(--panel-dark);
+  color: #F5EDE0;
+  text-align: center;
+">
+  <div style="
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    color: var(--yellow);
+    margin-bottom: 12px;
+  ">Bubble</div>
+  <p style="
+    font-size: 0.9rem;
+    color: rgba(245,237,224,0.6);
+    margin: 0 0 20px 0;
+  ">
+    花心小泡泡 · 体验生活，感受体验，记录感受
+  </p>
+  <div style="
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  ">
+    <a href="#" style="
+      color: rgba(245,237,224,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+    ">关于</a>
+    <a href="#" style="
+      color: rgba(245,237,224,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+    ">联系</a>
+    <a href="#" style="
+      color: rgba(245,237,224,0.5);
+      text-decoration: none;
+      font-size: 0.85rem;
+    ">Follow 在下 花心泡</a>
+  </div>
+</footer>
+```
+
+---
+
+## 📊 布局选择指南
+
+| 场景类型 | 推荐布局组合 |
+|----------|-------------|
+| 教程页 | Hero Split → Sidebar+Content → Full-width Text → Split Code+Preview → Banner |
+| Landing页 | Hero Centered → Grid 3-col → Alternating Rows → Stats Row → Dark Panel → Footer |
+| App页 | Sidebar+Content → Grid 2-col → Timeline → Gallery → Footer |
+| 作品集 | Hero Split → Masonry Grid → Gallery → Testimonial → Footer |
+| 卡片组 | 每个卡片使用不同手法（参考 scene-cards.md） |
+
+---
+
+## ⚠️ 关键原则
+
+- **每个Section必须使用不同布局**
+- 布局1-16可以自由组合，但相邻Section不能重复
+- 所有布局共用 `:root` CSS变量
+- 响应式通过 `clamp()` 和 `grid-template-columns: repeat(auto-fit, ...)` 实现
+- 移动端是"重新排列"不是"缩小"
+
+---
+
+*Layouts are the skeleton. Fill them with components from components.md.*

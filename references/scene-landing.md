@@ -1,165 +1,662 @@
-# Scene: 活动页 / 分享会 / Landing Page
+# Scene: Landing / 落地页
 
-> 适用于分享会邀请页、活动报名页、产品发布Landing、合作宣传页等需要强节奏感和行动转化的页面。
-
----
-
-## 核心原则
-
-- **更大的Hero** — 首屏要有冲击力，min-height: 100vh
-- **更强的节奏感** — 深浅面板交替频率高于教程页
-- **深色面板对比多** — 至少1~2个全宽深色或品牌色面板
-- **明确的CTA** — 每个逻辑段落结尾都应有下一步引导
-- **情绪递进** — 痛点→方案→证据→行动
+> 适用于活动页、产品介绍、分享会页面、个人主页、作品集首页等「转化导向」的页面类型。
 
 ---
 
-## 🎨 色彩
+## 🎨 色板（方案A 焦糖奶茶）
 
-继承 brand-dna.md 的三色体系，额外规则：
+所有Landing页面统一使用以下色值：
 
-### 合作品牌色扩展
-当页面涉及合作产品/品牌时，可引入第四色替代红色的点缀位：
-- Cola合作: `#F1752D`（橙色），替代红色作为强调色
-- 金橙: `#F7A946`（偏金），用于slogan/时间标识
-- **规则**: 第四色只替代红色位置，不替代蓝/黄主色
-
-### 暗色面板色值
-- 标准暗底: `#151821`
-- 深色底: `#0d1117`
-- 品牌蓝底: `var(--blue)` + 白字
-- 品牌黄底: `var(--yellow)` + 墨色字
-
----
-
-## 📐 布局偏好
-
-推荐的Landing Page节奏组合：
-
-```
-Hero全屏（纵向居中或双栏不对称）
-  ↓
-三列卡片（核心价值/嘉宾/亮点）
-  ↓
-全宽深色面板（金句/核心观点）
-  ↓
-Sticky侧栏或时间线交错（详细内容）
-  ↓
-Pull Quote引用
-  ↓
-CTA行动区
-```
-
-### 布局要点
-- Hero区域首选「单栏纵向」或「双栏不对称」
-- 中间部分通过深浅色背景交替制造节奏
-- 结尾必须有明确的CTA面板
-
----
-
-## 🧩 组件偏好
-
-Landing页面高频使用的组件：
-
-### Pull Quote（大字引用+装饰引号）
-用于嘉宾金句、核心slogan。参见 `components.md #6`。
-
-### 系统流程条（Flow Arrow）
-用于展示产品/活动流程。参见 `components.md #11`。
-
-### 头像集群（Avatar Cluster）
-用于嘉宾/团队展示。参见 `components.md #15`。
-
-### Do/Don't对比列表
-用于痛点展示、方案对比。参见 `components.md #12`。
-
----
-
-## 🔘 CTA按钮样式标准
+| 变量名 | 色值 | 用途 |
+|--------|------|------|
+| `--brown` | `#A67B5B` | 主色调、标题、CTA按钮主色、链接 |
+| `--yellow` | `#F0C674` | 强调色、装饰、品牌黄底、CTA黄色变体 |
+| `--blue` | `#5B8BA0` | 点缀色、点缀标签、下划线 |
+| `--bg-warm` | `#FDF8F0` | 暖底主背景 |
+| `--bg-alt` | `#F5EDE0` | 交替/卡片背景 |
+| `--ink` | `#2D2420` | 墨色正文 |
+| `--ink-light` | `#5C4D44` | 次要文字 |
+| `--panel-dark` | `#1E1A16` | 暗色面板底色（全屏HTML可用） |
 
 ```css
-.cta-button {
+:root {
+  --brown: #A67B5B;
+  --yellow: #F0C674;
+  --blue: #5B8BA0;
+  --bg-warm: #FDF8F0;
+  --bg-alt: #F5EDE0;
+  --ink: #2D2420;
+  --ink-light: #5C4D44;
+  --panel-dark: #1E1A16;
+}
+```
+
+---
+
+## 📐 Landing页结构
+
+Landing页面按"吸引 → 信任 → 行动"的漏斗式节奏：
+
+### 标准Section序列
+
+1. **Hero** — 大标题 + 副标题 + CTA按钮（首屏核心）
+2. **价值主张** — 3-4个核心卖点卡片
+3. **内容展示** — 核心内容/功能/作品展示
+4. **信任背书** — 数据、评价、合作方logo
+5. **再次CTA** — 强化行动号召
+6. **Footer** — 署名 + 签名档 + 链接
+
+---
+
+## 🔘 CTA按钮系统
+
+Landing页的CTA是核心转化元素，必须醒目但不刺眼。
+
+### 主CTA按钮（棕色）
+
+```html
+<a href="#" class="cta-primary" style="
   display: inline-flex;
   align-items: center;
   gap: 8px;
-  padding: 16px 36px;
-  background: var(--blue, #2B7FD8);
-  color: #fff;
-  border-radius: 12px;
-  text-decoration: none;
+  padding: 14px 32px;
+  background: var(--brown);
+  color: #FDF8F0;
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 1rem;
   font-weight: 600;
-  font-size: 1rem;
-  transition: transform .2s, box-shadow .2s;
-}
-.cta-button:hover {
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+  box-shadow: 0 2px 8px rgba(166,123,91,0.3);
+">
+  立即开始
+  <span style="font-size: 1.1rem;">→</span>
+</a>
+```
+
+### CTA悬停效果
+
+```css
+.cta-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(43,127,216,0.3);
-}
-
-/* 黄色变体（用于深色背景上） */
-.cta-button--yellow {
-  background: var(--yellow, #F4D758);
-  color: var(--ink, #1A1A2E);
-}
-.cta-button--yellow:hover {
-  box-shadow: 0 8px 24px rgba(244,215,88,0.3);
+  box-shadow: 0 4px 16px rgba(166,123,91,0.4);
 }
 ```
 
-### CTA区域布局
-```css
-.cta-section {
-  text-align: center;
-  padding: clamp(80px, 12vh, 160px) 2rem;
-}
-.cta-section h2 {
-  font-family: 'Noto Serif SC', serif;
-  font-size: clamp(1.6rem, 4vw, 2.6rem);
-  margin-bottom: 1rem;
-}
-.cta-section p {
+### CTA黄色变体
+
+```html
+<a href="#" class="cta-yellow" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 14px 32px;
+  background: var(--yellow);
+  color: var(--ink);
+  font-family: 'Noto Sans SC', sans-serif;
   font-size: 1rem;
-  color: var(--ink-light, #4A4A5A);
-  margin-bottom: 2rem;
-}
+  font-weight: 600;
+  border: none;
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+">
+  Follow 在下 花心泡
+</a>
+```
+
+### 次要CTA按钮（outline）
+
+```html
+<a href="#" class="cta-outline" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 13px 32px;
+  background: transparent;
+  color: var(--brown);
+  font-family: 'Noto Sans SC', sans-serif;
+  font-size: 1rem;
+  font-weight: 600;
+  border: 2px solid var(--brown);
+  border-radius: 8px;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.2s ease, color 0.2s ease;
+">
+  了解更多
+</a>
 ```
 
 ---
 
-## ✨ 动效增强
+## 🎯 Hero区域
 
-Landing页面在教程页Scroll Reveal基础上，可额外使用：
+### Hero Split（图文左右）
 
-### 轨道旋转（头像集群）
-```css
-@keyframes heroSpin {
-  to { transform: rotate(360deg); }
-}
-.ring {
-  animation: heroSpin 20s linear infinite;
-}
+```html
+<section style="
+  display: flex;
+  align-items: center;
+  gap: clamp(40px, 6vw, 80px);
+  min-height: 80vh;
+  padding: clamp(60px, 10vh, 120px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  position: relative;
+  overflow: hidden;
+">
+  <!-- 左侧文字 -->
+  <div style="flex: 1; position: relative; z-index: 1;">
+    <div style="
+      font-size: 0.85rem;
+      color: var(--blue);
+      text-transform: uppercase;
+      letter-spacing: 0.15em;
+      margin-bottom: 16px;
+    ">BUBBLE DESIGN SYSTEM</div>
+    <h1 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(2.8rem, 7vw, 5.5rem);
+      color: var(--ink);
+      line-height: 1.15;
+      margin: 0 0 20px 0;
+    ">
+      用设计<br>记录每一次<span style="color: var(--brown);">旅行</span>
+    </h1>
+    <p style="
+      font-size: 1.05rem;
+      color: var(--ink-light);
+      line-height: 1.7;
+      max-width: 480px;
+      margin-bottom: 32px;
+    ">
+      花心小泡泡 · 体验生活，感受体验，记录感受
+    </p>
+    <div style="display: flex; gap: 16px; flex-wrap: wrap;">
+      <!-- CTA按钮 -->
+      <a href="#" style="
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 14px 32px;
+        background: var(--brown);
+        color: #FDF8F0;
+        font-weight: 600;
+        border-radius: 8px;
+        text-decoration: none;
+        box-shadow: 0 2px 8px rgba(166,123,91,0.3);
+      ">开始探索 →</a>
+      <a href="#" style="
+        display: inline-flex; align-items: center; gap: 8px;
+        padding: 13px 32px;
+        background: transparent;
+        color: var(--brown);
+        font-weight: 600;
+        border: 2px solid var(--brown);
+        border-radius: 8px;
+        text-decoration: none;
+      ">了解更多</a>
+    </div>
+  </div>
+
+  <!-- 右侧装饰 -->
+  <div style="flex: 1; position: relative; min-height: 400px;">
+    <!-- 光晕背景 -->
+    <div style="
+      position: absolute;
+      width: 500px; height: 500px;
+      background: radial-gradient(ellipse, rgba(240,198,116,0.15), transparent 70%);
+      top: -50px; right: -100px;
+      pointer-events: none;
+    "></div>
+    <!-- 虚线圆圈 -->
+    <div style="
+      width: 300px; height: 300px;
+      border: 2.5px dashed var(--yellow);
+      border-radius: 50%;
+      opacity: 0.3;
+      position: absolute;
+      top: 10%; right: 5%;
+    "></div>
+    <!-- IP形象或头像 -->
+    <div style="
+      position: absolute;
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      width: 260px; height: 260px;
+      border-radius: 50%;
+      background: var(--bg-alt);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    ">
+      <span style="color: var(--brown); font-family: 'Fraunces', serif; font-style: italic; font-size: 1.5rem;">Bubble</span>
+    </div>
+  </div>
+</section>
 ```
 
-### 数字递增（统计数据）
-配合IntersectionObserver，数字从0计数到目标值。
+### Hero Centered（居中）
 
-### 入场层叠
-多个卡片使用 `.reveal-d1` ~ `.reveal-d5` 做stagger，间隔0.1s。
+```html
+<section style="
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 85vh;
+  padding: clamp(60px, 10vh, 120px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+  position: relative;
+  overflow: hidden;
+">
+  <div style="
+    font-size: 0.85rem;
+    color: var(--blue);
+    text-transform: uppercase;
+    letter-spacing: 0.15em;
+    margin-bottom: 20px;
+  ">花心小泡泡 · 个人品牌</div>
+  <h1 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(2.8rem, 7vw, 5.5rem);
+    color: var(--ink);
+    line-height: 1.2;
+    margin: 0 0 20px 0;
+    max-width: 800px;
+  ">
+    体验生活<br>感受<span style="color: var(--brown);">体验</span>
+  </h1>
+  <p style="
+    font-size: 1.05rem;
+    color: var(--ink-light);
+    line-height: 1.7;
+    max-width: 540px;
+    margin-bottom: 36px;
+  ">
+    温暖治愈、自由探索、元气满满、潇洒酷帅 — 
+    用设计和文字记录每一次旅程。
+  </p>
+  <a href="#" style="
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 16px 40px;
+    background: var(--brown);
+    color: #FDF8F0;
+    font-size: 1.05rem;
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 2px 12px rgba(166,123,91,0.3);
+  ">Follow 在下 花心泡 →</a>
+</section>
+```
 
 ---
 
-## 📱 响应式要点
+## 🃏 价值主张卡片
 
-- Hero区域移动端：双栏变单栏，图片在文字下方
-- 三列卡片：移动端变单列
-- CTA按钮：移动端宽度100%
-- Pull Quote：移动端减小padding和字号
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-alt);
+">
+  <h2 style="
+    text-align: center;
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 48px 0;
+  ">品牌<span style="color: var(--brown);">基因</span></h2>
+
+  <div style="
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+    gap: clamp(24px, 3vw, 48px);
+    max-width: 1300px;
+    margin: 0 auto;
+  ">
+    <!-- 卡片1 -->
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      padding: 36px 28px;
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <div style="
+        width: 48px; height: 48px;
+        background: rgba(240,198,116,0.25);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 20px;
+      ">
+        <span style="font-size: 1.4rem;">☕</span>
+      </div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        font-size: 1.2rem;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">温暖治愈</h3>
+      <p style="
+        font-size: 0.92rem;
+        color: var(--ink-light);
+        line-height: 1.6;
+        margin: 0;
+      ">像一杯热茶，让人感到安心和放松的设计语言。</p>
+    </div>
+
+    <!-- 卡片2 -->
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      padding: 36px 28px;
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <div style="
+        width: 48px; height: 48px;
+        background: rgba(240,198,116,0.25);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 20px;
+      ">
+        <span style="font-size: 1.4rem;">✈️</span>
+      </div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        font-size: 1.2rem;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">自由探索</h3>
+      <p style="
+        font-size: 0.92rem;
+        color: var(--ink-light);
+        line-height: 1.6;
+        margin: 0;
+      ">有旅行的呼吸感，不拘束、不沉闷的视觉节奏。</p>
+    </div>
+
+    <!-- 卡片3 -->
+    <div style="
+      background: var(--bg-warm);
+      border-radius: 12px;
+      padding: 36px 28px;
+      border: 1px solid rgba(166,123,91,0.12);
+    ">
+      <div style="
+        width: 48px; height: 48px;
+        background: rgba(240,198,116,0.25);
+        border-radius: 12px;
+        display: flex; align-items: center; justify-content: center;
+        margin-bottom: 20px;
+      ">
+        <span style="font-size: 1.4rem;">🎨</span>
+      </div>
+      <h3 style="
+        font-family: 'Noto Serif SC', serif;
+        font-size: 1.2rem;
+        color: var(--brown);
+        margin: 0 0 12px 0;
+      ">手绘彩铅感</h3>
+      <p style="
+        font-size: 0.92rem;
+        color: var(--ink-light);
+        line-height: 1.6;
+        margin: 0;
+      ">有温度、有人味、有笔触痕迹的质感设计。</p>
+    </div>
+  </div>
+</section>
+```
 
 ---
 
-## 🚫 Landing页禁忌
+## 🌙 暗色面板
 
-- 不要在品牌色面板上放同色文字（蓝底不放蓝字）
-- 不要超过3个CTA按钮（选择越少转化越高）
-- 不要用stock photo风格的图片
-- 不要所有section都用白底（必须有节奏对比）
+暗色面板仅在全屏HTML页面中使用，3:4图文卡片场景禁止深色底。
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--panel-dark);
+  color: #F5EDE0;
+  position: relative;
+  overflow: hidden;
+">
+  <!-- 光晕 -->
+  <div style="
+    position: absolute;
+    width: 400px; height: 400px;
+    background: radial-gradient(ellipse, rgba(240,198,116,0.08), transparent 70%);
+    top: -50px; right: -100px;
+    pointer-events: none;
+  "></div>
+
+  <div style="
+    max-width: 1300px;
+    margin: 0 auto;
+    position: relative;
+    z-index: 1;
+  ">
+    <h2 style="
+      font-family: 'Noto Serif SC', serif;
+      font-size: clamp(1.6rem, 4vw, 2.6rem);
+      color: #F5EDE0;
+      margin: 0 0 20px 0;
+    ">
+      暗色面板中的<span style="color: var(--yellow);">内容</span>
+    </h2>
+    <p style="
+      font-size: 1rem;
+      color: rgba(245,237,224,0.7);
+      line-height: 1.7;
+      max-width: 600px;
+      margin-bottom: 36px;
+    ">
+      花心小泡泡 · 体验生活，感受体验，记录感受
+    </p>
+    <a href="#" style="
+      display: inline-flex; align-items: center; gap: 8px;
+      padding: 14px 32px;
+      background: var(--yellow);
+      color: var(--ink);
+      font-weight: 600;
+      border-radius: 8px;
+      text-decoration: none;
+    ">Follow 在下 花心泡 →</a>
+  </div>
+</section>
+```
+
+---
+
+## 🟡 品牌黄底区块
+
+```html
+<section style="
+  padding: clamp(60px, 8vh, 100px) clamp(20px, 4vw, 60px);
+  background: var(--yellow);
+  text-align: center;
+">
+  <h2 style="
+    font-family: 'Noto Serif SC', serif;
+    font-size: clamp(1.6rem, 4vw, 2.6rem);
+    color: var(--ink);
+    margin: 0 0 16px 0;
+  ">
+    准备好开始<span style="color: var(--brown);">旅程</span>了吗？
+  </h2>
+  <p style="
+    font-size: 1rem;
+    color: var(--ink-light);
+    margin-bottom: 32px;
+  ">
+    花心小泡泡 · 体验生活，感受体验，记录感受
+  </p>
+  <a href="#" style="
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 14px 32px;
+    background: var(--ink);
+    color: var(--yellow);
+    font-weight: 600;
+    border-radius: 8px;
+    text-decoration: none;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+  ">Follow 在下 花心泡 →</a>
+</section>
+```
+
+---
+
+## 📊 数据展示（信任背书）
+
+```html
+<section style="
+  padding: clamp(80px, 12vh, 160px) clamp(20px, 4vw, 60px);
+  background: var(--bg-warm);
+">
+  <div style="
+    display: flex;
+    justify-content: center;
+    gap: clamp(40px, 8vw, 100px);
+    flex-wrap: wrap;
+    max-width: 1300px;
+    margin: 0 auto;
+    text-align: center;
+  ">
+    <div>
+      <div style="
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        color: var(--brown);
+        line-height: 1;
+      ">100+</div>
+      <div style="
+        font-size: 0.85rem;
+        color: var(--ink-light);
+        margin-top: 8px;
+      ">旅行笔记</div>
+    </div>
+    <div>
+      <div style="
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        color: var(--brown);
+        line-height: 1;
+      ">50+</div>
+      <div style="
+        font-size: 0.85rem;
+        color: var(--ink-light);
+        margin-top: 8px;
+      ">城市足迹</div>
+    </div>
+    <div>
+      <div style="
+        font-family: 'Fraunces', serif;
+        font-style: italic;
+        font-size: clamp(2.5rem, 5vw, 3.5rem);
+        color: var(--brown);
+        line-height: 1;
+      ">10k+</div>
+      <div style="
+        font-size: 0.85rem;
+        color: var(--ink-light);
+        margin-top: 8px;
+      ">读者伙伴</div>
+    </div>
+  </div>
+</section>
+```
+
+---
+
+## 📋 Footer
+
+```html
+<footer style="
+  padding: clamp(60px, 8vh, 100px) clamp(20px, 4vw, 60px);
+  background: var(--panel-dark);
+  color: #F5EDE0;
+  text-align: center;
+">
+  <div style="
+    font-family: 'Fraunces', serif;
+    font-style: italic;
+    font-size: 1.8rem;
+    color: var(--yellow);
+    margin-bottom: 12px;
+  ">Bubble</div>
+  <p style="
+    font-size: 0.9rem;
+    color: rgba(245,237,224,0.6);
+    margin: 0 0 20px 0;
+  ">
+    花心小泡泡 · 体验生活，感受体验，记录感受
+  </p>
+  <div style="
+    display: flex;
+    justify-content: center;
+    gap: 24px;
+    flex-wrap: wrap;
+  ">
+    <a href="#" style="color: rgba(245,237,224,0.5); text-decoration: none; font-size: 0.85rem;">关于</a>
+    <a href="#" style="color: rgba(245,237,224,0.5); text-decoration: none; font-size: 0.85rem;">联系</a>
+    <a href="#" style="color: rgba(245,237,224,0.5); text-decoration: none; font-size: 0.85rem;">Follow 在下 花心泡</a>
+  </div>
+</footer>
+```
+
+---
+
+## 📐 Landing页布局推荐
+
+| Section | 推荐布局 | 说明 |
+|---------|----------|------|
+| Hero | Hero Split / Hero Centered | 大标题 + CTA |
+| 价值主张 | Grid 3-col cards | 卖点展示 |
+| 内容展示 | Alternating rows / Masonry | 作品/功能展示 |
+| 数据背书 | Stats row / Logo grid | 信任建立 |
+| 二次CTA | Banner / Centered CTA | 强化转化 |
+| Footer | Footer dark | 署名 + 链接 |
+
+---
+
+## 🎯 Landing页自检清单
+
+### P0（必须过）
+- [ ] 三色比例正确（棕60% + 黄30% + 蓝10%）
+- [ ] CTA按钮使用棕色 `#A67B5B`
+- [ ] CTA黄色变体使用 `#F0C674` + 墨色字
+- [ ] 品牌黄底使用 `#F0C674` 背景 + 墨色字
+- [ ] 暗色面板底色 `#1E1A16`（仅全屏HTML）
+- [ ] 署名和签名档正确
+
+### P1（应过）
+- [ ] Hero区域有视觉冲击力
+- [ ] 每个Section布局不同
+- [ ] 有数据或信任元素
+- [ ] CTA按钮有hover效果
+
+### P2（加分）
+- [ ] 有暗色面板区块制造节奏变化
+- [ ] 有品牌黄底全宽区块
+- [ ] 使用了旅行主题装饰元素
+- [ ] Footer有完整的品牌信息
+- [ ] 截图不会被说"又是AI做的"
+
+---
+
+## 📝 品牌信息
+
+- **署名**: 花心小泡泡 / Bubble
+- **签名档**: 花心小泡泡 · 体验生活，感受体验，记录感受
+- **CTA**: Follow 在下 花心泡
+
+---
+
+*This scene file builds on top of brand-dna.md. Always reference brand-dna.md for the full brand specification.*

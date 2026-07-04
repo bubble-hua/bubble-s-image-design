@@ -1,241 +1,558 @@
-# Scene: App型 / 功能型页面
+# Scene: App / 应用型页面
 
-> 适用于个人看板、书架、Canvas白板等功能优先的应用型页面。视觉克制，交互优先。
-
----
-
-## 核心原则
-
-- **功能优先，视觉克制** — 装饰元素最少化，不干扰操作
-- **信息密度高** — 内容紧凑，间距小于教程/Landing页
-- **交互反馈清晰** — 每个可操作元素都有hover/active状态
-- **导航永远可见** — Sticky header或侧边栏，用户不迷路
+> 适用于看板、书架、Canvas、Dashboard、终端风格等「功能型/工具型」页面类型。
 
 ---
 
-## 📐 布局
+## 🎨 色板（方案A 焦糖奶茶）
 
-### 基本结构
-```
-Sticky Header (48~64px高度)
-  ↓
-Tab栏 / 侧边栏导航
-  ↓
-内容区 (max-width: 820px ~ 1200px)
-  ↓
-卡片网格为主要内容承载
-```
+| 变量名 | 色值 | 用途 |
+|--------|------|------|
+| `--brown` | `#A67B5B` | Header/Badge主色、标题、导航 |
+| `--yellow` | `#F0C674` | 强调色、边框高亮、装饰 |
+| `--blue` | `#5B8BA0` | 危险操作、删除按钮、点缀 |
+| `--bg-warm` | `#FDF8F0` | 暖底主背景 |
+| `--bg-alt` | `#F5EDE0` | 交替/卡片背景 |
+| `--ink` | `#2D2420` | 墨色正文 |
+| `--ink-light` | `#5C4D44` | 次要文字 |
+| `--panel-dark` | `#1E1A16` | 暗色面板底色（终端/全屏HTML） |
+| `--green` | `#6B9E5A` | 终端绿（仅终端风格场景） |
 
-### Header
 ```css
-.app-header {
-  position: sticky;
-  top: 0;
-  z-index: 100;
-  height: 56px;
-  background: var(--cream, #fefcf6);
-  border-bottom: 1px solid rgba(26,26,26,.06);
+:root {
+  --brown: #A67B5B;
+  --yellow: #F0C674;
+  --blue: #5B8BA0;
+  --bg-warm: #FDF8F0;
+  --bg-alt: #F5EDE0;
+  --ink: #2D2420;
+  --ink-light: #5C4D44;
+  --panel-dark: #1E1A16;
+  --green: #6B9E5A;
+}
+```
+
+---
+
+## 📐 App页面结构
+
+App型页面注重"功能清晰 + 操作高效"：
+
+### 标准布局
+
+```
+┌──────────────────────────────────┐
+│  Header (棕色背景 + 白色文字)      │
+├────────┬─────────────────────────┤
+│ Sidebar│   Main Content          │
+│ (导航) │                         │
+│        │   ┌──────┬──────┬──────┐│
+│        │   │ Card │ Card │ Card ││
+│        │   ├──────┼──────┼──────┤│
+│        │   │ Card │ Card │ Card ││
+│        │   └──────┴──────┴──────┘│
+│        │                         │
+└────────┴─────────────────────────┘
+```
+
+---
+
+## 🧩 App专属组件
+
+### Header（棕色）
+
+```html
+<header style="
   display: flex;
   align-items: center;
-  padding: 0 1.5rem;
-}
+  justify-content: space-between;
+  padding: 16px 32px;
+  background: var(--brown);
+  color: #FDF8F0;
+">
+  <div style="display: flex; align-items: center; gap: 12px;">
+    <span style="
+      font-family: 'Fraunces', serif;
+      font-style: italic;
+      font-size: 1.3rem;
+      font-weight: 700;
+    ">Bubble</span>
+    <span style="
+      font-size: 0.75rem;
+      opacity: 0.7;
+      background: rgba(255,255,255,0.15);
+      padding: 2px 8px;
+      border-radius: 4px;
+    ">v1.0</span>
+  </div>
+  <nav style="display: flex; gap: 20px; align-items: center;">
+    <a href="#" style="color: #FDF8F0; text-decoration: none; font-size: 0.9rem; opacity: 0.8;">首页</a>
+    <a href="#" style="color: #FDF8F0; text-decoration: none; font-size: 0.9rem; opacity: 0.8;">项目</a>
+    <a href="#" style="color: #FDF8F0; text-decoration: none; font-size: 0.9rem; opacity: 0.8;">关于</a>
+  </nav>
+</header>
 ```
 
-### 侧边栏（可选）
-```css
-.app-sidebar {
-  position: fixed;
-  top: 56px; left: 0; bottom: 0;
-  width: 220px;
-  padding: 1.5rem 1rem;
-  border-right: 1px solid rgba(26,26,26,.06);
-  overflow-y: auto;
-}
-.app-main {
-  margin-left: 220px;
-  padding: 2rem;
-  max-width: 1200px;
-}
-```
+### Badge（棕色）
 
-### 内容区
-```css
-.app-content {
-  max-width: 820px;
-  margin: 0 auto;
-  padding: 2rem 1.5rem;
-}
-
-/* 宽内容区（看板/网格型） */
-.app-content--wide {
-  max-width: 1200px;
-}
-```
-
----
-
-## 🎨 色彩简化规则
-
-App型页面色彩更简洁：
-
-| 元素 | 色值 | 说明 |
-|------|------|------|
-| 背景 | `#fefcf6` | 保持品牌暖底 |
-| 卡片 | `#fff` | 白卡片浮于背景上 |
-| Header/Badge | `var(--blue)` | 品牌蓝做主交互色 |
-| 强调/边框 | `var(--yellow)` | 黄色做border/badge |
-| 危险操作 | `var(--red)` | 红色仅用于删除/警告 |
-| 绿色板块 | `#2d6a4f` | 特殊功能板块（如梦境/自然） |
-
-### 分类标签扩展色
-功能页面分类标签可使用扩展色，但总色板不超6种：
-- 所有扩展色饱和度应低于主三色
-- 白色卡片底 + 品牌色header是App页面标准配色
-
----
-
-## 🖱️ 交互标准
-
-### Tab切换
-```css
-.tab-bar {
-  display: flex;
-  gap: 4px;
-  overflow-x: auto;
-  border-bottom: 2px solid #eee;
-}
-.tab {
-  padding: 10px 20px;
-  border: none;
-  background: transparent;
-  cursor: pointer;
-  font-size: 0.9rem;
-  border-bottom: 2px solid transparent;
-  margin-bottom: -2px;
-  transition: all .2s;
-}
-.tab.active {
-  border-bottom-color: var(--blue);
-  color: var(--blue);
+```html
+<span class="badge" style="
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--brown);
+  color: #FDF8F0;
+  border-radius: 999px;
+  font-size: 0.72rem;
   font-weight: 600;
-}
+  letter-spacing: 0.02em;
+">NEW</span>
 ```
 
-### Modal
-```css
-.modal-overlay {
-  position: fixed;
-  inset: 0;
-  z-index: 1000;
-  background: rgba(0,0,0,.6);
-  backdrop-filter: blur(4px);
+### 黄色Badge变体
+
+```html
+<span class="badge-yellow" style="
+  display: inline-block;
+  padding: 2px 10px;
+  background: var(--yellow);
+  color: var(--ink);
+  border-radius: 999px;
+  font-size: 0.72rem;
+  font-weight: 600;
+">HOT</span>
+```
+
+### 状态指示器
+
+```html
+<span class="status" style="
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.8rem;
+  color: var(--ink-light);
+">
+  <span style="
+    display: inline-block;
+    width: 8px; height: 8px;
+    background: var(--green);
+    border-radius: 50%;
+  "></span>
+  在线
+</span>
+```
+
+---
+
+## 🟡 强调/边框系统
+
+### 黄色边框卡片
+
+```html
+<div style="
+  background: var(--bg-warm);
+  border: 2px solid var(--yellow);
+  border-radius: 12px;
+  padding: 24px;
+  position: relative;
+">
+  <div style="
+    position: absolute;
+    top: -1px; left: 24px;
+    transform: translateY(-50%);
+    background: var(--yellow);
+    color: var(--ink);
+    padding: 3px 12px;
+    border-radius: 4px;
+    font-size: 0.72rem;
+    font-weight: 600;
+  ">推荐</div>
+  <h3 style="
+    font-family: 'Noto Serif SC', serif;
+    color: var(--ink);
+    margin: 8px 0 12px 0;
+  ">项目名称</h3>
+  <p style="
+    font-size: 0.88rem;
+    color: var(--ink-light);
+    margin: 0 0 16px 0;
+    line-height: 1.6;
+  ">项目描述内容，简短有力。</p>
+  <div style="display: flex; gap: 8px;">
+    <span style="
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      background: rgba(240,198,116,0.2);
+      color: var(--ink-light);
+      border-radius: 4px;
+    ">标签A</span>
+    <span style="
+      font-size: 0.72rem;
+      padding: 2px 8px;
+      background: rgba(240,198,116,0.2);
+      color: var(--ink-light);
+      border-radius: 4px;
+    ">标签B</span>
+  </div>
+</div>
+```
+
+### 强调色分割线
+
+```html
+<hr style="
+  border: none;
+  height: 2px;
+  background: var(--yellow);
+  margin: 32px 0;
+  border-radius: 1px;
+">
+```
+
+### 高亮选中行
+
+```html
+<div style="
+  padding: 12px 16px;
+  background: rgba(240,198,116,0.15);
+  border-left: 3px solid var(--yellow);
+  border-radius: 0 6px 6px 0;
   display: flex;
   align-items: center;
-  justify-content: center;
-}
-.modal-content {
-  background: var(--cream, #fefcf6);
-  border-radius: 16px;
-  padding: clamp(24px, 3vw, 40px);
-  max-width: 560px;
-  width: 90%;
-  max-height: 80vh;
-  overflow-y: auto;
-}
+  justify-content: space-between;
+">
+  <span style="color: var(--ink); font-size: 0.9rem;">当前选中项目</span>
+  <span style="color: var(--ink-light); font-size: 0.8rem;">活跃</span>
+</div>
 ```
 
-### 卡片Hover
-```css
-.app-card {
-  background: #fff;
-  border-radius: 12px;
-  padding: 1.25rem;
-  box-shadow: 0 2px 12px rgba(0,0,0,.04);
-  transition: transform .2s, box-shadow .2s;
+---
+
+## 🔵 危险/删除操作（蓝色点缀）
+
+### 删除按钮
+
+```html
+<button style="
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 8px 20px;
+  background: transparent;
+  color: var(--blue);
+  border: 1.5px solid var(--blue);
+  border-radius: 6px;
+  font-size: 0.85rem;
   cursor: pointer;
-}
-.app-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(0,0,0,.08);
-}
+  transition: background 0.2s ease, color 0.2s ease;
+">
+  删除
+</button>
 ```
 
-### 输入Focus
-```css
-.app-input {
-  border: 1.5px solid rgba(26,26,26,.1);
-  border-radius: 8px;
-  padding: 10px 14px;
-  font-size: 0.9rem;
-  transition: border-color .2s;
-  background: #fff;
-}
-.app-input:focus {
-  outline: none;
-  border-color: var(--blue, #2B7FD8);
-  box-shadow: 0 0 0 3px rgba(43,127,216,0.1);
-}
-```
+### 危险确认面板
 
----
-
-## 🎨 无限画布 / Canvas 规范
-
-适用于白板、信息可视化、自由拖拽布局：
-
-### Grid Dot背景
-```css
-.canvas-grid {
-  width: 100%; height: 100%;
-  background-image: radial-gradient(circle, rgba(74,124,201,0.13) 1.2px, transparent 1.2px);
-  background-size: 28px 28px;
-}
-```
-
-### Cursor
-```css
-.canvas-area {
-  cursor: grab;
-}
-.canvas-area:active {
-  cursor: grabbing;
-}
-```
-
-### Transform Origin
-```css
-.canvas-transform {
-  position: absolute;
-  transform-origin: 0 0;
-  will-change: transform;
-}
-```
-
-### Canvas卡片（手绘感）
-```css
-.canvas-card {
-  background: #fff;
-  border: 2px dashed rgba(74,124,201,0.35);
-  border-radius: 16px;
-  padding: 1.25rem;
-  box-shadow: 0 4px 16px rgba(0,0,0,.06);
-}
+```html
+<div style="
+  background: var(--bg-warm);
+  border: 1.5px solid var(--blue);
+  border-radius: 10px;
+  padding: 24px;
+">
+  <div style="
+    display: flex;
+    align-items: flex-start;
+    gap: 12px;
+    margin-bottom: 16px;
+  ">
+    <span style="
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 32px; height: 32px;
+      background: rgba(91,139,160,0.15);
+      color: var(--blue);
+      border-radius: 50%;
+      font-size: 1rem;
+      flex-shrink: 0;
+    ">!</span>
+    <div>
+      <strong style="color: var(--blue); display: block; margin-bottom: 4px;">确认删除</strong>
+      <span style="color: var(--ink-light); font-size: 0.85rem;">此操作不可撤销，确定要继续吗？</span>
+    </div>
+  </div>
+  <div style="display: flex; gap: 10px; justify-content: flex-end;">
+    <button style="
+      padding: 8px 20px;
+      background: transparent;
+      color: var(--ink-light);
+      border: 1px solid rgba(0,0,0,0.15);
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    ">取消</button>
+    <button style="
+      padding: 8px 20px;
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 6px;
+      font-size: 0.85rem;
+      cursor: pointer;
+    ">确认删除</button>
+  </div>
+</div>
 ```
 
 ---
 
-## 📱 响应式
+## 🟢 终端风格（绿色 `#6B9E5A`）
 
-- Header高度保持，内部元素简化
-- 侧边栏移动端变为底部Tab或汉堡菜单
-- 卡片网格：`repeat(auto-fill, minmax(260px, 1fr))`自适应
-- Modal：移动端全屏或底部弹出
+终端风格仅适用于终端/命令行场景。
+
+### 终端窗口
+
+```html
+<div style="
+  background: var(--panel-dark);
+  border-radius: 10px;
+  overflow: hidden;
+  font-family: 'Fira Code', monospace;
+">
+  <!-- 标题栏 -->
+  <div style="
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    padding: 10px 16px;
+    background: rgba(0,0,0,0.3);
+  ">
+    <span style="width: 12px; height: 12px; background: #ff5f57; border-radius: 50%;"></span>
+    <span style="width: 12px; height: 12px; background: #febc2e; border-radius: 50%;"></span>
+    <span style="width: 12px; height: 12px; background: #28c840; border-radius: 50%;"></span>
+    <span style="margin-left: 12px; font-size: 0.72rem; color: rgba(255,255,255,0.4);">terminal — bash</span>
+  </div>
+  <!-- 内容 -->
+  <div style="padding: 20px 24px; font-size: 0.85rem; line-height: 1.8;">
+    <div><span style="color: var(--green);">bubble@travel</span> <span style="color: rgba(255,255,255,0.6);">~</span> <span style="color: rgba(255,255,255,0.8);">$</span> <span style="color: rgba(255,255,255,0.7);">ls -la</span></div>
+    <div style="color: rgba(255,255,255,0.5); margin-top: 4px;">
+      drwxr-xr-x  bubble  staff  .notes<br>
+      drwxr-xr-x  bubble  staff  .photos<br>
+      -rw-r--r--  bubble  staff  travel-log.md
+    </div>
+    <div style="margin-top: 12px;"><span style="color: var(--green);">bubble@travel</span> <span style="color: rgba(255,255,255,0.6);">~</span> <span style="color: rgba(255,255,255,0.8);">$</span> <span style="color: rgba(255,255,255,0.7);">cat travel-log.md</span></div>
+    <div style="color: var(--yellow); margin-top: 4px;">
+      # 花心小泡泡 · 体验生活，感受体验，记录感受
+    </div>
+    <div style="margin-top: 8px;"><span style="color: var(--green);">bubble@travel</span> <span style="color: rgba(255,255,255,0.6);">~</span> <span style="color: rgba(255,255,255,0.8);">$</span> <span style="display: inline-block; width: 8px; height: 16px; background: rgba(255,255,255,0.6); animation: blink 1s step-end infinite; vertical-align: text-bottom;"></span></div>
+  </div>
+</div>
+```
+
+### 终端标签
+
+```html
+<span style="
+  display: inline-block;
+  padding: 2px 8px;
+  background: rgba(107,158,90,0.15);
+  color: var(--green);
+  border: 1px solid rgba(107,158,90,0.3);
+  border-radius: 4px;
+  font-family: 'Fira Code', monospace;
+  font-size: 0.75rem;
+">status: ok</span>
+```
 
 ---
 
-## 🚫 App页面禁忌
+## 📊 数据看板组件
 
-- 不要加大段装饰性文字（功能页不是杂志）
-- 不要用Scroll Reveal（App页面要即时加载，不等动画）
-- 不要用超大标题（App内标题控制在1.2rem以内）
-- 不要在功能区域加深色面板（深色只用于夜间模式场景）
+### 统计卡片
+
+```html
+<div style="
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 16px;
+">
+  <!-- 统计卡片 -->
+  <div style="
+    background: var(--bg-warm);
+    border: 1px solid rgba(166,123,91,0.12);
+    border-radius: 10px;
+    padding: 20px;
+  ">
+    <div style="font-size: 0.75rem; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">笔记数</div>
+    <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 1.8rem; color: var(--brown);">128</div>
+    <div style="font-size: 0.72rem; color: var(--green); margin-top: 4px;">↑ 12%</div>
+  </div>
+
+  <div style="
+    background: var(--bg-warm);
+    border: 1px solid rgba(166,123,91,0.12);
+    border-radius: 10px;
+    padding: 20px;
+  ">
+    <div style="font-size: 0.75rem; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">城市</div>
+    <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 1.8rem; color: var(--brown);">37</div>
+    <div style="font-size: 0.72rem; color: var(--green); margin-top: 4px;">↑ 5</div>
+  </div>
+
+  <div style="
+    background: var(--bg-warm);
+    border: 1px solid rgba(166,123,91,0.12);
+    border-radius: 10px;
+    padding: 20px;
+  ">
+    <div style="font-size: 0.75rem; color: var(--ink-light); text-transform: uppercase; letter-spacing: 0.05em; margin-bottom: 8px;">照片</div>
+    <div style="font-family: 'Fraunces', serif; font-style: italic; font-size: 1.8rem; color: var(--brown);">2.4k</div>
+    <div style="font-size: 0.72rem; color: var(--blue); margin-top: 4px;">↓ 3%</div>
+  </div>
+</div>
+```
+
+### 进度条
+
+```html
+<div style="margin-bottom: 16px;">
+  <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+    <span style="font-size: 0.8rem; color: var(--ink-light);">旅行计划完成度</span>
+    <span style="font-size: 0.8rem; color: var(--brown); font-weight: 600;">75%</span>
+  </div>
+  <div style="
+    height: 6px;
+    background: var(--bg-alt);
+    border-radius: 3px;
+    overflow: hidden;
+  ">
+    <div style="
+      height: 100%;
+      width: 75%;
+      background: linear-gradient(90deg, var(--brown), var(--yellow));
+      border-radius: 3px;
+    "></div>
+  </div>
+</div>
+```
+
+---
+
+## 📋 列表组件
+
+### 项目列表
+
+```html
+<div style="display: flex; flex-direction: column; gap: 4px;">
+  <div style="
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--bg-warm);
+    border-radius: 8px;
+    border: 1px solid rgba(166,123,91,0.08);
+  ">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="
+        width: 10px; height: 10px;
+        background: var(--yellow);
+        border-radius: 2px;
+      "></span>
+      <span style="color: var(--ink); font-size: 0.9rem;">东京游记</span>
+    </div>
+    <span style="color: var(--ink-light); font-size: 0.78rem;">2024.03</span>
+  </div>
+
+  <div style="
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--bg-warm);
+    border-radius: 8px;
+    border: 1px solid rgba(166,123,91,0.08);
+  ">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="
+        width: 10px; height: 10px;
+        background: var(--brown);
+        border-radius: 2px;
+      "></span>
+      <span style="color: var(--ink); font-size: 0.9rem;">京都漫步</span>
+    </div>
+    <span style="color: var(--ink-light); font-size: 0.78rem;">2024.04</span>
+  </div>
+
+  <div style="
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: var(--bg-warm);
+    border-radius: 8px;
+    border: 1px solid rgba(166,123,91,0.08);
+  ">
+    <div style="display: flex; align-items: center; gap: 12px;">
+      <span style="
+        width: 10px; height: 10px;
+        background: var(--blue);
+        border-radius: 2px;
+      "></span>
+      <span style="color: var(--ink); font-size: 0.9rem;">北海道之冬</span>
+    </div>
+    <span style="color: var(--ink-light); font-size: 0.78rem;">2024.12</span>
+  </div>
+</div>
+```
+
+---
+
+## 📐 App页面布局推荐
+
+| Section | 推荐布局 | 说明 |
+|---------|----------|------|
+| Header | Full-width header | 棕色背景 |
+| Sidebar | Fixed sidebar + content | 导航 + 内容 |
+| Dashboard | Grid cards | 数据统计 |
+| 内容区 | Grid / List / Table | 功能展示 |
+| 终端区 | Terminal panel | 暗色面板 |
+| Footer | Compact footer | 状态信息 |
+
+---
+
+## 🎯 App页面自检清单
+
+### P0（必须过）
+- [ ] Header使用棕色 `#A67B5B`
+- [ ] Badge使用棕色 `#A67B5B`
+- [ ] 强调/边框使用黄色 `#F0C674`
+- [ ] 危险操作使用蓝色 `#5B8BA0`
+- [ ] 终端绿仅用于终端场景 `#6B9E5A`
+- [ ] 暗色面板仅用于全屏HTML
+- [ ] 三色比例正确
+
+### P1（应过）
+- [ ] 功能分区清晰
+- [ ] 状态指示明确
+- [ ] 交互元素有hover/active反馈
+- [ ] 数据展示有对比（上升/下降）
+
+### P2（加分）
+- [ ] 有终端风格区块
+- [ ] 有进度条或图表元素
+- [ ] 有项目列表或数据表格
+- [ ] 操作确认有二次确认面板
+- [ ] 截图有工具感但不冰冷
+
+---
+
+## 📝 品牌信息
+
+- **署名**: 花心小泡泡 / Bubble
+- **签名档**: 花心小泡泡 · 体验生活，感受体验，记录感受
+- **CTA**: Follow 在下 花心泡
+
+---
+
+*This scene file builds on top of brand-dna.md. Always reference brand-dna.md for the full brand specification.*

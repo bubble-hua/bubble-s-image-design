@@ -3,286 +3,867 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title><!-- App标题 --></title>
+  <title>花心小泡泡 · 设计灵感库</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700&family=Noto+Serif+SC:wght@700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Fira+Code:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
   <style>
-    /* === CSS变量（简化版） === */
     :root {
-      --blue: #2B7FD8;
-      --yellow: #F4D758;
-      --red: #E84A5F;
-      --cream: #fefcf6;
-      --ink: #1A1A2E;
-      --ink-light: #4A4A5A;
-      --ink-faint: #8A8A9A;
-      --card-bg: #fff;
-      --border: rgba(26,26,26,.08);
+      --brown: #A67B5B;
+      --brown-deep: #8B6343;
+      --yellow: #F0C674;
+      --yellow-soft: #FDF0D0;
+      --blue: #5B8BA0;
+      --blue-deep: #4A7A8E;
+      --cream: #FDF8F0;
+      --cream-dark: #F5EDE0;
+      --ink: #2D2420;
+      --ink-light: #5C4D44;
+      --ink-faint: #8A7D74;
+      --dark-panel: #1E1A16;
+      --terminal-green: #6B9E5A;
+      --font-display: 'Fraunces', 'Noto Serif SC', serif;
+      --font-body: 'Noto Sans SC', sans-serif;
+      --font-hand: 'Caveat', cursive;
+      --font-mono: 'Fira Code', monospace;
+      --font-serif: 'Noto Serif SC', serif;
+      --header-height: 56px;
+      --sidebar-width: 240px;
     }
 
-    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    html {
+      font-size: clamp(14px, 1.1vw, 16px);
+    }
 
     body {
-      font-family: 'Noto Sans SC', -apple-system, 'PingFang SC', 'Helvetica Neue', sans-serif;
-      font-size: 15px;
+      font-family: var(--font-body);
+      color: var(--ink);
+      background: var(--cream);
       line-height: 1.6;
-      color: var(--ink);
-      background: var(--cream);
+      -webkit-font-smoothing: antialiased;
+      padding-top: var(--header-height);
     }
 
-    ::selection {
-      background: var(--yellow);
-      color: var(--ink);
-    }
-
-    /* === Fixed Header === */
-    .app-header {
-      position: sticky;
+    /* ============ STICKY HEADER ============ */
+    .header {
+      position: fixed;
       top: 0;
-      z-index: 100;
-      height: 56px;
-      background: var(--cream);
-      border-bottom: 1px solid var(--border);
+      left: 0;
+      right: 0;
+      height: var(--header-height);
+      z-index: 1000;
+      backdrop-filter: blur(16px) saturate(150%);
+      -webkit-backdrop-filter: blur(16px) saturate(150%);
+      background: rgba(253, 248, 240, 0.85);
+      border-bottom: 1px solid rgba(166, 123, 91, 0.1);
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 0 1.5rem;
+      padding: 0 clamp(12px, 2vw, 24px);
+      gap: 16px;
     }
 
-    .app-header h1 {
-      font-family: 'Noto Serif SC', serif;
-      font-size: 1.1rem;
-      font-weight: 700;
+    .header-logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      text-decoration: none;
+      color: var(--ink);
+      font-family: var(--font-display);
+      font-weight: 600;
+      font-size: 1rem;
+      white-space: nowrap;
+    }
+
+    .header-avatar {
+      width: 30px;
+      height: 30px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--yellow);
+    }
+
+    .header-search {
+      flex: 1;
+      max-width: 400px;
+      position: relative;
+    }
+
+    .header-search input {
+      width: 100%;
+      padding: 8px 16px 8px 36px;
+      border: 1px solid rgba(166, 123, 91, 0.15);
+      border-radius: 20px;
+      background: rgba(255,255,255,0.6);
+      font-size: 0.85rem;
+      color: var(--ink);
+      outline: none;
+      transition: border-color 0.2s, background 0.2s;
+      font-family: var(--font-body);
+    }
+
+    .header-search input:focus {
+      border-color: var(--brown);
+      background: #fff;
+    }
+
+    .header-search::before {
+      content: '🔍';
+      position: absolute;
+      left: 12px;
+      top: 50%;
+      transform: translateY(-50%);
+      font-size: 0.8rem;
+      pointer-events: none;
     }
 
     .header-actions {
       display: flex;
       align-items: center;
       gap: 12px;
+      margin-left: auto;
     }
 
-    /* === Tab栏 === */
-    .tab-bar {
-      display: flex;
-      gap: 4px;
-      overflow-x: auto;
-      border-bottom: 2px solid #eee;
-      padding: 0 1.5rem;
-      background: var(--cream);
-    }
-
-    .tab {
-      padding: 12px 20px;
+    .header-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
       border: none;
       background: transparent;
       cursor: pointer;
-      font-size: 0.9rem;
-      color: var(--ink-light);
-      border-bottom: 2px solid transparent;
-      margin-bottom: -2px;
-      transition: all .2s;
-      white-space: nowrap;
-    }
-
-    .tab.active {
-      border-bottom-color: var(--blue);
-      color: var(--blue);
-      font-weight: 600;
-    }
-
-    .tab:hover:not(.active) {
-      color: var(--ink);
-    }
-
-    /* === 内容区 === */
-    .app-content {
-      max-width: 1000px;
-      margin: 0 auto;
-      padding: 2rem 1.5rem;
-    }
-
-    /* === 卡片网格 === */
-    .card-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 1rem;
-    }
-
-    .app-card {
-      background: var(--card-bg);
-      border-radius: 12px;
-      padding: 1.25rem;
-      box-shadow: 0 2px 12px rgba(0,0,0,.04);
-      transition: transform .2s, box-shadow .2s;
-      cursor: pointer;
-    }
-
-    .app-card:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 8px 24px rgba(0,0,0,.08);
-    }
-
-    .app-card h3 {
-      font-size: 1rem;
-      font-weight: 600;
-      margin-bottom: 0.5rem;
-    }
-
-    .app-card p {
-      font-size: 0.85rem;
-      color: var(--ink-light);
-    }
-
-    .card-badge {
-      display: inline-block;
-      padding: 2px 8px;
-      border-radius: 8px;
-      font-size: 0.7rem;
-      background: rgba(43,127,216,0.1);
-      color: var(--blue);
-      margin-bottom: 0.5rem;
-    }
-
-    /* === Tab内容切换 === */
-    .tab-content { display: none; }
-    .tab-content.active { display: block; }
-
-    /* === Modal === */
-    .modal-overlay {
-      position: fixed;
-      inset: 0;
-      z-index: 1000;
-      background: rgba(0,0,0,.6);
-      backdrop-filter: blur(4px);
-      display: none;
+      display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 1rem;
+      transition: background 0.2s;
+      color: var(--ink-light);
     }
 
-    .modal-overlay.active {
+    .header-btn:hover {
+      background: rgba(166, 123, 91, 0.08);
+    }
+
+    .header-btn.primary {
+      background: var(--brown);
+      color: #fff;
+      width: auto;
+      height: auto;
+      padding: 7px 18px;
+      border-radius: 18px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      font-family: var(--font-body);
+    }
+
+    .header-btn.primary:hover {
+      background: var(--brown-deep);
+    }
+
+    .sidebar-toggle {
+      display: none;
+    }
+
+    /* ============ LAYOUT ============ */
+    .app-layout {
       display: flex;
+      min-height: calc(100vh - var(--header-height));
     }
 
-    .modal-content {
-      background: var(--cream);
-      border-radius: 16px;
-      padding: 2rem;
-      max-width: 560px;
-      width: 90%;
-      max-height: 80vh;
+    /* ============ SIDEBAR ============ */
+    .sidebar {
+      width: var(--sidebar-width);
+      flex-shrink: 0;
+      background: #fff;
+      border-right: 1px solid rgba(166, 123, 91, 0.08);
+      padding: clamp(16px, 2vw, 24px) clamp(12px, 2vw, 16px);
+      position: sticky;
+      top: var(--header-height);
+      height: calc(100vh - var(--header-height));
       overflow-y: auto;
     }
 
-    .modal-close {
-      position: absolute;
-      top: 1rem; right: 1rem;
-      width: 36px; height: 36px;
-      border-radius: 50%;
-      background: var(--card-bg);
+    .sidebar-section {
+      margin-bottom: 24px;
+    }
+
+    .sidebar-section h4 {
+      font-family: var(--font-mono);
+      font-size: 0.7rem;
+      text-transform: uppercase;
+      letter-spacing: 0.08em;
+      color: var(--ink-faint);
+      margin-bottom: 8px;
+      padding: 0 8px;
+    }
+
+    .sidebar-nav {
+      list-style: none;
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .sidebar-nav a {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 8px 10px;
+      text-decoration: none;
+      color: var(--ink-light);
+      font-size: 0.85rem;
+      border-radius: 8px;
+      transition: background 0.15s, color 0.15s;
+    }
+
+    .sidebar-nav a:hover {
+      background: var(--cream-dark);
+      color: var(--ink);
+    }
+
+    .sidebar-nav a.active {
+      background: var(--yellow-soft);
+      color: var(--brown-deep);
+      font-weight: 500;
+    }
+
+    .sidebar-nav .nav-icon {
+      width: 20px;
+      text-align: center;
+      font-size: 0.9rem;
+      flex-shrink: 0;
+    }
+
+    .sidebar-nav .badge {
+      margin-left: auto;
+      background: var(--yellow);
+      color: var(--brown-deep);
+      font-size: 0.7rem;
+      padding: 2px 8px;
+      border-radius: 10px;
+      font-weight: 500;
+    }
+
+    /* ============ MAIN CONTENT ============ */
+    .main-content {
+      flex: 1;
+      padding: clamp(16px, 2vw, 24px);
+      overflow-y: auto;
+    }
+
+    /* ============ TAB BAR ============ */
+    .tab-bar {
+      display: flex;
+      gap: 4px;
+      border-bottom: 1px solid rgba(166, 123, 91, 0.1);
+      margin-bottom: clamp(16px, 2vw, 24px);
+      overflow-x: auto;
+      -webkit-overflow-scrolling: touch;
+    }
+
+    .tab-btn {
+      padding: 10px 20px;
       border: none;
+      background: transparent;
+      font-size: 0.85rem;
+      color: var(--ink-faint);
       cursor: pointer;
-      font-size: 1.2rem;
+      border-bottom: 2px solid transparent;
+      transition: color 0.2s, border-color 0.2s;
+      white-space: nowrap;
+      font-family: var(--font-body);
+      font-weight: 400;
+    }
+
+    .tab-btn:hover {
+      color: var(--ink-light);
+    }
+
+    .tab-btn.active {
+      color: var(--brown);
+      border-bottom-color: var(--brown);
+      font-weight: 500;
+    }
+
+    /* ============ CARD GRID ============ */
+    .content-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+      gap: clamp(12px, 1.5vw, 20px);
+    }
+
+    .content-card {
+      background: #fff;
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid rgba(166, 123, 91, 0.06);
+      transition: transform 0.2s, box-shadow 0.2s;
+      cursor: pointer;
+    }
+
+    .content-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 20px rgba(45, 36, 32, 0.08);
+    }
+
+    .content-card:active {
+      transform: translateY(0);
+      box-shadow: 0 2px 8px rgba(45, 36, 32, 0.04);
+    }
+
+    .card-thumb {
+      height: 140px;
+      background: linear-gradient(135deg, var(--cream-dark), var(--yellow-soft));
       display: flex;
       align-items: center;
       justify-content: center;
+      font-size: 2.5rem;
+      position: relative;
     }
 
-    /* === 输入框 === */
-    .app-input {
-      border: 1.5px solid var(--border);
-      border-radius: 8px;
-      padding: 10px 14px;
+    .card-thumb .card-tag {
+      position: absolute;
+      top: 10px;
+      left: 10px;
+      background: rgba(255,255,255,0.85);
+      backdrop-filter: blur(4px);
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-size: 0.7rem;
+      color: var(--brown);
+      font-weight: 500;
+    }
+
+    .card-info {
+      padding: clamp(12px, 1.5vw, 16px);
+    }
+
+    .card-info h4 {
       font-size: 0.9rem;
-      transition: border-color .2s;
-      background: var(--card-bg);
-      width: 100%;
+      font-weight: 500;
+      margin-bottom: 4px;
+      line-height: 1.4;
     }
 
-    .app-input:focus {
-      outline: none;
-      border-color: var(--blue);
-      box-shadow: 0 0 0 3px rgba(43,127,216,0.1);
+    .card-info .meta {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.75rem;
+      color: var(--ink-faint);
     }
 
-    /* === 响应式 === */
+    .card-info .meta img {
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+    }
+
+    .card-stats {
+      display: flex;
+      gap: 16px;
+      padding: 0 16px 12px;
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+    }
+
+    .card-stats span {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    /* ============ SECTION TITLE ============ */
+    .section-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+
+    .section-header h3 {
+      font-family: var(--font-display);
+      font-size: 1.15rem;
+      font-weight: 600;
+    }
+
+    .section-header a {
+      font-size: 0.8rem;
+      color: var(--brown);
+      text-decoration: none;
+    }
+
+    .section-header a:hover {
+      text-decoration: underline;
+    }
+
+    /* ============ QUICK STATS ROW ============ */
+    .stats-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: clamp(12px, 1.5vw, 16px);
+      margin-bottom: clamp(16px, 2vw, 24px);
+    }
+
+    .stat-card {
+      background: #fff;
+      border-radius: 12px;
+      padding: clamp(12px, 1.5vw, 20px);
+      border: 1px solid rgba(166, 123, 91, 0.06);
+      text-align: center;
+    }
+
+    .stat-card .stat-number {
+      font-family: var(--font-display);
+      font-size: clamp(1.4rem, 2vw, 1.8rem);
+      font-weight: 700;
+      color: var(--brown);
+    }
+
+    .stat-card .stat-label {
+      font-size: 0.75rem;
+      color: var(--ink-faint);
+      margin-top: 4px;
+    }
+
+    /* ============ MOBILE BOTTOM NAV ============ */
+    .bottom-nav {
+      display: none;
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.95);
+      backdrop-filter: blur(16px);
+      border-top: 1px solid rgba(166, 123, 91, 0.1);
+      padding: 8px 16px;
+      justify-content: space-around;
+      z-index: 1000;
+    }
+
+    .bottom-nav-item {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 2px;
+      text-decoration: none;
+      color: var(--ink-faint);
+      font-size: 0.65rem;
+      padding: 4px 8px;
+      transition: color 0.2s;
+    }
+
+    .bottom-nav-item.active {
+      color: var(--brown);
+    }
+
+    .bottom-nav-item .nav-icon {
+      font-size: 1.1rem;
+    }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 900px) {
+      .sidebar {
+        display: none;
+        position: fixed;
+        top: var(--header-height);
+        left: 0;
+        bottom: 0;
+        z-index: 999;
+        box-shadow: 4px 0 20px rgba(0,0,0,0.1);
+        width: 260px;
+      }
+
+      .sidebar.open {
+        display: block;
+      }
+
+      .sidebar-toggle {
+        display: flex;
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .content-grid {
+        grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      }
+    }
+
     @media (max-width: 600px) {
-      .app-content { padding: 1.5rem 1rem; }
-      .card-grid { grid-template-columns: 1fr; }
+      .content-grid {
+        grid-template-columns: 1fr 1fr;
+        gap: 10px;
+      }
+
+      .card-thumb {
+        height: 100px;
+      }
+
+      .card-info h4 {
+        font-size: 0.8rem;
+      }
+
+      .header-search {
+        max-width: 200px;
+      }
+
+      .bottom-nav {
+        display: flex;
+      }
+
+      .main-content {
+        padding-bottom: 70px;
+      }
+
+      .tab-bar {
+        gap: 0;
+      }
+
+      .tab-btn {
+        padding: 8px 14px;
+        font-size: 0.8rem;
+      }
+
+      .stats-row {
+        grid-template-columns: repeat(2, 1fr);
+        gap: 8px;
+      }
     }
   </style>
 </head>
 <body>
 
-  <!-- ====== Fixed Header ====== -->
-  <header class="app-header">
-    <h1><!-- App名称 --></h1>
+  <!-- ============ HEADER ============ -->
+  <header class="header">
+    <button class="header-btn sidebar-toggle" id="sidebarToggle" aria-label="菜单">☰</button>
+    <a href="#" class="header-logo">
+      <img src="avatar.jpg" alt="Bubble" class="header-avatar" onerror="this.style.display='none'">
+      灵感库
+    </a>
+    <div class="header-search">
+      <input type="text" placeholder="搜索设计灵感、配色方案...">
+    </div>
     <div class="header-actions">
-      <!-- 操作按钮 -->
+      <button class="header-btn" aria-label="通知">🔔</button>
+      <button class="header-btn" aria-label="收藏">❤️</button>
+      <button class="header-btn primary">发布灵感</button>
     </div>
   </header>
 
-  <!-- ====== Tab栏 ====== -->
-  <div class="tab-bar">
-    <button class="tab active" data-tab="tab1"><!-- 标签1 --></button>
-    <button class="tab" data-tab="tab2"><!-- 标签2 --></button>
-    <button class="tab" data-tab="tab3"><!-- 标签3 --></button>
-  </div>
-
-  <!-- ====== 内容区 ====== -->
-  <main class="app-content">
-
-    <!-- Tab 1 内容 -->
-    <div class="tab-content active" id="tab1">
-      <div class="card-grid">
-        <div class="app-card">
-          <span class="card-badge"><!-- 分类 --></span>
-          <h3><!-- 卡片标题 --></h3>
-          <p><!-- 卡片描述 --></p>
-        </div>
-        <!-- 更多卡片 -->
+  <!-- ============ APP LAYOUT ============ -->
+  <div class="app-layout">
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+        <h4>浏览</h4>
+        <ul class="sidebar-nav">
+          <li><a href="#" class="active"><span class="nav-icon">🏠</span>首页</a></li>
+          <li><a href="#"><span class="nav-icon">🔥</span>热门推荐</a></li>
+          <li><a href="#"><span class="nav-icon">⭐</span>我的收藏</a></li>
+          <li><a href="#"><span class="nav-icon">🕐</span>最近浏览</a></li>
+        </ul>
       </div>
-    </div>
+      <div class="sidebar-section">
+        <h4>分类</h4>
+        <ul class="sidebar-nav">
+          <li><a href="#"><span class="nav-icon">🎨</span>配色方案<span class="badge">48</span></a></li>
+          <li><a href="#"><span class="nav-icon">✍️</span>字体排版<span class="badge">32</span></a></li>
+          <li><a href="#"><span class="nav-icon">🧩</span>组件设计<span class="badge">56</span></a></li>
+          <li><a href="#"><span class="nav-icon">📱</span>界面灵感<span class="badge">71</span></a></li>
+          <li><a href="#"><span class="nav-icon">🎯</span>品牌设计<span class="badge">29</span></a></li>
+        </ul>
+      </div>
+      <div class="sidebar-section">
+        <h4>工具</h4>
+        <ul class="sidebar-nav">
+          <li><a href="#"><span class="nav-icon">🎨</span>调色板</a></li>
+          <li><a href="#"><span class="nav-icon">📐</span>间距计算器</a></li>
+          <li><a href="#"><span class="nav-icon">🔤</span>字体配对</a></li>
+        </ul>
+      </div>
+    </aside>
 
-    <!-- Tab 2 内容 -->
-    <div class="tab-content" id="tab2">
-      <!-- 另一组内容 -->
-    </div>
+    <!-- Main Content -->
+    <main class="main-content">
+      <!-- Stats Row -->
+      <div class="stats-row">
+        <div class="stat-card">
+          <div class="stat-number">236</div>
+          <div class="stat-label">灵感收藏</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">48</div>
+          <div class="stat-label">配色方案</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">32</div>
+          <div class="stat-label">字体配对</div>
+        </div>
+        <div class="stat-card">
+          <div class="stat-number">12</div>
+          <div class="stat-label">设计模板</div>
+        </div>
+      </div>
 
-    <!-- Tab 3 内容 -->
-    <div class="tab-content" id="tab3">
-      <!-- 另一组内容 -->
-    </div>
+      <!-- Tab Bar -->
+      <div class="tab-bar" id="tabBar">
+        <button class="tab-btn active">全部灵感</button>
+        <button class="tab-btn">配色方案</button>
+        <button class="tab-btn">字体排版</button>
+        <button class="tab-btn">组件设计</button>
+        <button class="tab-btn">界面灵感</button>
+        <button class="tab-btn">品牌设计</button>
+      </div>
 
-  </main>
+      <!-- Content Grid -->
+      <div class="section-header">
+        <h3>最新灵感</h3>
+        <a href="#">查看全部 →</a>
+      </div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="card-thumb" style="background: linear-gradient(135deg, #A67B5B, #F0C674);">
+            <span style="color:#fff; mix-blend-mode: overlay; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;">暖棕</span>
+            <span class="card-tag">配色</span>
+          </div>
+          <div class="card-info">
+            <h4>暖棕 Autumn 配色方案</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 2天前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 128</span><span>💬 23</span><span>🔗 56</span>
+          </div>
+        </div>
 
-  <!-- ====== Modal ====== -->
-  <div class="modal-overlay" id="modal">
-    <div class="modal-content">
-      <button class="modal-close" onclick="closeModal()">×</button>
-      <!-- Modal内容 -->
-    </div>
+        <div class="content-card">
+          <div class="card-thumb" style="background: linear-gradient(135deg, #5B8BA0, #E8F0F3);">
+            <span style="color:#fff; mix-blend-mode: overlay; font-family: var(--font-display); font-size: 1.5rem; font-weight: 700;">海洋</span>
+            <span class="card-tag">配色</span>
+          </div>
+          <div class="card-info">
+            <h4>海洋蓝专业配色体系</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 3天前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 96</span><span>💬 15</span><span>🔗 42</span>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-thumb" style="background: linear-gradient(135deg, #FDF0D0, #F5EDE0); font-family: var(--font-display);">
+            <span style="font-size: 2rem;">Fraunces</span>
+            <span class="card-tag">字体</span>
+          </div>
+          <div class="card-info">
+            <h4>Fraunces + Noto Sans SC 字体配对</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 5天前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 203</span><span>💬 38</span><span>🔗 87</span>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-thumb" style="background: #1E1A16; color: #F0C674; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 8px;">
+            <span style="font-family: var(--font-mono); font-size: 0.85rem;">btn-primary</span>
+            <span style="background: #A67B5B; padding: 6px 20px; border-radius: 20px; font-size: 0.75rem; color: #fff;">确认提交</span>
+            <span class="card-tag">组件</span>
+          </div>
+          <div class="card-info">
+            <h4>品牌按钮组件设计规范</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 1周前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 167</span><span>💬 29</span><span>🔗 64</span>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-thumb" style="background: linear-gradient(135deg, #FDF8F0, #fff); border: 2px dashed #A67B5B; margin: 20px; border-radius: 8px; display: flex; flex-direction: column; align-items: flex-start; justify-content: center; padding: 16px; gap: 4px;">
+            <span style="font-family: var(--font-display); font-weight: 700; font-size: 1.2rem;">Dashboard</span>
+            <span style="font-size: 0.7rem; color: #8A7D74;">界面布局灵感</span>
+            <span class="card-tag" style="position: static; display: inline-block; margin-top: 4px;">界面</span>
+          </div>
+          <div class="card-info">
+            <h4>后台仪表盘界面布局方案</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 1周前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 145</span><span>💬 31</span><span>🔗 53</span>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-thumb" style="background: linear-gradient(135deg, #F5EDE0, #FDF0D0);">
+            <span style="font-family: var(--font-hand); font-size: 2.5rem; color: #A67B5B;">Bubble</span>
+            <span class="card-tag">品牌</span>
+          </div>
+          <div class="card-info">
+            <h4>花心小泡泡品牌视觉规范</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 2周前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 289</span><span>💬 45</span><span>🔗 102</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Second Section -->
+      <div class="section-header" style="margin-top: clamp(24px, 3vw, 36px);">
+        <h3>热门配色方案</h3>
+        <a href="#">查看全部 →</a>
+      </div>
+      <div class="content-grid">
+        <div class="content-card">
+          <div class="card-thumb" style="background: linear-gradient(to right, #A67B5B 0%, #A67B5B 33%, #F0C674 33%, #F0C674 66%, #5B8BA0 66%, #5B8BA0 100%);">
+            <span class="card-tag">配色</span>
+          </div>
+          <div class="card-info">
+            <h4>三色品牌渐变体系</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 3天前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 112</span><span>💬 18</span><span>🔗 39</span>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-thumb" style="background: linear-gradient(135deg, #FDF8F0, #FDF0D0, #F5EDE0);">
+            <span style="color: #A67B5B; font-family: var(--font-mono); font-size: 0.8rem; text-align: center; line-height: 1.6;">
+              --cream: #FDF8F0<br>
+              --yellow-soft: #FDF0D0<br>
+              --cream-dark: #F5EDE0
+            </span>
+            <span class="card-tag">配色</span>
+          </div>
+          <div class="card-info">
+            <h4>暖色调背景层次体系</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 4天前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 87</span><span>💬 12</span><span>🔗 28</span>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-thumb" style="background: #1E1A16; color: #fff; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 6px;">
+            <div style="display: flex; gap: 8px;">
+              <span style="width: 24px; height: 24px; border-radius: 50%; background: #A67B5B;"></span>
+              <span style="width: 24px; height: 24px; border-radius: 50%; background: #F0C674;"></span>
+              <span style="width: 24px; height: 24px; border-radius: 50%; background: #5B8BA0;"></span>
+            </div>
+            <span style="font-size: 0.7rem; opacity: 0.6;">Dark Mode Palette</span>
+            <span class="card-tag">配色</span>
+          </div>
+          <div class="card-info">
+            <h4>深色模式配色适配方案</h4>
+            <div class="meta">
+              <img src="avatar.jpg" alt="" onerror="this.style.display='none'">
+              <span>花心小泡泡 · 6天前</span>
+            </div>
+          </div>
+          <div class="card-stats">
+            <span>❤️ 156</span><span>💬 27</span><span>🔗 48</span>
+          </div>
+        </div>
+      </div>
+    </main>
   </div>
 
-  <!-- ====== JS ====== -->
+  <!-- Mobile Bottom Nav -->
+  <nav class="bottom-nav">
+    <a href="#" class="bottom-nav-item active">
+      <span class="nav-icon">🏠</span>首页
+    </a>
+    <a href="#" class="bottom-nav-item">
+      <span class="nav-icon">🔍</span>探索
+    </a>
+    <a href="#" class="bottom-nav-item">
+      <span class="nav-icon">❤️</span>收藏
+    </a>
+    <a href="#" class="bottom-nav-item">
+      <span class="nav-icon">👤</span>我的
+    </a>
+  </nav>
+
   <script>
-    // Tab切换
-    document.querySelectorAll('.tab').forEach(tab => {
+    // Sidebar toggle
+    const sidebarToggle = document.getElementById('sidebarToggle');
+    const sidebar = document.getElementById('sidebar');
+
+    sidebarToggle.addEventListener('click', () => {
+      sidebar.classList.toggle('open');
+    });
+
+    // Close sidebar when clicking outside on mobile
+    document.addEventListener('click', (e) => {
+      if (window.innerWidth <= 900) {
+        if (!sidebar.contains(e.target) && !sidebarToggle.contains(e.target)) {
+          sidebar.classList.remove('open');
+        }
+      }
+    });
+
+    // Tab switching
+    const tabBar = document.getElementById('tabBar');
+    const tabs = tabBar.querySelectorAll('.tab-btn');
+
+    tabs.forEach(tab => {
       tab.addEventListener('click', () => {
-        document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
-        document.querySelectorAll('.tab-content').forEach(c => c.classList.remove('active'));
+        tabs.forEach(t => t.classList.remove('active'));
         tab.classList.add('active');
-        document.getElementById(tab.dataset.tab).classList.add('active');
       });
     });
 
-    // Modal
-    function openModal() {
-      document.getElementById('modal').classList.add('active');
-    }
-    function closeModal() {
-      document.getElementById('modal').classList.remove('active');
-    }
+    // Sidebar nav active state
+    const sidebarLinks = document.querySelectorAll('.sidebar-nav a');
+    sidebarLinks.forEach(link => {
+      link.addEventListener('click', (e) => {
+        e.preventDefault();
+        sidebarLinks.forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+      });
+    });
+
+    // Bottom nav active
+    const bottomNavItems = document.querySelectorAll('.bottom-nav-item');
+    bottomNavItems.forEach(item => {
+      item.addEventListener('click', (e) => {
+        e.preventDefault();
+        bottomNavItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+      });
+    });
   </script>
 </body>
 </html>

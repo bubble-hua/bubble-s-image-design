@@ -1,502 +1,879 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>图文卡片</title>
-<link href="https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@700;900&family=Noto+Sans+SC:wght@400;500;700;900&family=Fraunces:ital,wght@1,400;1,700&family=Fira+Code:wght@400;500;600&display=swap" rel="stylesheet">
-<script src="html2canvas.min.js" onerror="console.error('html2canvas failed to load')"></script>
-<script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
-<style>
-* { margin: 0; padding: 0; box-sizing: border-box; }
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>花心小泡泡 · 图文卡片模板</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Caveat:wght@400;600&family=Fira+Code:wght@400;500&family=Fraunces:ital,opsz,wght@0,9..144,300;0,9..144,400;0,9..144,600;0,9..144,700;1,9..144,300&family=Noto+Sans+SC:wght@300;400;500;700&family=Noto+Serif+SC:wght@400;600;700&display=swap" rel="stylesheet">
+  <script src="html2canvas.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+  <style>
+    :root {
+      --brown: #A67B5B;
+      --brown-deep: #8B6343;
+      --yellow: #F0C674;
+      --yellow-soft: #FDF0D0;
+      --blue: #5B8BA0;
+      --blue-deep: #4A7A8E;
+      --cream: #FDF8F0;
+      --cream-dark: #F5EDE0;
+      --ink: #2D2420;
+      --ink-light: #5C4D44;
+      --ink-faint: #8A7D74;
+      --dark-panel: #1E1A16;
+      --terminal-green: #6B9E5A;
+      --font-display: 'Fraunces', 'Noto Serif SC', serif;
+      --font-body: 'Noto Sans SC', sans-serif;
+      --font-hand: 'Caveat', cursive;
+      --font-mono: 'Fira Code', monospace;
+      --font-serif: 'Noto Serif SC', serif;
+    }
 
-:root {
-  --yellow: #F4D758;
-  --yellow-soft: #FFF3CD;
-  --blue: #2B7FD8;
-  --blue-deep: #1E5BA8;
-  --red: #E84A5F;
-  --cream: #fefcf6;
-  --cream-dark: #faf6eb;
-  --ink: #1A1A2E;
-  --ink-light: #4A4A5A;
-  --ink-faint: #8A8A9A;
-}
+    *, *::before, *::after {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
 
-body {
-  background: #e8e4de;
-  font-family: 'Noto Sans SC', sans-serif;
-  color: var(--ink);
-  padding: 40px 20px;
-}
+    body {
+      font-family: var(--font-body);
+      background: #1a1a1a;
+      color: var(--ink);
+      -webkit-font-smoothing: antialiased;
+      padding-top: 56px;
+      min-height: 100vh;
+    }
 
-/* ========== 导出栏 ========== */
-.export-bar {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  z-index: 9999;
-  background: var(--ink);
-  padding: 14px 24px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 16px;
-}
+    /* ============ TOP BAR ============ */
+    .top-bar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 56px;
+      background: rgba(30, 26, 22, 0.95);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,255,255,0.08);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 16px;
+      z-index: 1000;
+      padding: 0 24px;
+    }
 
-.export-bar button {
-  background: var(--blue);
-  color: #fff;
-  border: none;
-  padding: 10px 28px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: 700;
-  cursor: pointer;
-  font-family: 'Noto Sans SC', sans-serif;
-}
+    .export-btn {
+      background: var(--brown);
+      color: #fff;
+      border: none;
+      padding: 10px 28px;
+      border-radius: 24px;
+      font-size: 0.9rem;
+      font-weight: 500;
+      cursor: pointer;
+      font-family: var(--font-body);
+      transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+      box-shadow: 0 2px 12px rgba(166, 123, 91, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
 
-.export-bar button:hover { background: #1a6abf; }
+    .export-btn:hover {
+      background: var(--brown-deep);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 20px rgba(166, 123, 91, 0.4);
+    }
 
-.export-bar .hint {
-  color: #aaa;
-  font-size: 13px;
-}
+    .export-btn:active {
+      transform: translateY(0);
+    }
 
-/* ========== 卡片容器 ========== */
-.cards-container {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 40px;
-  margin-top: 80px;
-}
+    .export-btn:disabled {
+      opacity: 0.5;
+      cursor: not-allowed;
+      transform: none;
+    }
 
-.card {
-  width: 1080px;
-  height: 1440px;
-  position: relative;
-  overflow: hidden;
-  transform: scale(0.45);
-  transform-origin: top center;
-  margin-bottom: -792px;
-  border-radius: 4px;
-  box-shadow: 0 8px 40px rgba(0,0,0,0.12);
-}
+    .export-status {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8rem;
+      min-width: 120px;
+      text-align: left;
+    }
 
-/* ========== P1 封面 ========== */
-.p-cover {
-  background: var(--cream);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  padding: 80px 90px;
-}
+    /* ============ CARDS CONTAINER ============ */
+    .cards-container {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 8px;
+      padding: 24px;
+    }
 
-.p-cover .deco-top {
-  position: absolute;
-  top: 0; left: 0; right: 0;
-  height: 8px;
-  background: linear-gradient(90deg, var(--blue) 60%, var(--yellow) 80%, var(--red) 100%);
-}
+    .card-wrapper {
+      width: 486px;  /* 1080 * 0.45 */
+      height: 648px; /* 1440 * 0.45 */
+      overflow: hidden;
+      border-radius: 12px;
+      box-shadow: 0 4px 30px rgba(0,0,0,0.3);
+      transition: transform 0.3s, box-shadow 0.3s;
+      cursor: default;
+      position: relative;
+    }
 
-.p-cover .tag {
-  font-size: 28px;
-  font-weight: 700;
-  color: #fff;
-  background: var(--blue);
-  display: inline-block;
-  padding: 8px 24px;
-  border-radius: 6px;
-  margin-bottom: 40px;
-  letter-spacing: 2px;
-}
+    .card-wrapper:hover {
+      transform: scale(1.02);
+      box-shadow: 0 8px 40px rgba(0,0,0,0.4);
+      z-index: 10;
+    }
 
-.p-cover h1 {
-  font-family: 'Noto Serif SC', serif;
-  font-weight: 900;
-  font-size: 88px;
-  line-height: 1.2;
-  color: var(--ink);
-  margin-bottom: 24px;
-}
+    .card-wrapper .card-label {
+      position: absolute;
+      top: 8px;
+      left: 8px;
+      background: rgba(0,0,0,0.6);
+      color: #fff;
+      padding: 3px 10px;
+      border-radius: 10px;
+      font-size: 0.65rem;
+      z-index: 5;
+      font-family: var(--font-mono);
+    }
 
-.p-cover h1 .highlight { color: var(--blue); }
+    /* ============ CARD INNER (1080×1440) ============ */
+    .card {
+      width: 1080px;
+      height: 1440px;
+      transform: scale(0.45);
+      transform-origin: top left;
+      position: relative;
+      overflow: hidden;
+      background: var(--cream);
+      font-family: var(--font-body);
+    }
 
-.p-cover .subtitle {
-  font-size: 42px;
-  color: var(--ink-light);
-  font-weight: 500;
-  line-height: 1.6;
-  margin-bottom: 80px;
-}
+    .card-grid-bg {
+      position: absolute;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(166, 123, 91, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(166, 123, 91, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+    }
 
-.p-cover .author-row {
-  display: flex;
-  align-items: center;
-  gap: 24px;
-  margin-top: auto;
-}
+    .card-inner {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      height: 100%;
+      display: flex;
+      flex-direction: column;
+    }
 
-.p-cover .avatar {
-  width: 88px;
-  height: 88px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--yellow);
-}
+    /* ============ P1 COVER ============ */
+    .card-p1 {
+      background: var(--cream);
+    }
 
-.p-cover .author-name {
-  font-size: 36px;
-  font-weight: 700;
-  color: var(--ink);
-}
+    .card-p1 .card-inner {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 80px;
+    }
 
-.p-cover .author-desc {
-  font-size: 24px;
-  color: var(--ink-light);
-  margin-top: 4px;
-}
+    .card-p1 .cover-frame {
+      border: 4px solid var(--yellow);
+      border-radius: 24px;
+      padding: 80px 60px;
+      width: 100%;
+      max-width: 800px;
+    }
 
-/* ========== 深色面板页 ========== */
-.p-dark {
-  background: var(--ink);
-  display: flex;
-  flex-direction: column;
-  padding: 80px 80px;
-}
+    .card-p1 .cover-avatar {
+      width: 160px;
+      height: 160px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid var(--brown);
+      margin-bottom: 40px;
+    }
 
-.p-dark .page-num {
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-size: 120px;
-  color: var(--yellow);
-  opacity: 0.15;
-  position: absolute;
-  top: 40px;
-  right: 80px;
-  font-weight: 700;
-}
+    .card-p1 .cover-title {
+      font-family: var(--font-display);
+      font-size: 72px;
+      font-weight: 700;
+      line-height: 1.1;
+      letter-spacing: -0.02em;
+      margin-bottom: 20px;
+    }
 
-.p-dark h2 {
-  font-family: 'Noto Serif SC', serif;
-  font-weight: 900;
-  font-size: 52px;
-  color: var(--cream);
-  margin-bottom: 16px;
-}
+    .card-p1 .cover-subtitle {
+      font-size: 32px;
+      color: var(--ink-light);
+      font-weight: 300;
+      margin-bottom: 40px;
+    }
 
-.p-dark .sub {
-  font-size: 32px;
-  color: var(--yellow);
-  margin-bottom: 60px;
-  font-weight: 500;
-}
+    .card-p1 .cover-author {
+      font-family: var(--font-hand);
+      font-size: 36px;
+      color: var(--brown);
+    }
 
-.p-dark .items {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 36px;
-}
+    .card-p1 .cover-tag {
+      display: inline-block;
+      background: var(--brown);
+      color: #fff;
+      padding: 12px 36px;
+      border-radius: 32px;
+      font-size: 24px;
+      font-weight: 500;
+      margin-top: 32px;
+    }
 
-.p-dark .item {
-  display: flex;
-  align-items: flex-start;
-  gap: 24px;
-}
+    /* ============ P2 CONTENT - DARK PANEL ============ */
+    .card-p2 {
+      background: var(--dark-panel);
+      color: #fff;
+    }
 
-.p-dark .item .icon {
-  font-size: 40px;
-  flex-shrink: 0;
-  width: 56px;
-  text-align: center;
-}
+    .card-p2 .card-inner {
+      justify-content: center;
+      padding: 100px 80px;
+    }
 
-.p-dark .item .text {
-  font-size: 38px;
-  color: #e8e4de;
-  line-height: 1.5;
-  font-weight: 500;
-}
+    .card-p2 .section-num {
+      font-family: var(--font-mono);
+      font-size: 24px;
+      color: var(--yellow);
+      letter-spacing: 0.1em;
+      margin-bottom: 24px;
+    }
 
-.p-dark .item .text strong {
-  color: #fff;
-  font-weight: 700;
-}
+    .card-p2 h2 {
+      font-family: var(--font-display);
+      font-size: 64px;
+      font-weight: 600;
+      line-height: 1.15;
+      margin-bottom: 32px;
+    }
 
-.p-dark .deco-line {
-  position: absolute;
-  bottom: 80px;
-  left: 80px;
-  right: 80px;
-  height: 4px;
-  background: linear-gradient(90deg, var(--blue) 50%, var(--yellow) 75%, var(--red) 100%);
-  border-radius: 2px;
-  opacity: 0.6;
-}
+    .card-p2 p {
+      font-size: 28px;
+      line-height: 1.7;
+      opacity: 0.8;
+      max-width: 800px;
+    }
 
-/* ========== 浅色列表页 ========== */
-.p-list {
-  background: var(--cream);
-  display: flex;
-  flex-direction: column;
-  padding: 72px 80px;
-}
+    .card-p2 .highlight-box {
+      background: rgba(166, 123, 91, 0.2);
+      border-left: 4px solid var(--brown);
+      padding: 32px 40px;
+      margin-top: 48px;
+      font-size: 26px;
+      border-radius: 0 12px 12px 0;
+    }
 
-.p-list .page-num {
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-size: 120px;
-  color: var(--blue);
-  opacity: 0.12;
-  position: absolute;
-  top: 40px;
-  right: 80px;
-  font-weight: 700;
-}
+    /* ============ P3 CONTENT - OVERSIZED NUMBER ============ */
+    .card-p3 {
+      background: #fff;
+    }
 
-.p-list h2 {
-  font-family: 'Noto Serif SC', serif;
-  font-weight: 900;
-  font-size: 52px;
-  margin-bottom: 48px;
-  color: var(--ink);
-}
+    .card-p3 .card-inner {
+      justify-content: center;
+      padding: 80px;
+    }
 
-.p-list h2::after {
-  content: '';
-  display: block;
-  width: 80px;
-  height: 6px;
-  background: var(--yellow);
-  margin-top: 16px;
-  border-radius: 3px;
-}
+    .card-p3 .big-num {
+      font-family: var(--font-display);
+      font-size: 280px;
+      font-weight: 700;
+      color: var(--yellow-soft);
+      line-height: 0.8;
+      position: absolute;
+      right: 40px;
+      top: 60px;
+      z-index: 0;
+    }
 
-.p-list .content-area {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  gap: 24px;
-}
+    .card-p3 .content-zone {
+      position: relative;
+      z-index: 1;
+      max-width: 700px;
+    }
 
-/* ========== 尾页 ========== */
-.p-end {
-  background: var(--cream);
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
-  padding: 80px 90px;
-  text-align: center;
-}
+    .card-p3 h2 {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 600;
+      margin-bottom: 32px;
+      line-height: 1.15;
+    }
 
-.p-end .deco-bottom {
-  position: absolute;
-  bottom: 0; left: 0; right: 0;
-  height: 8px;
-  background: linear-gradient(90deg, var(--blue) 60%, var(--yellow) 80%, var(--red) 100%);
-}
+    .card-p3 p {
+      font-size: 28px;
+      line-height: 1.7;
+      color: var(--ink-light);
+      margin-bottom: 24px;
+    }
 
-.p-end .quote-mark {
-  font-family: 'Fraunces', serif;
-  font-style: italic;
-  font-size: 200px;
-  color: var(--blue);
-  opacity: 0.15;
-  line-height: 0.6;
-  margin-bottom: -20px;
-}
+    .card-p3 .tag-row {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-top: 40px;
+    }
 
-.p-end .quote {
-  font-family: 'Noto Serif SC', serif;
-  font-weight: 900;
-  font-size: 60px;
-  line-height: 1.5;
-  color: var(--ink);
-  margin-bottom: 32px;
-  max-width: 900px;
-}
+    .card-p3 .tag {
+      background: var(--yellow-soft);
+      color: var(--brown-deep);
+      padding: 10px 24px;
+      border-radius: 20px;
+      font-size: 22px;
+      font-weight: 500;
+    }
 
-.p-end .quote .highlight {
-  color: var(--blue);
-  text-decoration: underline;
-  text-decoration-color: var(--yellow);
-  text-underline-offset: 8px;
-  text-decoration-thickness: 4px;
-}
+    /* ============ P4 CONTENT - COLOR BLOCK ALTERNATING ============ */
+    .card-p4 {
+      background: var(--cream);
+    }
 
-.p-end .avatar {
-  width: 100px;
-  height: 100px;
-  border-radius: 50%;
-  object-fit: cover;
-  border: 3px solid var(--yellow);
-  margin-bottom: 20px;
-}
+    .card-p4 .card-inner {
+      padding: 80px;
+      gap: 32px;
+    }
 
-.p-end .author-name {
-  font-size: 40px;
-  font-weight: 700;
-  color: var(--ink);
-  margin-bottom: 8px;
-}
+    .card-p4 h2 {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 600;
+      margin-bottom: 48px;
+    }
 
-.p-end .cta {
-  font-size: 32px;
-  color: var(--blue);
-  font-weight: 600;
-  margin-bottom: 48px;
-}
+    .card-p4 .alt-row {
+      display: flex;
+      align-items: center;
+      gap: 32px;
+      padding: 40px;
+      border-radius: 20px;
+      font-size: 28px;
+    }
 
-.p-end .tagline {
-  font-size: 26px;
-  color: var(--ink-light);
-  letter-spacing: 2px;
-}
-</style>
+    .card-p4 .alt-row.brown-row {
+      background: var(--brown);
+      color: #fff;
+    }
+
+    .card-p4 .alt-row.yellow-row {
+      background: var(--yellow-soft);
+      color: var(--ink);
+    }
+
+    .card-p4 .alt-row.blue-row {
+      background: var(--blue);
+      color: #fff;
+    }
+
+    .card-p4 .alt-icon {
+      font-size: 48px;
+      flex-shrink: 0;
+    }
+
+    /* ============ P5 CONTENT - CODE PANEL ============ */
+    .card-p5 {
+      background: #1a1a2e;
+      color: var(--terminal-green);
+    }
+
+    .card-p5 .card-inner {
+      justify-content: center;
+      padding: 100px 80px;
+      font-family: var(--font-mono);
+    }
+
+    .card-p5 .code-title {
+      font-family: var(--font-body);
+      color: #fff;
+      font-size: 48px;
+      font-weight: 600;
+      margin-bottom: 48px;
+    }
+
+    .card-p5 .code-block {
+      background: rgba(0,0,0,0.3);
+      border-radius: 16px;
+      padding: 48px;
+      font-size: 26px;
+      line-height: 1.8;
+      border: 1px solid rgba(107, 158, 90, 0.2);
+    }
+
+    .card-p5 .code-comment {
+      color: rgba(107, 158, 90, 0.5);
+    }
+
+    .card-p5 .code-keyword {
+      color: #C792EA;
+    }
+
+    .card-p5 .code-property {
+      color: #82AAFF;
+    }
+
+    .card-p5 .code-value {
+      color: #C3E88D;
+    }
+
+    .card-p5 .code-string {
+      color: #F78C6C;
+    }
+
+    /* ============ P6 CONTENT - GOLDEN QUOTE ============ */
+    .card-p6 {
+      background: var(--cream);
+    }
+
+    .card-p6 .card-inner {
+      justify-content: center;
+      align-items: center;
+      padding: 120px 100px;
+      text-align: center;
+    }
+
+    .card-p6 .deco-line {
+      width: 80px;
+      height: 4px;
+      background: var(--yellow);
+      border-radius: 2px;
+      margin-bottom: 48px;
+    }
+
+    .card-p6 .quote-text {
+      font-family: var(--font-display);
+      font-size: 56px;
+      font-weight: 300;
+      font-style: italic;
+      line-height: 1.4;
+      margin-bottom: 48px;
+      max-width: 800px;
+    }
+
+    .card-p6 .quote-text .highlight {
+      color: var(--brown);
+      font-weight: 600;
+      font-style: normal;
+    }
+
+    .card-p6 .quote-author {
+      font-family: var(--font-hand);
+      font-size: 36px;
+      color: var(--brown);
+    }
+
+    /* ============ P7 END PAGE ============ */
+    .card-p7 {
+      background: var(--cream);
+    }
+
+    .card-p7 .card-inner {
+      justify-content: center;
+      align-items: center;
+      text-align: center;
+      padding: 120px 80px;
+    }
+
+    .card-p7 .end-quote {
+      font-family: var(--font-display);
+      font-size: 52px;
+      font-weight: 300;
+      font-style: italic;
+      margin-bottom: 48px;
+      max-width: 750px;
+      line-height: 1.4;
+    }
+
+    .card-p7 .end-avatar {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 3px solid var(--yellow);
+      margin-bottom: 24px;
+    }
+
+    .card-p7 .end-cta {
+      font-family: var(--font-body);
+      font-size: 28px;
+      color: var(--brown);
+      font-weight: 500;
+      margin-bottom: 16px;
+    }
+
+    .card-p7 .end-signature {
+      font-family: var(--font-serif);
+      font-size: 22px;
+      color: var(--ink-light);
+      margin-bottom: 8px;
+    }
+
+    .card-p7 .end-signature-en {
+      font-family: var(--font-hand);
+      font-size: 24px;
+      color: var(--ink-faint);
+      margin-bottom: 48px;
+    }
+
+    .card-p7 .color-bar {
+      display: flex;
+      width: 400px;
+      height: 8px;
+      border-radius: 4px;
+      overflow: hidden;
+    }
+
+    .card-p7 .color-bar span {
+      flex: 1;
+    }
+
+    .card-p7 .color-bar span:nth-child(1) { background: var(--brown); }
+    .card-p7 .color-bar span:nth-child(2) { background: var(--yellow); }
+    .card-p7 .color-bar span:nth-child(3) { background: var(--blue); }
+
+    /* ============ RESPONSIVE ============ */
+    @media (max-width: 600px) {
+      .cards-container {
+        padding: 12px;
+        gap: 4px;
+      }
+
+      .card-wrapper {
+        width: 324px;  /* 1080 * 0.3 */
+        height: 432px; /* 1440 * 0.3 */
+      }
+
+      .card {
+        transform: scale(0.3);
+      }
+
+      .top-bar {
+        padding: 0 12px;
+        gap: 8px;
+      }
+
+      .export-btn {
+        padding: 8px 20px;
+        font-size: 0.8rem;
+      }
+
+      .export-status {
+        display: none;
+      }
+    }
+
+    /* ============ LOADING OVERLAY ============ */
+    .loading-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 2000;
+      align-items: center;
+      justify-content: center;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .loading-overlay.active {
+      display: flex;
+    }
+
+    .loading-spinner {
+      width: 40px;
+      height: 40px;
+      border: 3px solid rgba(255,255,255,0.2);
+      border-top-color: var(--yellow);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+
+    .loading-text {
+      color: #fff;
+      font-size: 0.9rem;
+      font-family: var(--font-body);
+    }
+  </style>
 </head>
 <body>
 
-<div class="export-bar">
-  <button onclick="exportAll()">📥 一键导出PNG</button>
-  <span class="hint">每张卡片导出为1080×1440 PNG</span>
-</div>
+  <!-- Top Bar -->
+  <div class="top-bar">
+    <button class="export-btn" id="exportBtn" onclick="exportAllCards()">
+      <span>📥</span> 一键导出PNG
+    </button>
+    <span class="export-status" id="exportStatus"></span>
+  </div>
 
-<div class="cards-container">
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <div class="loading-text" id="loadingText">正在导出...</div>
+  </div>
 
-<!-- ===== P1 封面 ===== -->
-<!-- 大标题+副标题+头像+署名。内容少，字要大，留白多。 -->
-<div class="card p-cover" data-card="1">
-  <div class="deco-top"></div>
-  <span class="tag"><!-- 分类标签，如"AI教程"、"效率工具" --></span>
-  <h1><!-- 主标题，72-96px --><span class="highlight"><!-- 高亮关键词 --></span></h1>
-  <p class="subtitle"><!-- 副标题/一句话说明 --></p>
-  <div class="author-row">
-    <img class="avatar" src="avatar.jpg" alt="avatar">
-    <div>
-      <div class="author-name"><!-- 你的名字 --></div>
-      <div class="author-desc"><!-- 你的一句话介绍 --></div>
+  <!-- Cards Container -->
+  <div class="cards-container" id="cardsContainer">
+
+    <!-- P1: Cover -->
+    <div class="card-wrapper" data-card="p1">
+      <span class="card-label">P1 封面</span>
+      <div class="card card-p1">
+        <div class="card-grid-bg"></div>
+        <div class="card-inner">
+          <div class="cover-frame">
+            <img src="avatar.jpg" alt="Bubble" class="cover-avatar" onerror="this.style.display='none'">
+            <div class="cover-title">设计系统<br>构建指南</div>
+            <div class="cover-subtitle">从品牌基因到组件体系</div>
+            <div class="cover-author">花心小泡泡</div>
+            <div class="cover-tag">2026 设计手册</div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div>
-</div>
 
-<!-- ===== P2 深色面板页示例 ===== -->
-<!-- 适合代码、文件树、核心要点强调。深色底+亮色文字。 -->
-<div class="card p-dark" data-card="2">
-  <span class="page-num">02</span>
-  <h2><!-- 页面标题 --></h2>
-  <p class="sub"><!-- 副标题/小字说明 --></p>
-  <div class="items">
-    <!-- 每项：icon + 文字说明 -->
-    <div class="item">
-      <span class="icon"><!-- emoji --></span>
-      <span class="text"><strong><!-- 要点标题 --></strong><!-- 说明文字 --></span>
+    <!-- P2: Dark Panel -->
+    <div class="card-wrapper" data-card="p2">
+      <span class="card-label">P2 深色面板</span>
+      <div class="card card-p2">
+        <div class="card-grid-bg"></div>
+        <div class="card-inner">
+          <div class="section-num">CHAPTER 01</div>
+          <h2>品牌基因<br>Brand DNA</h2>
+          <p>每一个伟大的设计系统，都始于对品牌核心价值的深刻理解。配色、字体、间距 —— 这些基础元素共同构成了设计的底层语言。</p>
+          <div class="highlight-box">
+            设计不是装饰，而是沟通。
+          </div>
+        </div>
+      </div>
     </div>
-    <!-- 重复3-6项 -->
+
+    <!-- P3: Oversized Number -->
+    <div class="card-wrapper" data-card="p3">
+      <span class="card-label">P3 超大编号</span>
+      <div class="card card-p3">
+        <div class="card-grid-bg"></div>
+        <span class="big-num">02</span>
+        <div class="card-inner">
+          <div class="content-zone">
+            <h2>配色体系<br>Color System</h2>
+            <p>以暖棕色系为主调，搭配柔和黄与克制蓝，构建温暖、自然、专业的视觉感受。所有颜色均通过 WCAG AA 对比度验证。</p>
+            <div class="tag-row">
+              <span class="tag">#A67B5B 主色</span>
+              <span class="tag">#F0C674 辅色</span>
+              <span class="tag">#5B8BA0 强调</span>
+              <span class="tag">#FDF8F0 底色</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P4: Color Block Alternating -->
+    <div class="card-wrapper" data-card="p4">
+      <span class="card-label">P4 色块交替</span>
+      <div class="card card-p4">
+        <div class="card-grid-bg"></div>
+        <div class="card-inner">
+          <h2>三大设计原则</h2>
+          <div class="alt-row brown-row">
+            <span class="alt-icon">🎯</span>
+            <span>一致性 —— 统一的视觉语言降低认知负担</span>
+          </div>
+          <div class="alt-row yellow-row">
+            <span class="alt-icon">⚡</span>
+            <span>效率 —— 标准化组件加速设计与开发</span>
+          </div>
+          <div class="alt-row blue-row">
+            <span class="alt-icon">🔧</span>
+            <span>可维护 —— 设计令牌实现全局统一管理</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P5: Code Panel -->
+    <div class="card-wrapper" data-card="p5">
+      <span class="card-label">P5 代码面板</span>
+      <div class="card card-p5">
+        <div class="card-inner">
+          <div class="code-title">设计令牌 Design Tokens</div>
+          <div class="code-block">
+            <span class="code-comment">/* 品牌配色 */</span><br>
+            <span class="code-keyword">:root</span> {<br>
+            &nbsp;&nbsp;<span class="code-property">--brown</span>: <span class="code-string">#A67B5B</span>;<br>
+            &nbsp;&nbsp;<span class="code-property">--yellow</span>: <span class="code-string">#F0C674</span>;<br>
+            &nbsp;&nbsp;<span class="code-property">--blue</span>: <span class="code-string">#5B8BA0</span>;<br>
+            &nbsp;&nbsp;<span class="code-property">--cream</span>: <span class="code-string">#FDF8F0</span>;<br>
+            &nbsp;&nbsp;<span class="code-property">--ink</span>: <span class="code-string">#2D2420</span>;<br>
+            }<br>
+            <span class="code-comment">/* 一处修改，全局同步 */</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P6: Golden Quote -->
+    <div class="card-wrapper" data-card="p6">
+      <span class="card-label">P6 金句装饰</span>
+      <div class="card card-p6">
+        <div class="card-grid-bg"></div>
+        <div class="card-inner">
+          <div class="deco-line"></div>
+          <div class="quote-text">
+            最好的设计系统，<br>不是最完整的规范文档，<br>而是能让团队<span class="highlight">不假思索</span>地<br>做出正确设计决策的那一套。
+          </div>
+          <div class="quote-author">—— 花心小泡泡</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- P7: End Page -->
+    <div class="card-wrapper" data-card="p7">
+      <span class="card-label">P7 尾页</span>
+      <div class="card card-p7">
+        <div class="card-grid-bg"></div>
+        <div class="card-inner">
+          <div class="end-quote">让每一个像素都承载品牌灵魂</div>
+          <img src="avatar.jpg" alt="Bubble" class="end-avatar" onerror="this.style.display='none'">
+          <div class="end-cta">Follow 在下 花心泡</div>
+          <div class="end-signature">花心小泡泡 · 体验生活，感受体验，记录感受</div>
+          <div class="end-signature-en">Bubble · Live the experience, feel the moment, capture the memory</div>
+          <div class="color-bar">
+            <span></span><span></span><span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
-  <div class="deco-line"></div>
-</div>
 
-<!-- ===== P3 浅色列表页示例 ===== -->
-<!-- 适合步骤、列表、分点说明。浅色底+oversized编号装饰。 -->
-<div class="card p-list" data-card="3">
-  <span class="page-num">03</span>
-  <h2><!-- 页面标题 --></h2>
-  <div class="content-area">
-    <!-- 根据内容选择排版：
-         - 步骤流程：oversized编号 + 文字
-         - 对比列表：色块交替行
-         - 代码展示：深色代码面板
-         - 自由组合，避免与其他页重复 -->
-  </div>
-</div>
+  <script>
+    // Store original card HTML for reset after export
+    const cardsContainer = document.getElementById('cardsContainer');
+    const originalHTML = cardsContainer.innerHTML;
 
-<!-- ===== 最后一页 尾页 ===== -->
-<!-- 金句+头像+CTA。oversized引号装饰，居中大字。 -->
-<div class="card p-end" data-card="last">
-  <div class="deco-bottom"></div>
-  <div class="quote-mark">"</div>
-  <p class="quote"><!-- 金句/核心观点 --><span class="highlight"><!-- 高亮关键词 --></span></p>
-  <img class="avatar" src="avatar.jpg" alt="avatar">
-  <p class="author-name"><!-- 你的名字 --></p>
-  <p class="cta"><!-- 关注 + 你的名字，或你的固定CTA短语 --></p>
-  <p class="tagline"><!-- 签名档第一行 --><br><!-- 签名档第二行 --></p>
-</div>
+    async function exportAllCards() {
+      const exportBtn = document.getElementById('exportBtn');
+      const exportStatus = document.getElementById('exportStatus');
+      const loadingOverlay = document.getElementById('loadingOverlay');
+      const loadingText = document.getElementById('loadingText');
 
-</div><!-- cards-container -->
+      exportBtn.disabled = true;
+      loadingOverlay.classList.add('active');
+      exportStatus.textContent = '准备导出...';
 
-<script>
-async function exportAll() {
-  if (typeof html2canvas === 'undefined') {
-    alert('⏳ html2canvas 正在加载，请稍等几秒后重试。');
-    return;
-  }
-  if (typeof JSZip === 'undefined') {
-    alert('JSZip 加载失败，请刷新重试。');
-    return;
-  }
-  const cards = document.querySelectorAll('.card');
-  const btn = document.querySelector('.export-bar button');
-  btn.textContent = '⏳ 导出中... 0/' + cards.length;
-  btn.disabled = true;
+      // Get all card elements
+      const cardWrappers = cardsContainer.querySelectorAll('.card-wrapper');
+      const totalCards = cardWrappers.length;
+      const zip = new JSZip();
+      const timestamp = new Date().toISOString().slice(0, 10);
 
-  const zip = new JSZip();
-  const folder = zip.folder('cards-export');
+      for (let i = 0; i < totalCards; i++) {
+        const wrapper = cardWrappers[i];
+        const card = wrapper.querySelector('.card');
+        const cardLabel = wrapper.getAttribute('data-card') || `card-${i + 1}`;
 
-  for (let i = 0; i < cards.length; i++) {
-    const card = cards[i];
-    card.style.transform = 'none';
-    card.style.marginBottom = '0';
-    card.style.borderRadius = '0';
-    card.style.boxShadow = 'none';
+        loadingText.textContent = `正在导出 ${cardLabel} (${i + 1}/${totalCards})...`;
+        exportStatus.textContent = `导出中 ${i + 1}/${totalCards}`;
 
-    await new Promise(r => setTimeout(r, 150));
+        try {
+          // Temporarily remove scale for rendering
+          const originalTransform = card.style.transform;
+          const originalWidth = card.style.width;
+          const originalHeight = card.style.height;
+          const originalTransformOrigin = card.style.transformOrigin;
 
-    try {
-      const canvas = await html2canvas(card, {
-        width: 1080,
-        height: 1440,
-        scale: 1,
-        useCORS: true,
-        allowTaint: true,
-        backgroundColor: null,
-        logging: false
-      });
+          card.style.transform = 'none';
+          card.style.width = '1080px';
+          card.style.height = '1440px';
+          card.style.transformOrigin = 'top left';
 
-      const dataUrl = canvas.toDataURL('image/png');
-      const base64 = dataUrl.split(',')[1];
-      folder.file(`card-${String(i + 1).padStart(2, '0')}.png`, base64, {base64: true});
+          const canvas = await html2canvas(card, {
+            scale: 2,
+            useCORS: true,
+            allowTaint: true,
+            backgroundColor: null,
+            width: 1080,
+            height: 1440
+          });
 
-      btn.textContent = `⏳ 导出中... ${i + 1}/${cards.length}`;
-    } catch(e) {
-      console.error('Export error on card ' + (i+1), e);
-    } finally {
-      card.style.transform = 'scale(0.45)';
-      card.style.marginBottom = '-792px';
-      card.style.borderRadius = '4px';
-      card.style.boxShadow = '0 8px 40px rgba(0,0,0,0.12)';
+          // Restore original styles
+          card.style.transform = originalTransform;
+          card.style.width = originalWidth;
+          card.style.height = originalHeight;
+          card.style.transformOrigin = originalTransformOrigin;
+
+          const blob = await new Promise(resolve => {
+            canvas.toBlob(resolve, 'image/png');
+          });
+
+          const filename = `${cardLabel}_${timestamp}.png`;
+          zip.file(filename, blob);
+
+        } catch (err) {
+          console.error(`Error exporting ${cardLabel}:`, err);
+          exportStatus.textContent = `导出 ${cardLabel} 失败`;
+          // Restore card styles on error too
+          card.style.transform = '';
+          card.style.width = '';
+          card.style.height = '';
+          card.style.transformOrigin = '';
+        }
+      }
+
+      loadingText.textContent = '正在打包 ZIP 文件...';
+      exportStatus.textContent = '打包中...';
+
+      try {
+        const zipBlob = await zip.generateAsync({ type: 'blob' });
+        const url = URL.createObjectURL(zipBlob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `bubble-cards_${timestamp}.zip`;
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        URL.revokeObjectURL(url);
+
+        exportStatus.textContent = `导出完成! ${totalCards} 张卡片`;
+      } catch (err) {
+        console.error('Error creating ZIP:', err);
+        exportStatus.textContent = '打包失败';
+      }
+
+      loadingOverlay.classList.remove('active');
+      exportBtn.disabled = false;
+
+      setTimeout(() => {
+        exportStatus.textContent = '';
+      }, 5000);
     }
-  }
 
-  btn.textContent = '⏳ 打包中...';
-  const blob = await zip.generateAsync({type: 'blob'});
-  const link = document.createElement('a');
-  link.download = 'cards-export.zip';
-  link.href = URL.createObjectURL(blob);
-  document.body.appendChild(link);
-  link.click();
-  document.body.removeChild(link);
-  URL.revokeObjectURL(link.href);
-
-  btn.textContent = '✅ 导出完成';
-  setTimeout(() => { btn.textContent = '📥 一键导出PNG'; btn.disabled = false; }, 2000);
-}
-</script>
-
+    // Check if html2canvas is loaded
+    if (typeof html2canvas === 'undefined') {
+      const exportBtn = document.getElementById('exportBtn');
+      exportBtn.disabled = true;
+      exportBtn.textContent = '⚠️ html2canvas 未加载';
+      exportBtn.title = '请将 html2canvas.min.js 放到同目录下';
+      document.getElementById('exportStatus').textContent = '缺少 html2canvas.min.js';
+    }
+  </script>
 </body>
 </html>
